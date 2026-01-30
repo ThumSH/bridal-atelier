@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { ChevronRight, ChevronLeft, MoveRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SLIDES = [
@@ -32,176 +32,212 @@ const SLIDES = [
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false); // Locks interaction during transition
+  const [isAnimating, setIsAnimating] = useState(false);
   const container = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   
-  // Logic to determine layout: Even = Normal, Odd = Reversed
   const isReversed = currentSlide % 2 !== 0; 
   const slide = SLIDES[currentSlide];
 
-  // --- 1. The Transition Orchestrator ---
+  // --- 1. Transition Logic ---
   const handleSlideChange = useCallback((direction: 'next' | 'prev') => {
-    if (isAnimating) return; // Prevent clicking while animating
+    if (isAnimating) return;
     setIsAnimating(true);
+
+    // Reset Progress Bar
+    if (progressRef.current) {
+        gsap.set(progressRef.current, { scaleX: 0 });
+    }
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // Only update state AFTER content has faded out
         setCurrentSlide((prev) => {
           if (direction === 'next') return (prev + 1) % SLIDES.length;
           return (prev - 1 + SLIDES.length) % SLIDES.length;
         });
-        // We don't set setIsAnimating(false) here. 
-        // We do it after the ENTER animation completes in useGSAP.
+        // Note: isAnimating set to false in the ENTER animation
       }
     });
 
-    // EXIT ANIMATION: Fade out current content
-    tl.to(".hero-content", { 
-      y: -30, 
-      opacity: 0, 
-      duration: 0.5, 
-      ease: "power2.in" 
-    })
-    .to(".hero-image-wrapper", { 
-      scale: 0.95, 
-      opacity: 0, 
-      duration: 0.5, 
-      ease: "power2.in" 
-    }, "<"); // Run simultaneously
+    // EXIT ANIMATION:
+    // 1. Text fades up and out
+    tl.to(".hero-text-line", { y: -50, opacity: 0, duration: 0.5, stagger: 0.05, ease: "power2.in" })
+      .to(".hero-desc", { y: -20, opacity: 0, duration: 0.4 }, "<0.1")
+      .to(".hero-meta", { opacity: 0, duration: 0.3 }, "<")
+    // 2. Image "Wipes" away (Clip Path)
+      .to(".hero-image-mask", { 
+        clipPath: "inset(0% 0% 100% 0%)", // Wipes down to hide
+        duration: 0.8, 
+        ease: "power4.inOut" 
+      }, "<");
 
   }, [isAnimating]);
 
-  // --- 2. Auto-Scroll Engine ---
+  // --- 2. Auto-Scroll with Progress Bar ---
   useEffect(() => {
-    if (isAnimating) return; // Pause timer if user is interacting
+    if (isAnimating) return;
     
+    // Animate Progress Bar
+    if (progressRef.current) {
+        gsap.fromTo(progressRef.current, 
+            { scaleX: 0 }, 
+            { scaleX: 1, duration: 5, ease: "linear" }
+        );
+    }
+
     const timer = setTimeout(() => {
       handleSlideChange('next');
-    }, 4000);
+    }, 5000); // 5 Seconds for better readability
 
-    return () => clearTimeout(timer);
+    return () => {
+        clearTimeout(timer);
+        if (progressRef.current) gsap.killTweensOf(progressRef.current);
+    };
   }, [currentSlide, isAnimating, handleSlideChange]);
 
-  // --- 3. Enter Animation (Runs on State Change) ---
+  // --- 3. Enter Animation ---
   useGSAP(() => {
     const tl = gsap.timeline({
-        onComplete: () => setIsAnimating(false) // Unlock interaction
+        onComplete: () => setIsAnimating(false)
     });
 
-    // Force initial state for the new elements
-    // We use .fromTo because React might reuse DOM nodes, so we must be explicit
-    
-    // IMAGE ENTER
-    tl.fromTo(".hero-image-wrapper", 
-      { opacity: 0, scale: 1.05 }, 
-      { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
+    // IMAGE REVEAL:
+    // Wipes up from bottom (Cinematic)
+    tl.fromTo(".hero-image-mask", 
+      { clipPath: "inset(100% 0% 0% 0%)" }, 
+      { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power4.out" }
     );
 
-    // TEXT ENTER (Staggered)
-    tl.fromTo(".hero-content", 
-        { y: 30, opacity: 0 }, 
-        { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, 
-        "-=0.8" // Overlap with image
+    // Image Scale Effect (Zoom Out slowly)
+    tl.fromTo(".hero-image-inner",
+        { scale: 1.2 },
+        { scale: 1, duration: 1.5, ease: "power2.out" },
+        "<"
     );
 
-    // Specific text stagger if needed, or just animate the whole block container
+    // TEXT REVEAL:
+    // Staggered lines for "Elegance / Softly / Spoken"
+    tl.fromTo(".hero-text-line", 
+        { y: 100, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" }, 
+        "-=0.8"
+    );
+
+    // Description & Meta
+    tl.fromTo([".hero-desc", ".hero-meta"],
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", stagger: 0.1 },
+        "-=0.6"
+    );
     
   }, { scope: container, dependencies: [currentSlide] });
 
   return (
     <section 
       ref={container} 
-      className={cn(
-        "relative flex min-h-screen w-full flex-col bg-bridal-ivory transition-all duration-700 ease-in-out",
-        isReversed ? "md:flex-row-reverse" : "md:flex-row"
-      )}
+      className="relative min-h-screen w-full bg-bridal-ivory overflow-hidden flex items-center justify-center py-20 lg:py-0"
     >
-      
-      {/* --- IMAGE SIDE --- */}
-      <div className="relative h-[50vh] w-full overflow-hidden md:h-screen md:w-1/2">
-        {/* Added 'hero-image-wrapper' class for GSAP targeting */}
-        <div className="hero-image-wrapper absolute inset-0 h-full w-full">
-           <Image 
-             src={slide.image}
-             alt="Bridal Imagery"
-             fill
-             className="object-cover blur-[3px] brightness-110 saturate-[0.8]"
-             priority
-             key={slide.image} // Force React to treat this as a new image
-           />
-        </div>
-        
-        {/* Overlays */}
-        <div className="absolute inset-0 bg-bridal-sage/10 mix-blend-multiply" />
-        <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-        
-        {/* Mobile Controls */}
-        <div className="absolute bottom-4 right-4 flex space-x-2 md:hidden z-30">
-          <button onClick={() => handleSlideChange('prev')} className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white"><ChevronLeft size={20}/></button>
-          <button onClick={() => handleSlideChange('next')} className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white"><ChevronRight size={20}/></button>
-        </div>
-      </div>
+      {/* Background Noise Texture */}
+      <div className="absolute inset-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-multiply" />
 
-      {/* --- TEXT SIDE --- */}
-      <div className="flex h-[50vh] w-full flex-col justify-center px-8 md:h-screen md:w-1/2 md:px-20 lg:px-32 relative">
-        {/* Added 'hero-content' class for GSAP targeting */}
-        <div className="hero-content relative z-10 max-w-lg">
-          <p className="mb-6 font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage">
+      <div className={cn(
+        "relative w-full max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center transition-all duration-700",
+        // Swap Order logic
+        isReversed ? "lg:grid-flow-dense" : "" 
+      )}>
+        
+        {/* --- IMAGE SIDE --- */}
+        <div className={cn(
+            "relative w-full h-[60vh] lg:h-[80vh] transition-all duration-700",
+             isReversed ? "lg:col-start-2" : "lg:col-start-1"
+        )}>
+            {/* THE NEW STRUCTURE: "Top & Under Rounded"
+                Using 'rounded-[3rem]' for a heavy, soft, card-like feel.
+                Added shadow for depth.
+            */}
+           <div className="hero-image-mask absolute inset-0 w-full h-full rounded-[3rem] overflow-hidden shadow-2xl shadow-bridal-charcoal/5">
+              <div className="hero-image-inner relative w-full h-full">
+                <Image 
+                    src={slide.image}
+                    alt="Bridal Imagery"
+                    fill
+                    className="object-cover"
+                    priority
+                    key={slide.image}
+                />
+                {/* Subtle Overlays for readability/mood */}
+                <div className="absolute inset-0 bg-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-60" />
+              </div>
+           </div>
+
+           {/* Floating Badge (Slide Counter) */}
+           <div className="hero-meta absolute -bottom-6 -right-6 lg:bottom-10 lg:-right-10 bg-white p-6 rounded-[2rem] shadow-xl z-20 flex flex-col items-center gap-2">
+              <span className="font-serif text-3xl text-bridal-charcoal">0{currentSlide + 1}</span>
+              <div className="w-px h-8 bg-bridal-charcoal/20" />
+              <span className="font-sans text-xs text-bridal-charcoal/40">0{SLIDES.length}</span>
+           </div>
+        </div>
+
+        {/* --- TEXT SIDE --- */}
+        <div className={cn(
+            "relative flex flex-col justify-center items-start transition-all duration-700",
+             isReversed ? "lg:col-start-1 lg:items-end lg:text-right" : "lg:col-start-2 lg:items-start lg:text-left"
+        )}>
+          {/* Progress Bar (Top of text) */}
+          <div className="hero-meta w-32 h-1 bg-bridal-charcoal/10 mb-8 rounded-full overflow-hidden">
+             <div ref={progressRef} className="h-full bg-bridal-sage origin-left" />
+          </div>
+
+          <p className="hero-meta mb-6 font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage">
             {slide.subtitle}
           </p>
           
-          <h1 className="mb-8 font-serif text-5xl leading-[1.1] text-bridal-charcoal md:text-6xl lg:text-7xl">
-            <span className="block">{slide.titleLine1}</span>
-            <span className="block italic text-bridal-gold/80">{slide.titleLine2}</span>
-            <span className="block">{slide.titleLine3}</span>
-          </h1>
+          <div className="mb-8 overflow-hidden">
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[0.9] text-bridal-charcoal">
+                {/* Wrapped in divs for mask animation */}
+                <div className="overflow-hidden"><span className="hero-text-line block">{slide.titleLine1}</span></div>
+                <div className="overflow-hidden"><span className="hero-text-line block italic text-bridal-gold/90">{slide.titleLine2}</span></div>
+                <div className="overflow-hidden"><span className="hero-text-line block">{slide.titleLine3}</span></div>
+            </h1>
+          </div>
 
-          <p className="mb-10 font-sans text-sm leading-loose text-bridal-charcoal/70">
+          <p className={cn(
+            "hero-desc mb-10 font-sans text-sm leading-loose text-bridal-charcoal/70 max-w-md",
+            isReversed ? "lg:ml-auto" : "" 
+          )}>
             {slide.description}
           </p>
 
-          <div className="inline-block">
-            <button className="group relative overflow-hidden bg-bridal-charcoal px-8 py-4 text-xs uppercase tracking-widest text-white transition-all hover:bg-bridal-sage">
-              <span className="relative z-10">{slide.button}</span>
+          <div className="hero-desc inline-block">
+            <button className="group relative flex items-center gap-4 px-8 py-4 bg-bridal-charcoal text-white rounded-full overflow-hidden transition-all hover:bg-bridal-sage">
+               <span className="relative z-10 text-xs uppercase tracking-widest">{slide.button}</span>
+               <div className="relative z-10 bg-white/20 p-1 rounded-full group-hover:translate-x-1 transition-transform">
+                 <MoveRight size={14} />
+               </div>
             </button>
           </div>
-        </div>
 
-        {/* --- DESKTOP CONTROLS --- */}
-        <div className={cn(
-            "absolute bottom-12 hidden md:flex items-center space-x-6 transition-all duration-500",
-            // Smoothly move controls left/right
-            isReversed ? "left-12" : "right-12"
-        )}>
-           <div className="flex space-x-2">
-             {SLIDES.map((_, idx) => (
-               <div 
-                 key={idx} 
-                 className={cn(
-                   "h-1 w-8 transition-all duration-500",
-                   idx === currentSlide ? "bg-bridal-sage" : "bg-bridal-charcoal/20"
-                 )} 
-               />
-             ))}
-           </div>
-           <div className="flex space-x-2">
-             <button 
+          {/* Navigation Controls */}
+          <div className="hero-meta mt-16 flex items-center gap-4">
+            <button 
                 onClick={() => handleSlideChange('prev')} 
                 disabled={isAnimating}
-                className="p-3 border border-bridal-charcoal/10 hover:border-bridal-sage hover:text-bridal-sage transition-all rounded-full text-bridal-charcoal disabled:opacity-50"
-             >
-               <ChevronLeft size={18} />
-             </button>
-             <button 
+                className="p-4 border border-bridal-charcoal/10 rounded-full hover:bg-white hover:shadow-lg hover:border-transparent transition-all disabled:opacity-50"
+            >
+                <ChevronLeft size={20} className="text-bridal-charcoal" />
+            </button>
+            <button 
                 onClick={() => handleSlideChange('next')} 
                 disabled={isAnimating}
-                className="p-3 border border-bridal-charcoal/10 hover:border-bridal-sage hover:text-bridal-sage transition-all rounded-full text-bridal-charcoal disabled:opacity-50"
-             >
-               <ChevronRight size={18} />
-             </button>
-           </div>
+                className="p-4 border border-bridal-charcoal/10 rounded-full hover:bg-white hover:shadow-lg hover:border-transparent transition-all disabled:opacity-50"
+            >
+                <ChevronRight size={20} className="text-bridal-charcoal" />
+            </button>
+          </div>
+
         </div>
+
       </div>
     </section>
   );

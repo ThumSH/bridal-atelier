@@ -1,8 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Quote } from "lucide-react";
+import Image from "next/image";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const services = [
   {
@@ -29,10 +38,28 @@ const services = [
 ];
 
 export default function ServicePillars() {
+   const container = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<string | null>(null);
 
+    useGSAP(
+    () => {
+      gsap.to(".leaf-blur", {
+        y: 40,
+        rotation: 15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
+    },
+    { scope: container }
+  );
+
   return (
-    <section className="relative flex h-[80vh] w-full flex-col overflow-hidden bg-bridal-ivory md:flex-row">
+    <section ref={container} className="relative flex h-[80vh] w-full flex-col overflow-hidden bg-bridal-ivory md:flex-row">
       {services.map((service) => (
         <div
           key={service.id}
@@ -45,6 +72,8 @@ export default function ServicePillars() {
             active === service.id ? "flex-[1.5]" : ""
           )}
         >
+                    
+            
           {/* Background Image Layer */}
           <div className={cn("absolute inset-0 z-0 transition-transform duration-700", service.color)} />
           
@@ -77,6 +106,15 @@ export default function ServicePillars() {
           </div>
         </div>
       ))}
+
+      <div className="leaf-blur absolute top-0 right-0 z-20 h-[300px] w-[300px] translate-x-1/4 -translate-y-1/4 opacity-15 pointer-events-none">
+        <Image
+          src="/leaves.webp"
+          alt="Leaf Accent"
+          fill
+          className="object-contain blur-[3px]"
+        />
+      </div>
     </section>
   );
 }

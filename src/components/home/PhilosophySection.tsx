@@ -62,7 +62,7 @@ export default function PhilosophySection() {
   return (
     <section ref={container} className="relative w-full min-h-[60vh] flex items-center bg-bridal-ivory py-24 overflow-hidden">
       
-      <div className="max-w-7xl mx-auto px-6 w-full h-full">
+      <div className="max-w-7xl mx-auto px-20 w-full h-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* --- LEFT SIDE: The Image (Arch) --- */}
@@ -118,12 +118,12 @@ export default function PhilosophySection() {
 
       {/* --- DECORATION: Right Side Top Leaf --- */}
       {/* Kept EXACTLY as requested - Top Right Corner */}
-      <div className="leaf-blur absolute top-0 right-0 z-0 h-[300px] w-[300px] translate-x-1/4 -translate-y-1/4 opacity-15 pointer-events-none">
+      <div className="leaf-blur absolute top-80 right-20 z-0 h-[300px] w-[300px] translate-x-1/4 -translate-y-1/4 opacity-10 pointer-events-none">
          <Image
             src="/leaves.webp"
             alt="Leaf Accent"
             fill
-            className="object-contain blur-[3px]"
+            className="object-contain blur-[3px] rotate-[60deg]"
          />
       </div>
 

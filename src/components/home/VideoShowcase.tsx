@@ -78,7 +78,7 @@ export default function VideoShowcase() {
           The 2026 Collection
         </p>
 
-        <h1 className="video-title font-serif text-6xl md:text-8xl lg:text-9xl tracking-tight">
+        <h1 className="video-title font-serif text-6xl md:text-8xl lg:text-8xl tracking-tight">
           BONITHA <span className="text-bridal-sage italic">&</span> CO.
         </h1>
 
