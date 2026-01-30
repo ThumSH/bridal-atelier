@@ -11,3 +11,6 @@
   --font-sans: var(--font-montserrat);
 }
 
+body {
+  @apply bg-bridal-charcoal; 
+}

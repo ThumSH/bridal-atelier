@@ -41,7 +41,7 @@ const SERVICES = [
     id: "planning",
     title: "Full Planning",
     description: "Orchestrating every detail of your day.",
-    image: "/knits.webp" 
+    image: "/planning.webp" 
   }
 ];
 

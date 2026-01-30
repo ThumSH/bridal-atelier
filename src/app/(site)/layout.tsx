@@ -3,16 +3,23 @@ import Footer from "@/components/global/Footer";
 
 export default function SiteLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <div className="relative flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col font-sans">
+      
+      {/* 1. The Navbar (Fixed Overlay) */}
       <Navbar />
-      <main className="flex-1">
+
+      {/* 2. The Page Content */}
+      <main className="flex-grow">
         {children}
       </main>
+
+      {/* 3. The Footer */}
       <Footer />
+      
     </div>
   );
 }

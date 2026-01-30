@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -214,10 +215,9 @@ export default function ArtistryShowcase() {
                     <p className="font-sans text-sm text-white/70 leading-relaxed max-w-md mb-8">
                         {item.description}
                     </p>
-                    
-                    <button className="flex items-center gap-2 text-xs uppercase tracking-widest text-white hover:text-bridal-sage transition-colors group/btn">
-                        Learn More <ArrowUpRight size={14} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
-                    </button>
+                    <Link href="/artistry" className="flex items-center gap-2 text-xs uppercase tracking-widest text-white hover:text-bridal-sage transition-colors group/btn">
+   Learn More <ArrowUpRight size={14} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+</Link>
                 </div>
 
                 {/* Mobile Fallback Title */}

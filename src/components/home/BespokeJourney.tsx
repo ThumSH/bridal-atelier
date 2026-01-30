@@ -15,7 +15,7 @@ const STEPS = [
     id: "01",
     title: "The Consultation",
     description: "Your journey begins with a private appointment. Over coffee or champagne, we discuss your vision, from the silhouette of your gown to the palette of your florals.",
-    image: "https://images.unsplash.com/photo-1550614000-4b9519e0037a?q=80&w=2000&auto=format&fit=crop"
+    image: "/mea.webp"
   },
   {
     id: "02",

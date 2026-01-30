@@ -82,16 +82,15 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8">
           
           {/* Button */}
-          <button 
+          <Link 
             className={cn(
               "px-6 py-2 font-sans text-[10px] uppercase tracking-widest transition-all duration-300 border",
-              isScrolled 
+              isScrolled
                 ? "border-bridal-charcoal text-bridal-charcoal hover:bg-bridal-charcoal hover:text-bridal-ivory"
                 : "border-white text-white hover:bg-white hover:text-bridal-charcoal"
-            )}
-          >
+            )} href={"/contact"}          >
             Book Now
-          </button>
+          </Link>
 
           {/* Social Icons (Far Right) */}
           <div className={cn(
