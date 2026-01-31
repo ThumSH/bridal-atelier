@@ -7,7 +7,6 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { cn } from "@/lib/utils";
 import PageHero from "@/components/global/PageHero";
 import { Scissors, Ruler, PenTool, Sparkles } from "lucide-react";
 
@@ -88,13 +87,13 @@ export default function CouturePage() {
       <PageHero 
         title="The Couture Atelier" 
         subtitle="Artistry in Motion" 
-        image="/couture.webp" 
+        image="/ch.webp" 
       />
 
       {/* 2. PHILOSOPHY INTRO */}
       <section className="py-32 px-6 max-w-5xl mx-auto text-center relative">
          {/* Leaf Decoration Top Left */}
-         <div className="couture-leaf absolute -top-20 -left-32 w-[400px] h-[400px] opacity-30 pointer-events-none">
+         <div className="couture-leaf absolute -top-20 -left-32 w-100 h-100 opacity-30 pointer-events-none">
             <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-[3px]" />
          </div>
 
@@ -102,7 +101,7 @@ export default function CouturePage() {
             Our Philosophy
          </span>
          <h2 className="reveal-text font-serif text-3xl md:text-5xl text-bridal-charcoal leading-relaxed">
-            "We do not simply sell dresses. We curate a personal transformation. Every fabric, every cut, and every fitting is a deliberate step towards your most authentic self."
+            "We curate a personal transformation. Every fabric, every cut, and every fitting is a deliberate step towards your most authentic self."
          </h2>
       </section>
 
@@ -111,9 +110,9 @@ export default function CouturePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
            
            {/* Sticky Image Side */}
-           <div className="md:sticky md:top-32 h-[80vh] w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-bridal-charcoal/10">
+           <div className="md:sticky md:top-32 h-[80vh] w-full rounded-4xl overflow-hidden shadow-2xl shadow-bridal-charcoal/10">
               <Image 
-                src="/21.webp" 
+                src="/art.webp" 
                 alt="Sketching" 
                 fill 
                 className="parallax-img object-cover scale-110" 
@@ -185,10 +184,10 @@ export default function CouturePage() {
                </ul>
             </div>
 
-            <div className="order-1 md:order-2 relative h-[600px] w-full">
+            <div className="order-1 md:order-2 relative h-150 w-full">
                {/* Collage Effect */}
                <div className="absolute top-0 right-0 w-[80%] h-[90%] rounded-tl-[10rem] overflow-hidden border border-white/10">
-                  <Image src="/a.webp" alt="Vintage" fill className="object-cover" />
+                  <Image src="/bridal.jpg" alt="Vintage" fill className="object-cover" />
                </div>
                <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-tr-[5rem] overflow-hidden border-4 border-bridal-charcoal shadow-2xl">
                   <Image src="/flower.webp" alt="Detail" fill className="object-cover" />
@@ -200,8 +199,8 @@ export default function CouturePage() {
       {/* 5. NEW SECTION: THE PROCESS (With Rope Animation) */}
       <section className="process-section relative py-32 px-6 overflow-hidden">
          {/* Leaf Decoration Right */}
-         <div className="couture-leaf absolute top-10 right-0 w-[500px] h-[500px] opacity-20 pointer-events-none">
-            <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-[4px] -rotate-90" />
+         <div className="couture-leaf absolute top-10 right-0 w-125 h-125 opacity-20 pointer-events-none">
+            <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-xs -rotate-90" />
          </div>
 
          {/* --- THE ROPE SVG BACKGROUND --- */}
@@ -225,7 +224,7 @@ export default function CouturePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-               {PROCESS_STEPS.map((step, index) => (
+               {PROCESS_STEPS.map((step) => (
                   <div key={step.id} className="reveal-text flex flex-col items-center text-center group">
                      <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-bridal-charcoal mb-6 group-hover:bg-bridal-sage group-hover:text-white transition-colors duration-500 relative z-10">
                         {step.icon}
@@ -244,7 +243,7 @@ export default function CouturePage() {
       <section className="py-20 px-6 max-w-7xl mx-auto mb-20">
          <div className="bg-white rounded-[3rem] p-8 md:p-16 shadow-xl shadow-bridal-charcoal/5 flex flex-col md:flex-row gap-12 items-center">
             <div className="w-full md:w-1/3 relative h-[400px] rounded-2xl overflow-hidden">
-               <Image src="/2.webp" alt="Alterations" fill className="object-cover" />
+               <Image src="/gown.jpg" alt="Alterations" fill className="object-cover" />
             </div>
             <div className="w-full md:w-2/3">
                <h3 className="font-serif text-3xl md:text-4xl text-bridal-charcoal mb-6">Expert Alterations</h3>

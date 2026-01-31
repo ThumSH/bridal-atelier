@@ -83,7 +83,7 @@ export default function AboutPage() {
       <PageHero 
         title="The Visionary" 
         subtitle="Behind The Brand" 
-        image="/21.webp" 
+        image="/ab.webp" 
       />
 
       {/* 2. THE FOUNDER (Asymmetrical Split) */}
@@ -169,7 +169,7 @@ export default function AboutPage() {
                {/* Item 1: Top Left */}
                <div className="float-img absolute top-0 left-0 md:left-20 w-64 md:w-80 aspect-[3/4] bg-white p-3 shadow-lg rotate-[-4deg]">
                   <div className="relative w-full h-full bg-bridal-charcoal/5">
-                     <Image src="/2.webp" alt="Moodboard 1" fill className="object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                     <Image src="/flower.webp" alt="Moodboard 1" fill className="object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                   </div>
                   <p className="font-serif text-xl mt-4 text-center italic text-bridal-charcoal/60">Inspiration</p>
                </div>

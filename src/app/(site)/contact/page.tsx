@@ -75,7 +75,7 @@ export default function ContactPage() {
       <PageHero
         title="Begin The Conversation"
         subtitle="Inquiries & Appointments"
-        image="/er.jpg" // Sketch/Paper vibe image
+        image="/book.webp" // Sketch/Paper vibe image
       />
 
       <section className="relative py-32 px-6 max-w-7xl mx-auto">
@@ -219,7 +219,7 @@ export default function ContactPage() {
       <section className="relative w-full h-[50vh] bg-bridal-charcoal overflow-hidden flex items-center justify-center">
           <div className="absolute inset-0 opacity-40 grayscale">
              {/* Note: In a real project, use a map image or embed here. Using a placeholder for the vibe. */}
-             <Image src="/21.webp" alt="Location Map" fill className="object-cover" />
+             <Image src="/wail.webp" alt="Location Map" fill className="object-cover" />
           </div>
           <div className="absolute inset-0 bg-black/30" />
           

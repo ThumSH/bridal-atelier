@@ -21,7 +21,7 @@ const STEPS = [
     id: "02",
     title: "The Artistry",
     description: "Watch your dream come to life. This phase includes couture fittings, hair & makeup trials, and selecting the finest blooms to match your theme.",
-    image: "https://images.unsplash.com/photo-1596451190630-186aff535bf2?q=80&w=2000&auto=format&fit=crop"
+    image: "/makeup.webp"
   },
   {
     id: "03",

@@ -20,7 +20,7 @@ const ARTISTRY_ITEMS = [
     title: "Bridal Makeup",
     subtitle: "High Definition Artistry",
     description: "Flawless, long-lasting application designed to look perfect in person and ethereal on camera. We focus on skin-first radiance.",
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=2071&auto=format&fit=crop"
+    image: "/qfc.webp"
   },
   {
     id: "hair",
@@ -28,7 +28,7 @@ const ARTISTRY_ITEMS = [
     title: "Couture Hair",
     subtitle: "Sculpted Elegance",
     description: "From Hollywood waves to intricate updos, we sculpt hair that withstands the elements and complements your veil placement.",
-    image: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=2069&auto=format&fit=crop"
+    image: "/r.webp"
   },
   {
     id: "details",

@@ -17,7 +17,7 @@ const DRESSES = [
     title: "The Basque",
     subtitle: "Spring 2026 Trend",
     description: "A corset-style waist that dips into a V-shape, elongating the torso for a regal, sculpted look.",
-    image: "/couture.webp",
+    image: "/The Basque.webp",
     tags: ["Sculpted", "Royal", "Volume"]
   },
   {
@@ -25,7 +25,7 @@ const DRESSES = [
     title: "The Drop Waist",
     subtitle: "Vintage Revival",
     description: "Characterized by a lengthened bodice that hits below the hips, blending 1920s glamour with modern structure.",
-    image: "/21.webp",
+    image: "/waist.webp",
     tags: ["Elongated", "Vintage", "Sleek"]
   },
   {
@@ -33,7 +33,7 @@ const DRESSES = [
     title: "The Architectural",
     subtitle: "Modern Minimalist",
     description: "Clean lines and artful folds. A sheath silhouette that focuses on fabric manipulation rather than embellishment.",
-    image: "/2.webp",
+    image: "/archi.webp",
     tags: ["Draped", "Modern", "Clean"]
   },
   {
@@ -41,7 +41,7 @@ const DRESSES = [
     title: "The Mermaid",
     subtitle: "Timeless Contour",
     description: "Precision tailoring that hugs the curves and flares dramatically at the knee for the ultimate feminine shape.",
-    image: "/a.webp",
+    image: "/mermaid.webp",
     tags: ["Fitted", "Dramatic", "Curves"]
   }
 ];

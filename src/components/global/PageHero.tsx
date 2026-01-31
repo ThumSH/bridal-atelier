@@ -58,7 +58,7 @@ export default function PageHero({ title, subtitle, image }: PageHeroProps) {
 
       {/* Content */}
       <div className="relative z-10 text-center text-white px-6">
-        <span className="page-hero-text font-sans text-xs uppercase tracking-[0.4em] mb-4 block text-bridal-sage">
+        <span className="page-hero-text font-sans text-xs font-bold uppercase tracking-[0.50em] mb-4 block text-bridal-sage">
           {subtitle}
         </span>
         <h1 className="page-hero-text font-serif text-5xl md:text-7xl">

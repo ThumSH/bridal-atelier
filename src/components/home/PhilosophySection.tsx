@@ -6,7 +6,6 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Quote } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -67,7 +66,7 @@ export default function PhilosophySection() {
           
           {/* --- LEFT SIDE: The Image (Arch) --- */}
           {/* Adjusted to match the reference: Tall arch, clean image */}
-          <div className="philo-image relative w-full h-[600px] md:h-[700px]">
+          <div className="philo-image relative w-full h-150 md:h-175">
             <div className="relative h-full w-full overflow-hidden rounded-t-[20rem] shadow-2xl shadow-bridal-charcoal/10">
               <Image
                 src="/er.jpg"
@@ -118,12 +117,12 @@ export default function PhilosophySection() {
 
       {/* --- DECORATION: Right Side Top Leaf --- */}
       {/* Kept EXACTLY as requested - Top Right Corner */}
-      <div className="leaf-blur absolute top-80 right-20 z-0 h-[300px] w-[300px] translate-x-1/4 -translate-y-1/4 opacity-10 pointer-events-none">
+      <div className="leaf-blur absolute top-80 right-20 z-0 h-75 w-75 translate-x-1/4 -translate-y-1/4 opacity-10 pointer-events-none">
          <Image
             src="/leaves.webp"
             alt="Leaf Accent"
             fill
-            className="object-contain blur-[3px] rotate-[60deg]"
+            className="object-contain blur-[3px] rotate-60"
          />
       </div>
 

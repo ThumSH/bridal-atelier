@@ -87,7 +87,7 @@ export default function ArtistryPage() {
       <PageHero 
         title="Couture Beauty" 
         subtitle="The Finishing Touch" 
-        image="/makeup.jpg" 
+        image="/ti.webp" 
       />
 
       {/* 2. PHILOSOPHY INTRO */}
@@ -112,7 +112,7 @@ export default function ArtistryPage() {
            {/* Sticky Image Side */}
            <div className="md:sticky md:top-32 h-[80vh] w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-black/30">
               <Image 
-                src="/makeup.jpg" 
+                src="/makeup-3.png" 
                 alt="The Trial" 
                 fill 
                 className="parallax-img object-cover scale-110" 
@@ -175,10 +175,10 @@ export default function ArtistryPage() {
                </ul>
             </div>
 
-            <div className="order-1 md:order-2 relative h-[600px] w-full">
+            <div className="order-1 md:order-2 relative h-150 w-full">
                {/* Collage Effect */}
                <div className="absolute top-0 right-0 w-[85%] h-[90%] rounded-tl-[10rem] overflow-hidden shadow-2xl shadow-bridal-charcoal/10">
-                  <Image src="/2.webp" alt="Wedding Morning" fill className="object-cover" />
+                  <Image src="/floral-2.jpg" alt="Wedding Morning" fill className="object-cover" />
                </div>
                <div className="absolute bottom-12 left-0 w-[45%] h-[40%] rounded-tr-[4rem] overflow-hidden border-4 border-white shadow-xl">
                   <Image src="/floral.webp" alt="Detail" fill className="object-cover" />
@@ -190,8 +190,8 @@ export default function ArtistryPage() {
       {/* 5. NEW SECTION: THE TIMELINE (With Rope Animation) */}
       <section className="timeline-section relative py-32 px-6 overflow-hidden">
          {/* Leaf Decoration Left */}
-         <div className="artistry-leaf absolute top-20 left-0 w-[500px] h-[500px] opacity-10 pointer-events-none">
-            <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-[4px] rotate-90" />
+         <div className="artistry-leaf absolute top-20 left-0 w-125 h-125 opacity-10 pointer-events-none">
+            <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-xs rotate-90" />
          </div>
 
          {/* --- THE ROPE SVG BACKGROUND --- */}
