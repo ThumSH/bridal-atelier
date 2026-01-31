@@ -102,7 +102,7 @@ export default function ArtistryShowcase() {
           Beauty & <span className="italic text-bridal-sage">Artistry</span>
           
           {/* --- THE ROPE-CLOTH DECORATION (Behind Title) --- */}
-          <div className="absolute -top-24 -right-32 w-[400px] h-[300px] pointer-events-none z-[-1] opacity-60">
+          <div className="absolute -top-24 -right-32 w-100 h-75 pointer-events-none z-[-1] opacity-60">
              <div className="artistry-flow-container w-full h-full">
                <svg 
                   className="w-full h-full" 
@@ -150,7 +150,7 @@ export default function ArtistryShowcase() {
       </div>
 
       {/* --- THE ACCORDION --- */}
-      <div className="flex flex-col md:flex-row w-full h-[600px] md:h-[700px] border-t border-white/10">
+      <div className="flex flex-col md:flex-row w-full h-150 md:h-175 border-t border-white/10">
         {ARTISTRY_ITEMS.map((item) => (
             <div
             key={item.id}
@@ -158,7 +158,7 @@ export default function ArtistryShowcase() {
             className={cn(
                 "relative h-full flex-1 transition-all duration-700 ease-in-out cursor-pointer overflow-hidden border-b md:border-b-0 md:border-r border-white/10 last:border-r-0 group",
                 // Active Logic
-                activeId === item.id ? "flex-[3]" : "flex-[1] hover:flex-[1.2]"
+                activeId === item.id ? "flex-3" : "flex-1 hover:flex-[1.2]"
             )}
             >
             {/* Background Image */}
@@ -173,7 +173,7 @@ export default function ArtistryShowcase() {
                 )}
                 />
                 <div className={cn(
-                    "absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500",
+                    "absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500",
                     activeId === item.id ? "opacity-80" : "opacity-60"
                 )} />
             </div>
@@ -203,7 +203,7 @@ export default function ArtistryShowcase() {
                 {/* Expanded Content */}
                 <div className={cn(
                     "transition-all duration-700 ease-in-out overflow-hidden",
-                    activeId === item.id ? "opacity-100 translate-y-0 max-h-[400px]" : "opacity-0 translate-y-8 max-h-0 md:opacity-0"
+                    activeId === item.id ? "opacity-100 translate-y-0 max-h-100" : "opacity-0 translate-y-8 max-h-0 md:opacity-0"
                 )}>
                     <p className="font-sans text-xs uppercase tracking-[0.3em] text-bridal-sage mb-2">
                         {item.subtitle}
@@ -211,7 +211,7 @@ export default function ArtistryShowcase() {
                     <h3 className="font-serif text-4xl md:text-5xl text-white mb-6">
                         {item.title}
                     </h3>
-                    <div className="w-12 h-[1px] bg-white/30 mb-6" />
+                    <div className="w-12 h-px bg-white/30 mb-6" />
                     <p className="font-sans text-sm text-white/70 leading-relaxed max-w-md mb-8">
                         {item.description}
                     </p>

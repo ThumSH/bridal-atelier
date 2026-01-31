@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Instagram, Facebook, Mail, ArrowUpRight } from "lucide-react";
+import { Instagram, Facebook} from "lucide-react";
 
 export default function Footer() {
   return (
@@ -10,12 +10,12 @@ export default function Footer() {
       <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
       {/* --- DECORATION: Leaf Rising from Bottom --- */}
-      <div className="absolute -bottom-20 -right-20 z-0 h-[400px] w-[400px] opacity-10 pointer-events-none">
+      <div className="absolute -bottom-20 -right-20 z-0 h-100 w-100 opacity-10 pointer-events-none">
          <Image
             src="/leaves.webp"
             alt="Leaf Accent"
             fill
-            className="object-contain blur-[3px] rotate-[-45deg]"
+            className="object-contain blur-[3px] -rotate-45"
          />
       </div>
 
