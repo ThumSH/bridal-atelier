@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -43,13 +43,24 @@ const ARTISTRY_ITEMS = [
 export default function ArtistryShowcase() {
   const container = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>("makeup");
+  
+  // Ref for debounce timer to prevent rapid-fire state changes
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = useCallback((id: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    
+    timeoutRef.current = setTimeout(() => {
+      setActiveId(id);
+    }, 150); 
+  }, []);
 
   useGSAP(
     () => {
-      // 1. Reveal Header & Section
+      // 1. Simple Fade In
       gsap.from(container.current, {
         opacity: 0,
-        duration: 1,
+        duration: 1.2,
         ease: "power2.out",
         scrollTrigger: {
           trigger: container.current,
@@ -57,8 +68,7 @@ export default function ArtistryShowcase() {
         }
       });
 
-      // 2. COUTURE FLOW ANIMATION (The Rope-Cloth Lines)
-      // Draw the lines in
+      // 2. SVG Line Animation
       gsap.fromTo(".artistry-flow-line", 
         { strokeDasharray: 1000, strokeDashoffset: 1000 },
         {
@@ -72,17 +82,6 @@ export default function ArtistryShowcase() {
           }
         }
       );
-
-      // Gentle Floating Animation
-      gsap.to(".artistry-flow-container", {
-        y: 15,
-        rotation: 1,
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
     },
     { scope: container }
   );
@@ -90,75 +89,38 @@ export default function ArtistryShowcase() {
   return (
     <section ref={container} className="relative w-full bg-bridal-charcoal overflow-hidden pt-24 pb-0">
       
-      {/* Background Noise */}
+      {/* Static Noise Texture */}
       <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none z-0" />
 
-      {/* --- SECTION HEADER --- */}
+      {/* Header */}
       <div className="relative z-10 text-center mb-16 px-6">
         <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-6 block">
           Beyond The Dress
         </span>
-        <h2 className="font-serif text-4xl md:text-5xl text-white relative inline-block">
+        <h2 className="font-serif text-4xl md:text-5xl text-white relative inline-block drop-shadow-2xl">
           Beauty & <span className="italic text-bridal-sage">Artistry</span>
           
-          {/* --- THE ROPE-CLOTH DECORATION (Behind Title) --- */}
+          {/* Decorative Lines */}
           <div className="absolute -top-24 -right-32 w-100 h-75 pointer-events-none z-[-1] opacity-60">
-             <div className="artistry-flow-container w-full h-full">
-               <svg 
-                  className="w-full h-full" 
-                  viewBox="0 0 400 300" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
-               >
-                  {/* Line 1: Main Flow (Gold) */}
-                  <path 
-                    className="artistry-flow-line"
-                    d="M50 150 C 150 50, 250 250, 350 150" 
-                    stroke="#D4AF37" 
-                    strokeWidth="1.5" 
-                    strokeOpacity="0.6"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  
-                  {/* Line 2: Parallel Detail (White) */}
-                  <path 
-                    className="artistry-flow-line"
-                    d="M50 170 C 150 70, 250 270, 350 170" 
-                    stroke="#FFFFFF" 
-                    strokeWidth="1" 
-                    strokeOpacity="0.3"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  
-                  {/* Line 3: Stitch Detail (Sage Dashed) */}
-                  <path 
-                    className="artistry-flow-line"
-                    d="M60 130 C 160 30, 260 230, 360 130" 
-                    stroke="#8A9A5B" 
-                    strokeWidth="0.5" 
-                    strokeOpacity="0.4"
-                    fill="none"
-                    strokeDasharray="4 4"
-                  />
+             <div className="w-full h-full">
+               <svg className="w-full h-full" viewBox="0 0 400 300" fill="none">
+                  <path className="artistry-flow-line" d="M50 150 C 150 50, 250 250, 350 150" stroke="#D4AF37" strokeWidth="1.5" strokeOpacity="0.6" fill="none" strokeLinecap="round" />
+                  <path className="artistry-flow-line" d="M50 170 C 150 70, 250 270, 350 170" stroke="#FFFFFF" strokeWidth="1" strokeOpacity="0.3" fill="none" strokeLinecap="round" />
                </svg>
              </div>
           </div>
-
         </h2>
       </div>
 
-      {/* --- THE ACCORDION --- */}
-      <div className="flex flex-col md:flex-row w-full h-150 md:h-175 border-t border-white/10">
+      {/* Accordion */}
+      <div className="flex flex-col md:flex-row w-full h-[600px] md:h-[700px] border-t border-white/10">
         {ARTISTRY_ITEMS.map((item) => (
             <div
             key={item.id}
-            onMouseEnter={() => setActiveId(item.id)}
+            onMouseEnter={() => handleMouseEnter(item.id)}
             className={cn(
-                "relative h-full flex-1 transition-all duration-700 ease-in-out cursor-pointer overflow-hidden border-b md:border-b-0 md:border-r border-white/10 last:border-r-0 group",
-                // Active Logic
-                activeId === item.id ? "flex-3" : "flex-1 hover:flex-[1.2]"
+                "relative h-full transition-[flex-grow] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer overflow-hidden border-b md:border-b-0 md:border-r border-white/10 last:border-r-0 group will-change-[flex-grow]",
+                activeId === item.id ? "flex-[3]" : "flex-[1] hover:flex-[1.2]"
             )}
             >
             {/* Background Image */}
@@ -167,21 +129,31 @@ export default function ArtistryShowcase() {
                 src={item.image}
                 alt={item.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                // REMOVED: scale-110 and scale-100 classes
+                // KEPT: transition-all to smooth the grayscale/brightness change
                 className={cn(
-                    "object-cover transition-transform duration-1000",
-                    activeId === item.id ? "scale-100 grayscale-0" : "scale-110 grayscale brightness-50"
+                    "object-cover transition-all duration-1000",
+                    activeId === item.id ? "grayscale-0" : "grayscale brightness-50"
                 )}
                 />
-                <div className={cn(
-                    "absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500",
-                    activeId === item.id ? "opacity-80" : "opacity-60"
-                )} />
+                
+                <div className="absolute inset-0 bg-black/40 transition-opacity duration-500" />
+                
+                {/* Powder Effects */}
+                {item.id === 'makeup' && activeId === 'makeup' && (
+                  <>
+                    <div className="absolute top-0 right-0 w-[80%] h-[80%] bg-[radial-gradient(circle_at_top_right,rgba(251,113,133,0.4)_0%,transparent_60%)] opacity-100 transition-opacity duration-1000 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-[60%] h-[60%] bg-[radial-gradient(circle_at_bottom_left,rgba(225,29,72,0.3)_0%,transparent_60%)] opacity-100 transition-opacity duration-1000 pointer-events-none" />
+                  </>
+                )}
+                
+                {/* Gradient for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
             </div>
 
-            {/* Content Container */}
-            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end z-10">
-                
-                {/* Top Number */}
+            {/* Content */}
+            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end z-20 pointer-events-none">
                 <div className="absolute top-8 left-8 md:top-12 md:left-12">
                 <span className={cn(
                     "font-sans text-xs border rounded-full px-2 py-1 transition-colors duration-500",
@@ -191,50 +163,43 @@ export default function ArtistryShowcase() {
                 </span>
                 </div>
 
-                {/* Animated Content */}
-                <div className="transform transition-transform duration-500 origin-bottom-left">
-                {/* Vertical Title (Collapsed State) */}
-                {activeId !== item.id && (
-                    <h3 className="hidden md:block absolute bottom-0 left-0 -rotate-90 origin-bottom-left font-serif text-3xl text-white/50 whitespace-nowrap translate-x-16 -translate-y-8 tracking-widest">
+                {/* Text Container */}
+                <div className="relative overflow-hidden w-full">
+                    {/* Collapsed Title */}
+                    <h3 className={cn(
+                        "absolute bottom-0 left-0 -rotate-90 origin-bottom-left font-serif text-3xl text-white/50 whitespace-nowrap translate-x-12 -translate-y-8 tracking-widest transition-opacity duration-500",
+                        activeId === item.id ? "opacity-0" : "opacity-100 hidden md:block"
+                    )}>
                         {item.title}
                     </h3>
-                )}
 
-                {/* Expanded Content */}
-                <div className={cn(
-                    "transition-all duration-700 ease-in-out overflow-hidden",
-                    activeId === item.id ? "opacity-100 translate-y-0 max-h-100" : "opacity-0 translate-y-8 max-h-0 md:opacity-0"
-                )}>
-                    <p className="font-sans text-xs uppercase tracking-[0.3em] text-bridal-sage mb-2">
-                        {item.subtitle}
-                    </p>
-                    <h3 className="font-serif text-4xl md:text-5xl text-white mb-6">
-                        {item.title}
-                    </h3>
-                    <div className="w-12 h-px bg-white/30 mb-6" />
-                    <p className="font-sans text-sm text-white/70 leading-relaxed max-w-md mb-8">
-                        {item.description}
-                    </p>
-                    <Link href="/artistry" className="flex items-center gap-2 text-xs uppercase tracking-widest text-white hover:text-bridal-sage transition-colors group/btn">
-   Learn More <ArrowUpRight size={14} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
-</Link>
+                    {/* Expanded Content */}
+                    <div className={cn(
+                        "transition-all duration-700 ease-out transform",
+                        activeId === item.id ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12 absolute bottom-0 left-0"
+                    )}>
+                        <div className="md:min-w-[400px] pointer-events-auto">
+                            <p className="font-sans text-xs uppercase tracking-[0.3em] text-bridal-sage mb-2">
+                                {item.subtitle}
+                            </p>
+                            <h3 className="font-serif text-4xl md:text-5xl text-white mb-6 drop-shadow-md">
+                                {item.title}
+                            </h3>
+                            <div className="w-12 h-px bg-white/30 mb-6" />
+                            <p className="font-sans text-sm text-white/70 leading-relaxed max-w-md mb-8">
+                                {item.description}
+                            </p>
+                            <Link href="/artistry" className="flex items-center gap-2 text-xs uppercase tracking-widest text-white hover:text-bridal-sage transition-colors">
+                                Learn More <ArrowUpRight size={14} />
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-
-                {/* Mobile Fallback Title */}
-                <h3 className={cn(
-                    "md:hidden font-serif text-2xl text-white transition-opacity duration-300",
-                    activeId === item.id ? "hidden" : "block"
-                )}>
-                    {item.title}
-                </h3>
-                </div>
-
             </div>
 
             </div>
         ))}
       </div>
-
     </section>
   );
 }

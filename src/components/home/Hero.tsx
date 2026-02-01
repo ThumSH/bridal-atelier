@@ -47,7 +47,6 @@ export default function Hero() {
     if (isAnimating) return;
     setIsAnimating(true);
 
-    // Reset Progress Bar
     if (progressRef.current) {
         gsap.set(progressRef.current, { scaleX: 0 });
     }
@@ -58,18 +57,14 @@ export default function Hero() {
           if (direction === 'next') return (prev + 1) % SLIDES.length;
           return (prev - 1 + SLIDES.length) % SLIDES.length;
         });
-        // Note: isAnimating set to false in the ENTER animation
       }
     });
 
-    // EXIT ANIMATION:
-    // 1. Text fades up and out
     tl.to(".hero-text-line", { y: -50, opacity: 0, duration: 0.5, stagger: 0.05, ease: "power2.in" })
       .to(".hero-desc", { y: -20, opacity: 0, duration: 0.4 }, "<0.1")
       .to(".hero-meta", { opacity: 0, duration: 0.3 }, "<")
-    // 2. Image "Wipes" away (Clip Path)
       .to(".hero-image-mask", { 
-        clipPath: "inset(0% 0% 100% 0%)", // Wipes down to hide
+        clipPath: "inset(0% 0% 100% 0%)",
         duration: 0.8, 
         ease: "power4.inOut" 
       }, "<");
@@ -80,7 +75,6 @@ export default function Hero() {
   useEffect(() => {
     if (isAnimating) return;
     
-    // Animate Progress Bar
     if (progressRef.current) {
         gsap.fromTo(progressRef.current, 
             { scaleX: 0 }, 
@@ -90,7 +84,7 @@ export default function Hero() {
 
     const timer = setTimeout(() => {
       handleSlideChange('next');
-    }, 5000); // 5 Seconds for better readability
+    }, 5000); 
 
     return () => {
         clearTimeout(timer);
@@ -104,29 +98,23 @@ export default function Hero() {
         onComplete: () => setIsAnimating(false)
     });
 
-    // IMAGE REVEAL:
-    // Wipes up from bottom (Cinematic)
     tl.fromTo(".hero-image-mask", 
       { clipPath: "inset(100% 0% 0% 0%)" }, 
       { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power4.out" }
     );
 
-    // Image Scale Effect (Zoom Out slowly)
     tl.fromTo(".hero-image-inner",
         { scale: 1.2 },
         { scale: 1, duration: 1.5, ease: "power2.out" },
         "<"
     );
 
-    // TEXT REVEAL:
-    // Staggered lines for "Elegance / Softly / Spoken"
     tl.fromTo(".hero-text-line", 
         { y: 100, opacity: 0 }, 
         { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" }, 
         "-=0.8"
     );
 
-    // Description & Meta
     tl.fromTo([".hero-desc", ".hero-meta"],
         { y: 20, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", stagger: 0.1 },
@@ -164,7 +152,8 @@ export default function Hero() {
           </div>
           <p className="hero-meta mb-6 font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage">{slide.subtitle}</p>
           <div className="mb-8 overflow-hidden">
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[0.9] text-bridal-charcoal">
+            {/* ADDED: shadow-glow class to H1 */}
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[0.9] text-bridal-charcoal shadow-glow">
                 <div className="overflow-hidden"><span className="hero-text-line block">{slide.titleLine1}</span></div>
                 <div className="overflow-hidden"><span className="hero-text-line block italic text-bridal-gold/90">{slide.titleLine2}</span></div>
                 <div className="overflow-hidden"><span className="hero-text-line block">{slide.titleLine3}</span></div>
@@ -175,9 +164,8 @@ export default function Hero() {
           </p>
           
           <div className="hero-desc inline-block">
-            {/* UPDATED LINK */}
             <Link href={slide.link}>
-                <button className="group relative flex items-center gap-4 px-8 py-4 bg-bridal-charcoal text-white rounded-full overflow-hidden transition-all hover:bg-bridal-sage">
+                <button className="group relative flex items-center gap-4 px-8 py-4 bg-bridal-charcoal text-white rounded-full overflow-hidden transition-all hover:bg-bridal-sage hover:shadow-[0_0_20px_rgba(138,154,91,0.4)]">
                     <span className="relative z-10 text-xs uppercase tracking-widest">{slide.button}</span>
                     <div className="relative z-10 bg-white/20 p-1 rounded-full group-hover:translate-x-1 transition-transform">
                         <MoveRight size={14} />

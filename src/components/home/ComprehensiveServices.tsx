@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"; //
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -50,70 +50,24 @@ export default function ComprehensiveServices() {
   const [activeService, setActiveService] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  // --- Auto-Scroll Logic ---
+  // Auto-rotate on desktop only
   useEffect(() => {
-    if (isPaused) return;
-
+    if (isPaused || window.innerWidth < 1024) return; 
     const interval = setInterval(() => {
       setActiveService((prev) => (prev + 1) % SERVICES.length);
     }, 4000);
-
     return () => clearInterval(interval);
   }, [isPaused]);
 
   useGSAP(() => {
-    // 1. Service List Reveal
     gsap.fromTo(".service-item", 
       { y: 30, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 70%",
-        }
-      }
+      { y: 0, opacity: 1, duration: 1, stagger: 0.1, scrollTrigger: { trigger: container.current, start: "top 70%" } }
     );
-
-    // 2. COUTURE FLOW ANIMATION
-    gsap.fromTo(".service-flow-line", 
-      { strokeDasharray: 1000, strokeDashoffset: 1000 },
-      {
-        strokeDashoffset: 0,
-        duration: 3,
-        ease: "power2.out",
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 60%",
-        }
-      }
-    );
-
-    // Float the container
-    gsap.to(".service-flow-container", {
-      y: 20,
-      rotation: 2,
-      duration: 6,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-
   }, { scope: container });
 
-  // 3. INTERACTION: Pulse the lines when changing services
-  useGSAP(() => {
-    gsap.fromTo(".service-flow-line",
-        { strokeOpacity: 0.8 },
-        { strokeOpacity: 0.3, duration: 1.5, ease: "power2.out" }
-    );
-  }, { scope: container, dependencies: [activeService] });
-
   return (
-    <section ref={container} className="relative w-full bg-bridal-ivory py-32 overflow-hidden">
+    <section ref={container} className="relative w-full bg-bridal-ivory py-20 md:py-32 overflow-hidden">
       
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
         
@@ -123,7 +77,7 @@ export default function ComprehensiveServices() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-12 block">
+          <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-8 md:mb-12 block">
             Our Services
           </span>
           
@@ -131,27 +85,36 @@ export default function ComprehensiveServices() {
             {SERVICES.map((service, index) => (
               <div 
                 key={service.id}
-                onMouseEnter={() => setActiveService(index)}
+                // On mobile, click to expand. On desktop, hover.
+                onClick={() => setActiveService(index)}
+                onMouseEnter={() => window.innerWidth >= 1024 && setActiveService(index)}
                 className={cn(
-                  "service-item group cursor-pointer border-b border-bridal-charcoal/10 py-8 transition-[padding,border-color] duration-500 relative",
-                  activeService === index ? "border-bridal-charcoal/40 pl-4" : "hover:border-bridal-charcoal/20"
+                  "service-item group cursor-pointer border-b border-bridal-charcoal/10 py-6 md:py-8 transition-[padding,border-color] duration-500 relative",
+                  activeService === index ? "border-bridal-sage/40 pl-0 md:pl-4" : "hover:border-bridal-charcoal/20"
                 )}
               >
                 <div className="flex items-center justify-between">
                   <h3 className={cn(
-                    "font-serif text-3xl transition-colors duration-500",
-                    activeService === index ? "text-bridal-charcoal italic" : "text-bridal-charcoal/50"
+                    "font-serif text-2xl md:text-3xl transition-all duration-500",
+                    activeService === index 
+                        ? "text-bridal-charcoal italic drop-shadow-[0_0_10px_rgba(138,154,91,0.2)]" 
+                        : "text-bridal-charcoal/50"
                   )}>
                     {service.title}
                   </h3>
-                  <ArrowRight 
-                    className={cn(
-                      "transition-all duration-500",
-                      activeService === index ? "opacity-100 -rotate-45 text-bridal-sage" : "opacity-0 -translate-x-4"
-                    )} 
-                    size={24} 
-                  />
+                  
+                  {/* Arrow (Hidden on mobile if inactive to save space) */}
+                  <div className={cn(
+                      "transition-all duration-500 p-2 rounded-full",
+                      activeService === index ? "opacity-100 bg-bridal-sage/10" : "opacity-0 md:opacity-0"
+                  )}>
+                    <ArrowRight 
+                        className={cn("text-bridal-sage", activeService === index ? "rotate-90 md:-rotate-45" : "")} 
+                        size={20} 
+                    />
+                  </div>
                 </div>
+
                 <p className={cn(
                   "mt-2 font-sans text-sm text-bridal-charcoal/60 overflow-hidden transition-all duration-500",
                   activeService === index ? "max-h-20 opacity-100 pt-2" : "max-h-0 opacity-0"
@@ -159,10 +122,20 @@ export default function ComprehensiveServices() {
                   {service.description}
                 </p>
                 
-                {/* Progress Bar */}
+                {/* MOBILE IMAGE PREVIEW (Accordian Style) */}
+                <div className={cn(
+                    "lg:hidden overflow-hidden transition-all duration-700 ease-in-out mt-4",
+                    activeService === index ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
+                )}>
+                    <div className="relative h-[250px] w-full rounded-2xl overflow-hidden shadow-md">
+                        <Image src={service.image} alt={service.title} fill className="object-cover" />
+                    </div>
+                </div>
+
+                {/* Progress Bar (Desktop Only) */}
                 {activeService === index && !isPaused && (
-                  <div className="absolute bottom-0 left-0 h-[1px] w-full bg-bridal-charcoal/5">
-                    <div className="h-full bg-bridal-sage animate-progress origin-left" style={{ animationDuration: '4000ms' }} />
+                  <div className="absolute bottom-0 left-0 h-[2px] w-full bg-bridal-charcoal/5 hidden lg:block">
+                    <div className="h-full bg-bridal-sage animate-progress origin-left shadow-[0_0_10px_rgba(138,154,91,0.8)]" style={{ animationDuration: '4000ms' }} />
                   </div>
                 )}
               </div>
@@ -170,7 +143,7 @@ export default function ComprehensiveServices() {
           </div>
         </div>
 
-        {/* --- RIGHT: The Image Showcase --- */}
+        {/* --- RIGHT: The Image Showcase (Desktop Only) --- */}
         <div className="lg:col-span-7 relative h-[600px] hidden lg:block">
           {SERVICES.map((service, index) => (
             <div
@@ -182,70 +155,20 @@ export default function ComprehensiveServices() {
                   : "opacity-0 scale-105 z-0"
               )}
             >
-               {/* Rounded Top Arch for consistency */}
-               <div className="relative h-full w-full rounded-t-[15rem] overflow-hidden shadow-2xl shadow-bridal-charcoal/5">
+               <div className={cn(
+                   "relative h-full w-full rounded-t-[15rem] overflow-hidden shadow-2xl transition-shadow duration-1000",
+                   activeService === index ? "shadow-[0_0_50px_rgba(138,154,91,0.25)]" : "shadow-bridal-charcoal/5"
+               )}>
                  <Image
                    src={service.image}
                    alt={service.title}
                    fill
-                   className="object-cover transition-transform duration-[4000ms] ease-linear scale-100 hover:scale-105"
+                   className="object-cover"
                  />
-                 <div className="absolute inset-0 bg-bridal-charcoal/10" />
-                 
-                 <div className="absolute bottom-12 left-12 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
-                    <span className="font-sans text-[10px] uppercase tracking-widest text-bridal-charcoal">
-                      {service.title}
-                    </span>
-                 </div>
+                 <div className="absolute inset-0 bg-bridal-charcoal/5" />
                </div>
             </div>
           ))}
-
-          {/* --- DECORATION: COUTURE FLOW --- */}
-          <div className="absolute -right-24 -top-24 z-20 h-[500px] w-[500px] pointer-events-none">
-             <div className="service-flow-container w-full h-full">
-               <svg 
-                  className="w-full h-full" 
-                  viewBox="0 0 500 500" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
-               >
-                  {/* Line 1: Main Flow (Sage) */}
-                  <path 
-                    className="service-flow-line"
-                    d="M100 0 C 100 200, 400 300, 400 500" 
-                    stroke="#8A9A5B" 
-                    strokeWidth="1.5" 
-                    strokeOpacity="0.3"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  
-                  {/* Line 2: Parallel Detail (Gold) */}
-                  <path 
-                    className="service-flow-line"
-                    d="M120 0 C 120 220, 420 320, 420 520" 
-                    stroke="#D4AF37" 
-                    strokeWidth="1" 
-                    strokeOpacity="0.4"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  
-                  {/* Line 3: Stitch Detail (Charcoal Dashed) */}
-                  <path 
-                    className="service-flow-line"
-                    d="M80 0 C 80 180, 380 280, 380 480" 
-                    stroke="#2C2C2C" 
-                    strokeWidth="0.5" 
-                    strokeOpacity="0.2"
-                    fill="none"
-                    strokeDasharray="4 4"
-                  />
-               </svg>
-             </div>
-          </div>
-
         </div>
       </div>
     </section>

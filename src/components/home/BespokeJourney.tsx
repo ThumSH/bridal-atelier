@@ -36,60 +36,62 @@ export default function BespokeJourney() {
 
   useGSAP(
     () => {
-      // 1. Initial Fade In (Standard Reveal)
+      const mm = gsap.matchMedia();
+
+      // 1. Reveal Cards
       STEPS.forEach((step, index) => {
         gsap.from(`#step-card-${index}`, {
-          y: 50,
+          y: 30, // Reduced distance for smoother reveal
           opacity: 0,
-          duration: 1,
-          ease: "power3.out",
+          duration: 0.8,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: `#step-card-${index}`,
-            start: "top 85%", // Triggers when the top of the card hits 85% of viewport
+            start: "top 90%", 
           },
         });
       });
 
-      // 2. The "Up & Down" Parallax (The Magic Part)
-      STEPS.forEach((step, index) => {
-        // Even items (0, 2) move UP (-120px)
-        // Odd item (1) moves DOWN (+120px)
-        // This creates a strong "separation" effect
-        const moveY = index % 2 === 0 ? -120 : 120; 
+      // 2. Parallax (Optimized)
+      mm.add("(min-width: 768px)", () => {
+        STEPS.forEach((step, index) => {
+          // Use yPercent for GPU efficiency
+          const moveY = index % 2 === 0 ? -15 : 15; 
 
-        gsap.to(`#step-card-${index}`, {
-          y: moveY, 
-          ease: "none", // Linear ease is crucial for scrub
-          scrollTrigger: {
-            trigger: container.current,
-            start: "top bottom", // Start moving when section enters
-            end: "bottom top",   // Stop moving when section leaves
-            scrub: 1.2,          // Slight delay for smoothness
-          },
+          gsap.to(`#step-card-${index}`, {
+            yPercent: moveY, 
+            ease: "none", 
+            scrollTrigger: {
+              trigger: container.current,
+              start: "top bottom", 
+              end: "bottom top",   
+              scrub: 0.5, // Faster reaction time
+            },
+          });
         });
       });
 
-      // 3. Leaf Rotation (Top Right)
-      gsap.to(".leaf-blur", {
-        rotation: 45,
-        y: 50,
-        ease: "none",
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.5,
-        },
+      // 3. Background Glow Pulse
+      gsap.to(".magic-glow", {
+        scale: 1.1,
+        opacity: 0.5,
+        duration: 4,
+        yoyo: true,
+        repeat: -1,
+        ease: "sine.inOut"
       });
     },
     { scope: container }
   );
 
   return (
-    <section ref={container} className="relative w-full bg-bridal-ivory py-40 overflow-hidden">
+    <section ref={container} className="relative w-full bg-bridal-ivory py-20 md:py-40 overflow-hidden">
       
+      {/* Background Glow */}
+      <div className="magic-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(212,175,55,0.06)_0%,transparent_70%)] rounded-full pointer-events-none z-0 will-change-transform" />
+
       {/* Header */}
-      <div className="text-center mb-12 px-6 relative z-10">
+      <div className="text-center mb-16 px-6 relative z-10">
         <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-6 block">
           The Process
         </span>
@@ -99,46 +101,47 @@ export default function BespokeJourney() {
       </div>
 
       {/* Steps Grid */}
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-16">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 relative z-10">
         {STEPS.map((step, index) => (
           <div 
             key={step.id} 
-            // ID assigned to the WHOLE card so the text moves with the image
             id={`step-card-${index}`} 
-            className="flex flex-col items-center text-center group will-change-transform"
+            className="flex flex-col items-center text-center group will-change-transform backface-hidden"
           >
             {/* Image Container */}
-            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-t-[10rem] mb-10 shadow-lg shadow-bridal-charcoal/5">
+            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-t-[10rem] mb-8 shadow-lg shadow-bridal-charcoal/5 transform-gpu">
               <Image
                 src={step.image}
                 alt={step.title}
                 fill
-                className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
-              {/* Step Number Badge */}
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full border border-bridal-sage/20">
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
+              
+              {/* Badge */}
+              <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full border border-bridal-sage/20 shadow-[0_0_15px_rgba(138,154,91,0.2)]">
                  <span className="font-serif text-sm italic text-bridal-charcoal">{step.id}</span>
               </div>
             </div>
 
             {/* Content */}
-            <h3 className="font-serif text-2xl text-bridal-charcoal mb-4">{step.title}</h3>
-            <div className="w-12 h-[1px] bg-bridal-sage/50 mb-6" />
-            <p className="font-sans text-sm leading-loose text-bridal-charcoal/70 max-w-xs">
+            <h3 className="font-serif text-2xl text-bridal-charcoal mb-4 group-hover:text-bridal-sage transition-colors duration-300">{step.title}</h3>
+            <div className="w-12 h-px bg-bridal-sage/50 mb-6 group-hover:w-24 transition-all duration-500" />
+            <p className="font-sans text-sm leading-loose text-bridal-charcoal/70 max-w-[280px]">
               {step.description}
             </p>
           </div>
         ))}
       </div>
 
-      {/* Decorative Leaf - Top Right */}
-      {/* Using leaves.webp as it exists in your repo */}
-      <div className="leaf-blur absolute -left-32 -top-20 w-[500px] h-[500px] opacity-10 pointer-events-none">
+      {/* Static Leaf Decoration (Removed Animation to reduce load) */}
+      <div className="absolute -left-32 -top-20 w-[400px] h-[400px] opacity-10 pointer-events-none z-0">
         <Image
           src="/jk.png" 
           alt="Leaf Decoration"
           fill
-          className="object-contain blur-[2px] rotate-[-55deg]"
+          className="object-contain blur-[1px]"
         />
       </div>
 

@@ -7,7 +7,6 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { cn } from "@/lib/utils";
 import PageHero from "@/components/global/PageHero";
 import { PenTool, Heart, Star } from "lucide-react";
 
@@ -19,20 +18,22 @@ export default function AboutPage() {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // 1. "Floating Gallery" Parallax (Images moving at different speeds)
-    gsap.utils.toArray<HTMLElement>(".float-img").forEach((img, i) => {
-      const speed = i % 2 === 0 ? 50 : 150; // Alternating speeds
-      gsap.to(img, {
-        y: -speed,
-        ease: "none",
-        scrollTrigger: {
-          trigger: img,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true
-        }
+    // 1. "Floating Gallery" Parallax (Desktop Only)
+    if (window.innerWidth > 768) {
+      gsap.utils.toArray<HTMLElement>(".float-img").forEach((img, i) => {
+        const speed = i % 2 === 0 ? -20 : 20; 
+        gsap.to(img, {
+          yPercent: speed,
+          ease: "none",
+          scrollTrigger: {
+            trigger: img,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true
+          }
+        });
       });
-    });
+    }
 
     // 2. Text Fade-Ins
     gsap.utils.toArray<HTMLElement>(".reveal-text").forEach((text) => {
@@ -48,7 +49,7 @@ export default function AboutPage() {
       });
     });
 
-    // 3. THE SKETCH LINE (Rough Pencil Animation)
+    // 3. THE SKETCH LINE
     gsap.fromTo(".sketch-line", 
       { strokeDasharray: 1000, strokeDashoffset: 1000 },
       {
@@ -86,16 +87,16 @@ export default function AboutPage() {
         image="/ab.webp" 
       />
 
-      {/* 2. THE FOUNDER (Asymmetrical Split) */}
-      <section className="relative py-32 px-6 max-w-7xl mx-auto">
+      {/* 2. THE FOUNDER */}
+      <section className="relative py-20 md:py-32 px-6 max-w-7xl mx-auto">
          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Text Block (Wide) */}
-            <div className="lg:col-span-7 relative z-10">
+            {/* Text Block */}
+            <div className="lg:col-span-7 relative z-10 order-2 lg:order-1">
                <span className="reveal-text font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-6 block">
                   Est. 2024
                </span>
-               <h2 className="reveal-text font-serif text-5xl md:text-7xl mb-8 leading-[0.9]">
+               <h2 className="reveal-text font-serif text-4xl md:text-7xl mb-8 leading-[1.1] md:leading-[0.9] drop-shadow-sm">
                   "Fashion fades,<br/> only <span className="italic text-bridal-gold/90">style</span> remains."
                </h2>
                <div className="reveal-text w-24 h-1 bg-bridal-charcoal/10 mb-8" />
@@ -117,15 +118,15 @@ export default function AboutPage() {
                </div>
             </div>
 
-            {/* Image Block (Narrow & Tall) - Parallax */}
-            <div className="lg:col-span-5 relative h-[600px] w-full lg:translate-y-20">
+            {/* Image Block */}
+            <div className="lg:col-span-5 relative h-[500px] md:h-[600px] w-full lg:translate-y-20 order-1 lg:order-2">
                <div className="float-img absolute inset-0 rounded-full overflow-hidden border border-bridal-charcoal/5 shadow-2xl">
                   <Image src="/couture.webp" alt="The Founder" fill className="object-cover" />
                </div>
                {/* Floating Element */}
-               <div className="float-img absolute -bottom-10 -left-10 w-48 h-48 bg-white p-4 shadow-xl rotate-3">
-                  <div className="relative w-full h-full border border-bridal-charcoal/10">
-                     <Image src="/er.jpg" alt="Sketch" fill className="object-cover p-2" />
+               <div className="float-img absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 w-36 h-36 md:w-48 md:h-48 bg-white p-4 shadow-xl rotate-0 border border-bridal-charcoal/5">
+                  <div className="relative w-full h-full">
+                     <Image src="/er.jpg" alt="Sketch" fill className="object-cover p-1" />
                   </div>
                </div>
             </div>
@@ -133,57 +134,54 @@ export default function AboutPage() {
          </div>
       </section>
 
-      {/* 3. THE SKETCHBOOK (Raw/Artistic Layout) */}
-      <section className="sketch-section relative py-40 bg-[#fdfdfd]">
-         {/* Background Texture (Paper) */}
+      {/* 3. THE SKETCHBOOK (Mobile Stack / Desktop Scatter) */}
+      <section className="sketch-section relative py-20 md:py-40 bg-[#fdfdfd]">
+         {/* Paper Texture */}
          <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]" />
 
-         {/* --- THE PENCIL SKETCH SVG --- */}
-         {/* A rough, jagged line connecting the elements */}
-         <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+         <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 hidden md:block">
             <svg className="w-full h-full" viewBox="0 0 1440 800" fill="none" preserveAspectRatio="none">
                <path 
                  className="sketch-line"
                  d="M-100 100 C 200 200, 400 0, 600 200 S 1000 600, 1440 300" 
                  stroke="#2C2C2C" 
-                 strokeWidth="1" 
+                 strokeWidth="1.5" 
                  fill="none" 
-                 strokeOpacity="0.1"
-                 // This makes it look like a pencil stroke
-                 strokeDasharray="4 2" 
+                 strokeOpacity="0.15"
+                 strokeDasharray="4 4" 
                />
             </svg>
          </div>
 
          <div className="max-w-7xl mx-auto px-6 relative z-10">
-            <div className="text-center mb-24">
+            <div className="text-center mb-16 md:mb-24">
                <div className="ink-blot mx-auto w-12 h-12 mb-6 text-bridal-charcoal opacity-80">
                   <PenTool size={48} />
                </div>
-               <h2 className="reveal-text font-serif text-4xl md:text-5xl">From Concept to Canvas</h2>
+               <h2 className="reveal-text font-serif text-3xl md:text-5xl">From Concept to Canvas</h2>
             </div>
 
-            {/* Scatter Grid */}
-            <div className="relative h-[800px] w-full">
+            {/* RESPONSIVE SCATTER GRID */}
+            <div className="relative h-auto md:h-[800px] w-full flex flex-col md:block gap-12 items-center">
                
-               {/* Item 1: Top Left */}
-               <div className="float-img absolute top-0 left-0 md:left-20 w-64 md:w-80 aspect-[3/4] bg-white p-3 shadow-lg rotate-[-4deg]">
+               {/* Item 1 */}
+               <div className="float-img relative md:absolute md:top-0 md:left-20 w-full max-w-sm md:w-80 aspect-[3/4] bg-white p-3 shadow-lg rotate-0 border border-bridal-charcoal/5">
                   <div className="relative w-full h-full bg-bridal-charcoal/5">
                      <Image src="/flower.webp" alt="Moodboard 1" fill className="object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                   </div>
                   <p className="font-serif text-xl mt-4 text-center italic text-bridal-charcoal/60">Inspiration</p>
                </div>
 
-               {/* Item 2: Center Right */}
-               <div className="float-img absolute top-40 right-0 md:right-20 w-72 md:w-96 aspect-square bg-white p-3 shadow-xl rotate-[2deg] z-10">
+               {/* Item 2 */}
+               <div className="float-img relative md:absolute md:top-40 md:right-20 w-full max-w-sm md:w-96 aspect-square bg-white p-3 shadow-xl z-10 border border-bridal-charcoal/5">
                   <div className="relative w-full h-full bg-bridal-charcoal/5">
                      <Image src="/makeup.jpg" alt="Moodboard 2" fill className="object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                   </div>
                   <p className="font-serif text-xl mt-4 text-center italic text-bridal-charcoal/60">Texture</p>
                </div>
 
-               {/* Item 3: Bottom Left */}
-               <div className="float-img absolute bottom-20 left-10 md:left-[30%] w-56 md:w-72 aspect-[4/5] bg-white p-3 shadow-lg rotate-[-2deg]">
+               {/* Item 3 */}
+               <div className="float-img relative md:absolute md:bottom-20 md:left-[30%] w-full max-w-sm md:w-72 aspect-[4/5] bg-white p-3 shadow-lg border border-bridal-charcoal/5">
                   <div className="relative w-full h-full bg-bridal-charcoal/5">
                      <Image src="/floral.webp" alt="Moodboard 3" fill className="object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                   </div>
@@ -194,31 +192,23 @@ export default function AboutPage() {
          </div>
       </section>
 
-      {/* 4. VALUES (Minimal List) */}
-      <section className="py-32 px-6 max-w-4xl mx-auto text-center">
-         <h2 className="reveal-text font-serif text-3xl md:text-4xl mb-16">Our Core Values</h2>
+      {/* 4. VALUES */}
+      <section className="py-20 md:py-32 px-6 max-w-4xl mx-auto text-center">
+         <h2 className="reveal-text font-serif text-3xl md:text-4xl mb-12 md:mb-16">Our Core Values</h2>
          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="reveal-text flex flex-col items-center gap-4">
-               <div className="w-12 h-12 rounded-full border border-bridal-charcoal/20 flex items-center justify-center text-bridal-sage">
-                  <Heart size={20} />
-               </div>
-               <h3 className="font-serif text-xl">Intention</h3>
-               <p className="font-sans text-sm text-bridal-charcoal/60">Every detail serves a purpose.</p>
-            </div>
-            <div className="reveal-text flex flex-col items-center gap-4">
-               <div className="w-12 h-12 rounded-full border border-bridal-charcoal/20 flex items-center justify-center text-bridal-sage">
-                  <Star size={20} />
-               </div>
-               <h3 className="font-serif text-xl">Quality</h3>
-               <p className="font-sans text-sm text-bridal-charcoal/60">Uncompromising material standards.</p>
-            </div>
-            <div className="reveal-text flex flex-col items-center gap-4">
-               <div className="w-12 h-12 rounded-full border border-bridal-charcoal/20 flex items-center justify-center text-bridal-sage">
-                  <PenTool size={20} />
-               </div>
-               <h3 className="font-serif text-xl">Artistry</h3>
-               <p className="font-sans text-sm text-bridal-charcoal/60">Fashion as a form of expression.</p>
-            </div>
+            {[
+                { Icon: Heart, title: "Intention", text: "Every detail serves a purpose." },
+                { Icon: Star, title: "Quality", text: "Uncompromising material standards." },
+                { Icon: PenTool, title: "Artistry", text: "Fashion as a form of expression." }
+            ].map((item, idx) => (
+                <div key={idx} className="reveal-text flex flex-col items-center gap-4 group">
+                    <div className="w-12 h-12 rounded-full border border-bridal-charcoal/20 flex items-center justify-center text-bridal-sage group-hover:bg-bridal-sage group-hover:text-white transition-all duration-500">
+                        <item.Icon size={20} />
+                    </div>
+                    <h3 className="font-serif text-xl group-hover:text-bridal-sage transition-colors">{item.title}</h3>
+                    <p className="font-sans text-sm text-bridal-charcoal/60">{item.text}</p>
+                </div>
+            ))}
          </div>
       </section>
 
@@ -227,7 +217,7 @@ export default function AboutPage() {
          <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-overlay" />
          
          <h2 className="font-serif text-4xl text-white mb-6 relative z-10">Create With Us</h2>
-         <p className="font-sans text-sm text-white/50 mb-10 max-w-md mx-auto relative z-10">
+         <p className="font-sans text-sm text-white/50 mb-10 max-w-md mx-auto relative z-10 px-6">
             Let's write the next chapter of our story together.
          </p>
          <Link href="/contact" className="relative z-10 inline-block px-10 py-4 border border-white/30 rounded-full text-xs uppercase tracking-widest hover:bg-white hover:text-bridal-charcoal transition-all duration-500">

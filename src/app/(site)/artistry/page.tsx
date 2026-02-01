@@ -7,7 +7,6 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { cn } from "@/lib/utils";
 import PageHero from "@/components/global/PageHero";
 import { Sparkles, Palette, Clock, Sun } from "lucide-react";
 
@@ -71,7 +70,6 @@ export default function ArtistryPage() {
     // 4. Leaf Float
     gsap.to(".artistry-leaf", {
         y: 20,
-        rotation: 5,
         duration: 6,
         repeat: -1,
         yoyo: true,
@@ -91,9 +89,8 @@ export default function ArtistryPage() {
       />
 
       {/* 2. PHILOSOPHY INTRO */}
-      <section className="py-32 px-6 max-w-5xl mx-auto text-center relative">
-         {/* Leaf Decoration Top Right */}
-         <div className="artistry-leaf absolute -top-10 -right-20 w-[400px] h-[400px] opacity-20 pointer-events-none">
+      <section className="py-20 md:py-32 px-6 max-w-5xl mx-auto text-center relative">
+         <div className="artistry-leaf absolute -top-10 -right-10 md:-right-20 w-40 h-40 md:w-[400px] md:h-[400px] opacity-20 pointer-events-none">
             <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-[3px] -rotate-45" />
          </div>
 
@@ -105,27 +102,30 @@ export default function ArtistryPage() {
          </h2>
       </section>
 
-      {/* 3. SECTION: THE TRIAL (Sticky Layout) */}
-      <section className="relative px-6 md:px-12 max-w-7xl mx-auto mb-40">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+      {/* 3. SECTION: THE TRIAL (Fixed Mobile Layout) */}
+      <section className="relative px-6 md:px-12 max-w-7xl mx-auto mb-24 md:mb-40">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
            
            {/* Sticky Image Side */}
-           <div className="md:sticky md:top-32 h-[80vh] w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-black/30">
+           {/* FIX: h-[50vh] on mobile */}
+           <div className="md:sticky md:top-32 h-[50vh] md:h-[80vh] w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-black/30 relative group">
               <Image 
                 src="/makeup-3.png" 
                 alt="The Trial" 
                 fill 
                 className="parallax-img object-cover scale-110" 
               />
-              <div className="absolute bottom-8 left-8 bg-black/60 backdrop-blur-md px-6 py-4 rounded-xl border-l-4 border-bridal-sage">
-                 <p className="font-serif text-2xl text-white">The Design Trial</p>
-                 <p className="font-sans text-xs uppercase tracking-widest text-white/50">3 Hours • Full Consultation</p>
+              
+              {/* Floating Card - Fixed Position */}
+              <div className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-auto bg-black/60 backdrop-blur-md px-6 py-4 rounded-xl border-l-4 border-bridal-sage">
+                 <p className="font-serif text-xl md:text-2xl text-white">The Design Trial</p>
+                 <p className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/50">3 Hours • Full Consultation</p>
               </div>
            </div>
 
            {/* Content Side */}
-           <div className="flex flex-col justify-center py-12 md:py-32">
-              <h3 className="reveal-text font-serif text-5xl md:text-6xl text-white mb-8">
+           <div className="flex flex-col justify-center py-0 md:py-32">
+              <h3 className="reveal-text font-serif text-4xl md:text-6xl text-white mb-8">
                  Engineering <br/><span className="italic text-bridal-sage">Radiance</span>
               </h3>
               <p className="reveal-text font-sans text-base leading-loose text-white/70 mb-12">
@@ -134,15 +134,15 @@ export default function ArtistryPage() {
               
               <div className="reveal-text space-y-12">
                  <div className="group border-l border-white/10 pl-8 hover:border-bridal-sage transition-colors duration-500">
-                    <h4 className="font-serif text-2xl text-white mb-2">Skin Analysis</h4>
+                    <h4 className="font-serif text-xl md:text-2xl text-white mb-2">Skin Analysis</h4>
                     <p className="font-sans text-sm text-white/50">We assess texture and hydration levels to choose the perfect primer and foundation combination.</p>
                  </div>
                  <div className="group border-l border-white/10 pl-8 hover:border-bridal-sage transition-colors duration-500">
-                    <h4 className="font-serif text-2xl text-white mb-2">Lighting Stress Test</h4>
+                    <h4 className="font-serif text-xl md:text-2xl text-white mb-2">Lighting Stress Test</h4>
                     <p className="font-sans text-sm text-white/50">We check how the makeup reads in daylight, candlelight, and flash photography.</p>
                  </div>
                  <div className="group border-l border-white/10 pl-8 hover:border-bridal-sage transition-colors duration-500">
-                    <h4 className="font-serif text-2xl text-white mb-2">Longevity Wear Test</h4>
+                    <h4 className="font-serif text-xl md:text-2xl text-white mb-2">Longevity Wear Test</h4>
                     <p className="font-sans text-sm text-white/50">We provide a specific wear-test guide to see how the look holds up over 8 hours.</p>
                  </div>
               </div>
@@ -151,23 +151,22 @@ export default function ArtistryPage() {
         </div>
       </section>
 
-      {/* 4. SECTION: THE MORNING (Cinematic Full Width) */}
-      <section className="relative w-full py-32 bg-bridal-ivory text-bridal-charcoal overflow-hidden mb-40">
-         {/* Background Texture */}
+      {/* 4. SECTION: THE MORNING */}
+      <section className="relative w-full py-20 md:py-32 bg-bridal-ivory text-bridal-charcoal overflow-hidden mb-24 md:mb-40">
          <div className="absolute inset-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-multiply" />
          
-         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-center">
             <div className="order-2 md:order-1">
                <span className="reveal-text font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-6 block">
                   The Wedding Morning
                </span>
-               <h3 className="reveal-text font-serif text-5xl md:text-6xl mb-8">
+               <h3 className="reveal-text font-serif text-4xl md:text-6xl mb-8">
                   Calm & <span className="italic text-bridal-sage">Curated</span>
                </h3>
                <p className="reveal-text font-sans text-base leading-loose text-bridal-charcoal/70 mb-10">
                   On the big day, we bring the studio to you. We curate a calm, luxurious environment where you can relax. We manage the entire beauty timeline for you and your bridal party, ensuring everyone is ready with champagne in hand.
                </p>
-               <ul className="reveal-text grid grid-cols-2 gap-y-6 gap-x-4">
+               <ul className="reveal-text grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-4">
                   <li className="flex items-center gap-3 font-serif text-lg"><Clock size={18} className="text-bridal-sage"/> Timeline Management</li>
                   <li className="flex items-center gap-3 font-serif text-lg"><Sparkles size={18} className="text-bridal-sage"/> Luxury Skin Prep</li>
                   <li className="flex items-center gap-3 font-serif text-lg"><Palette size={18} className="text-bridal-sage"/> Touch-up Kit Included</li>
@@ -175,26 +174,23 @@ export default function ArtistryPage() {
                </ul>
             </div>
 
-            <div className="order-1 md:order-2 relative h-150 w-full">
-               {/* Collage Effect */}
-               <div className="absolute top-0 right-0 w-[85%] h-[90%] rounded-tl-[10rem] overflow-hidden shadow-2xl shadow-bridal-charcoal/10">
+            <div className="order-1 md:order-2 relative h-[400px] md:h-150 w-full">
+               <div className="absolute top-0 right-0 w-[85%] h-[90%] rounded-tl-[5rem] md:rounded-tl-[10rem] overflow-hidden shadow-2xl shadow-bridal-charcoal/10">
                   <Image src="/floral-2.jpg" alt="Wedding Morning" fill className="object-cover" />
                </div>
-               <div className="absolute bottom-12 left-0 w-[45%] h-[40%] rounded-tr-[4rem] overflow-hidden border-4 border-white shadow-xl">
+               <div className="absolute bottom-0 md:bottom-12 left-0 w-[45%] h-[40%] rounded-tr-[2rem] md:rounded-tr-[4rem] overflow-hidden border-4 border-white shadow-xl">
                   <Image src="/floral.webp" alt="Detail" fill className="object-cover" />
                </div>
             </div>
          </div>
       </section>
 
-      {/* 5. NEW SECTION: THE TIMELINE (With Rope Animation) */}
-      <section className="timeline-section relative py-32 px-6 overflow-hidden">
-         {/* Leaf Decoration Left */}
-         <div className="artistry-leaf absolute top-20 left-0 w-125 h-125 opacity-10 pointer-events-none">
+      {/* 5. TIMELINE SECTION */}
+      <section className="timeline-section relative py-20 md:py-32 px-6 overflow-hidden">
+         <div className="artistry-leaf absolute top-10 left-0 w-60 h-60 md:w-125 md:h-125 opacity-10 pointer-events-none">
             <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-xs rotate-90" />
          </div>
 
-         {/* --- THE ROPE SVG BACKGROUND --- */}
          <div className="absolute top-[30%] left-0 w-full h-[400px] pointer-events-none z-0 opacity-40">
             <svg className="w-full h-full" viewBox="0 0 1440 400" fill="none" preserveAspectRatio="none">
                <path 
@@ -209,19 +205,19 @@ export default function ArtistryPage() {
          </div>
 
          <div className="max-w-7xl mx-auto relative z-10">
-            <div className="text-center mb-20">
+            <div className="text-center mb-16 md:mb-20">
                <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-4 block">The Journey</span>
-               <h2 className="font-serif text-4xl text-white">The Beauty Timeline</h2>
+               <h2 className="font-serif text-3xl md:text-4xl text-white">The Beauty Timeline</h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
                {TIMELINE_STEPS.map((step) => (
                   <div key={step.id} className="reveal-text flex flex-col items-center text-center group">
                      <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-white mb-6 group-hover:bg-bridal-sage group-hover:border-bridal-sage transition-colors duration-500 relative z-10">
                         {step.icon}
                      </div>
                      <h3 className="font-serif text-xl text-white mb-4">{step.title}</h3>
-                     <p className="font-sans text-sm text-white/60 leading-relaxed">
+                     <p className="font-sans text-sm text-white/60 leading-relaxed max-w-xs">
                         {step.desc}
                      </p>
                   </div>
@@ -230,10 +226,10 @@ export default function ArtistryPage() {
          </div>
       </section>
 
-      {/* 6. DRAPING (Overlap Layout) */}
+      {/* 6. DRAPING */}
       <section className="py-20 px-6 max-w-7xl mx-auto mb-20">
-         <div className="bg-white/5 border border-white/10 rounded-[3rem] p-8 md:p-16 flex flex-col md:flex-row gap-12 items-center">
-            <div className="w-full md:w-1/3 relative h-[400px] rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+         <div className="bg-white/5 border border-white/10 rounded-[2rem] md:rounded-[3rem] p-8 md:p-16 flex flex-col md:flex-row gap-12 items-center">
+            <div className="w-full md:w-1/3 relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
                <Image src="/flower.webp" alt="Draping" fill className="object-cover" />
             </div>
             <div className="w-full md:w-2/3">
@@ -253,8 +249,8 @@ export default function ArtistryPage() {
          <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-overlay" />
          
          <Sparkles className="mx-auto text-bridal-sage mb-6 animate-pulse" size={32} />
-         <h2 className="font-serif text-4xl text-white mb-6 relative z-10">Secure Your Date</h2>
-         <p className="font-sans text-sm text-white/50 mb-10 max-w-md mx-auto relative z-10">
+         <h2 className="font-serif text-3xl md:text-4xl text-white mb-6 relative z-10">Secure Your Date</h2>
+         <p className="font-sans text-sm text-white/50 mb-10 max-w-md mx-auto relative z-10 px-6">
             We only accept one bridal booking per day to ensure you have our undivided attention.
          </p>
          <Link href="/contact" className="relative z-10 inline-block px-10 py-4 bg-white text-bridal-charcoal rounded-full text-xs uppercase tracking-widest hover:bg-bridal-sage hover:text-white transition-all duration-500">

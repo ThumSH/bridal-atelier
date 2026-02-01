@@ -3,12 +3,12 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageHero from "@/components/global/PageHero";
 import { Scissors, Ruler, PenTool, Sparkles } from "lucide-react";
+import Link from "next/link"; // Added missing import
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -54,7 +54,6 @@ export default function CouturePage() {
     });
 
     // 3. THE COUTURE THREAD (Rope Animation)
-    // Connecting the process steps
     gsap.fromTo(".thread-line", 
       { strokeDasharray: 2000, strokeDashoffset: 2000 },
       {
@@ -91,9 +90,8 @@ export default function CouturePage() {
       />
 
       {/* 2. PHILOSOPHY INTRO */}
-      <section className="py-32 px-6 max-w-5xl mx-auto text-center relative">
-         {/* Leaf Decoration Top Left */}
-         <div className="couture-leaf absolute -top-20 -left-32 w-100 h-100 opacity-30 pointer-events-none">
+      <section className="py-20 md:py-32 px-6 max-w-5xl mx-auto text-center relative">
+         <div className="couture-leaf absolute -top-10 -left-10 md:-top-20 md:-left-32 w-40 h-40 md:w-100 md:h-100 opacity-30 pointer-events-none">
             <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-[3px]" />
          </div>
 
@@ -105,27 +103,29 @@ export default function CouturePage() {
          </h2>
       </section>
 
-      {/* 3. SECTION: BESPOKE DESIGN (Sticky Layout) */}
-      <section className="relative px-6 md:px-12 max-w-7xl mx-auto mb-40">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+      {/* 3. SECTION: BESPOKE DESIGN (Fixed Mobile Layout) */}
+      <section className="relative px-6 md:px-12 max-w-7xl mx-auto mb-24 md:mb-40">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
            
            {/* Sticky Image Side */}
-           <div className="md:sticky md:top-32 h-[80vh] w-full rounded-4xl overflow-hidden shadow-2xl shadow-bridal-charcoal/10">
+           <div className="md:sticky md:top-32 h-[50vh] md:h-[80vh] w-full rounded-[2rem] md:rounded-4xl overflow-hidden shadow-2xl shadow-bridal-charcoal/10 relative group">
               <Image 
                 src="/art.webp" 
                 alt="Sketching" 
                 fill 
                 className="parallax-img object-cover scale-110" 
               />
-              <div className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-md px-6 py-4 rounded-xl border-l-4 border-bridal-sage">
-                 <p className="font-serif text-2xl text-bridal-charcoal">Bespoke Design</p>
-                 <p className="font-sans text-xs uppercase tracking-widest text-bridal-charcoal/50">From Sketch to Stitch</p>
+              
+              {/* Floating Text Card - Fixed Alignment */}
+              <div className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-auto bg-white/90 backdrop-blur-md px-6 py-4 rounded-xl border-l-4 border-bridal-sage shadow-lg">
+                 <p className="font-serif text-xl md:text-2xl text-bridal-charcoal">Bespoke Design</p>
+                 <p className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-bridal-charcoal/50">From Sketch to Stitch</p>
               </div>
            </div>
 
            {/* Content Side */}
-           <div className="flex flex-col justify-center py-12 md:py-32">
-              <h3 className="reveal-text font-serif text-5xl md:text-6xl text-bridal-charcoal mb-8">
+           <div className="flex flex-col justify-center py-0 md:py-32">
+              <h3 className="reveal-text font-serif text-4xl md:text-6xl text-bridal-charcoal mb-8">
                  The Art of <br/><span className="italic text-bridal-gold/90">Creation</span>
               </h3>
               <p className="reveal-text font-sans text-base leading-loose text-bridal-charcoal/70 mb-12">
@@ -133,77 +133,66 @@ export default function CouturePage() {
               </p>
               
               <div className="reveal-text space-y-8">
-                 <div className="flex gap-6 items-start">
-                    <span className="font-serif text-4xl text-bridal-sage/40">01</span>
-                    <div>
-                       <h4 className="font-serif text-xl text-bridal-charcoal mb-2">Personalized Sketches</h4>
-                       <p className="font-sans text-sm text-bridal-charcoal/60">Hand-drawn illustrations to visualize your silhouette.</p>
-                    </div>
-                 </div>
-                 <div className="flex gap-6 items-start">
-                    <span className="font-serif text-4xl text-bridal-sage/40">02</span>
-                    <div>
-                       <h4 className="font-serif text-xl text-bridal-charcoal mb-2">Fabric Sourcing</h4>
-                       <p className="font-sans text-sm text-bridal-charcoal/60">Silks from Italy, Lace from France, curated for you.</p>
-                    </div>
-                 </div>
-                 <div className="flex gap-6 items-start">
-                    <span className="font-serif text-4xl text-bridal-sage/40">03</span>
-                    <div>
-                       <h4 className="font-serif text-xl text-bridal-charcoal mb-2">Muslin Fittings</h4>
-                       <p className="font-sans text-sm text-bridal-charcoal/60">A prototype dress to perfect the fit before cutting fabric.</p>
-                    </div>
-                 </div>
+                 {[
+                     { num: "01", title: "Personalized Sketches", text: "Hand-drawn illustrations to visualize your silhouette." },
+                     { num: "02", title: "Fabric Sourcing", text: "Silks from Italy, Lace from France, curated for you." },
+                     { num: "03", title: "Muslin Fittings", text: "A prototype dress to perfect the fit before cutting fabric." }
+                 ].map((item, i) => (
+                     <div key={i} className="flex gap-6 items-start group">
+                        <span className="font-serif text-4xl text-bridal-sage/40 group-hover:text-bridal-sage transition-colors duration-500">{item.num}</span>
+                        <div>
+                           <h4 className="font-serif text-xl text-bridal-charcoal mb-2 group-hover:text-bridal-sage transition-colors">{item.title}</h4>
+                           <p className="font-sans text-sm text-bridal-charcoal/60">{item.text}</p>
+                        </div>
+                     </div>
+                 ))}
               </div>
            </div>
 
         </div>
       </section>
 
-      {/* 4. SECTION: RESTORATION (Cinematic Full Width) */}
-      <section className="relative w-full py-32 bg-bridal-charcoal text-white overflow-hidden mb-40">
-         {/* Background Texture */}
+      {/* 4. SECTION: RESTORATION */}
+      <section className="relative w-full py-20 md:py-32 bg-bridal-charcoal text-white overflow-hidden mb-24 md:mb-40">
          <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
          
-         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-center">
             <div className="order-2 md:order-1">
                <span className="reveal-text font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-6 block">
                   Heirloom Services
                </span>
-               <h3 className="reveal-text font-serif text-5xl md:text-6xl mb-8">
+               <h3 className="reveal-text font-serif text-4xl md:text-6xl mb-8">
                   Restoration & <span className="italic text-bridal-sage">Reimagining</span>
                </h3>
                <p className="reveal-text font-sans text-base leading-loose text-white/70 mb-10">
                   For the bride who wishes to wear a piece of history. We delicately restore and resize vintage gowns—whether it is your mother's dress or a vintage find—reimagining them for the modern era while preserving their original soul.
                </p>
-               <ul className="reveal-text grid grid-cols-2 gap-4">
-                  <li className="flex items-center gap-2 text-sm text-white/60"><span className="w-1.5 h-1.5 bg-bridal-sage rounded-full"/> Vintage Cleaning</li>
-                  <li className="flex items-center gap-2 text-sm text-white/60"><span className="w-1.5 h-1.5 bg-bridal-sage rounded-full"/> Structural Repair</li>
-                  <li className="flex items-center gap-2 text-sm text-white/60"><span className="w-1.5 h-1.5 bg-bridal-sage rounded-full"/> Modern Resizing</li>
-                  <li className="flex items-center gap-2 text-sm text-white/60"><span className="w-1.5 h-1.5 bg-bridal-sage rounded-full"/> Lace Mending</li>
+               <ul className="reveal-text grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {["Vintage Cleaning", "Structural Repair", "Modern Resizing", "Lace Mending"].map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-sm text-white/60">
+                          <span className="w-1.5 h-1.5 bg-bridal-sage rounded-full"/> {item}
+                      </li>
+                  ))}
                </ul>
             </div>
 
-            <div className="order-1 md:order-2 relative h-150 w-full">
-               {/* Collage Effect */}
-               <div className="absolute top-0 right-0 w-[80%] h-[90%] rounded-tl-[10rem] overflow-hidden border border-white/10">
+            <div className="order-1 md:order-2 relative h-[400px] md:h-150 w-full">
+               <div className="absolute top-0 right-0 w-[80%] h-[90%] rounded-tl-[5rem] md:rounded-tl-[10rem] overflow-hidden border border-white/10">
                   <Image src="/bridal.jpg" alt="Vintage" fill className="object-cover" />
                </div>
-               <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-tr-[5rem] overflow-hidden border-4 border-bridal-charcoal shadow-2xl">
+               <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-tr-[2rem] md:rounded-tr-[5rem] overflow-hidden border-4 border-bridal-charcoal shadow-2xl">
                   <Image src="/flower.webp" alt="Detail" fill className="object-cover" />
                </div>
             </div>
          </div>
       </section>
 
-      {/* 5. NEW SECTION: THE PROCESS (With Rope Animation) */}
-      <section className="process-section relative py-32 px-6 overflow-hidden">
-         {/* Leaf Decoration Right */}
-         <div className="couture-leaf absolute top-10 right-0 w-125 h-125 opacity-20 pointer-events-none">
+      {/* 5. PROCESS SECTION */}
+      <section className="process-section relative py-20 md:py-32 px-6 overflow-hidden">
+         <div className="couture-leaf absolute top-10 right-0 w-60 h-60 md:w-125 md:h-125 opacity-20 pointer-events-none">
             <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-xs -rotate-90" />
          </div>
 
-         {/* --- THE ROPE SVG BACKGROUND --- */}
          <div className="absolute top-[30%] left-0 w-full h-[400px] pointer-events-none z-0 opacity-40">
             <svg className="w-full h-full" viewBox="0 0 1440 400" fill="none" preserveAspectRatio="none">
                <path 
@@ -218,15 +207,15 @@ export default function CouturePage() {
          </div>
 
          <div className="max-w-7xl mx-auto relative z-10">
-            <div className="text-center mb-20">
+            <div className="text-center mb-16 md:mb-20">
                <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-4 block">The Journey</span>
-               <h2 className="font-serif text-4xl text-bridal-charcoal">The 4 Steps to Perfection</h2>
+               <h2 className="font-serif text-3xl md:text-4xl text-bridal-charcoal">The 4 Steps to Perfection</h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
                {PROCESS_STEPS.map((step) => (
                   <div key={step.id} className="reveal-text flex flex-col items-center text-center group">
-                     <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-bridal-charcoal mb-6 group-hover:bg-bridal-sage group-hover:text-white transition-colors duration-500 relative z-10">
+                     <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-bridal-charcoal mb-6 group-hover:bg-bridal-sage group-hover:text-white transition-colors duration-500 relative z-10 border border-bridal-charcoal/5">
                         {step.icon}
                      </div>
                      <h3 className="font-serif text-xl text-bridal-charcoal mb-4">{step.title}</h3>
@@ -239,10 +228,10 @@ export default function CouturePage() {
          </div>
       </section>
 
-      {/* 6. ALTERATIONS (Overlap Layout) */}
+      {/* 6. ALTERATIONS */}
       <section className="py-20 px-6 max-w-7xl mx-auto mb-20">
-         <div className="bg-white rounded-[3rem] p-8 md:p-16 shadow-xl shadow-bridal-charcoal/5 flex flex-col md:flex-row gap-12 items-center">
-            <div className="w-full md:w-1/3 relative h-[400px] rounded-2xl overflow-hidden">
+         <div className="bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-16 shadow-xl shadow-bridal-charcoal/5 flex flex-col md:flex-row gap-12 items-center border border-bridal-charcoal/5">
+            <div className="w-full md:w-1/3 relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-inner">
                <Image src="/gown.jpg" alt="Alterations" fill className="object-cover" />
             </div>
             <div className="w-full md:w-2/3">
@@ -260,11 +249,11 @@ export default function CouturePage() {
       {/* 7. FOOTER CTA */}
       <div className="text-center py-24 bg-bridal-charcoal text-white relative overflow-hidden">
          <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
-         <h2 className="font-serif text-4xl mb-6 relative z-10">Your Dream Dress Awaits</h2>
-         <p className="font-sans text-sm text-white/60 mb-10 max-w-md mx-auto relative z-10">
+         <h2 className="font-serif text-3xl md:text-4xl mb-6 relative z-10 shadow-glow">Your Dream Dress Awaits</h2>
+         <p className="font-sans text-sm text-white/60 mb-10 max-w-md mx-auto relative z-10 px-6">
             From custom designs to expert tailoring, we are here to make you look breathtaking.
          </p>
-         <Link href="/contact" className="relative z-10 inline-block px-10 py-4 border border-white/30 rounded-full text-xs uppercase tracking-widest hover:bg-white hover:text-bridal-charcoal transition-all duration-500">
+         <Link href="/contact" className="relative z-10 inline-block px-10 py-4 border border-white/30 rounded-full text-xs uppercase tracking-widest hover:bg-white hover:text-bridal-charcoal hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-500">
             Book Consultation
          </Link>
       </div>

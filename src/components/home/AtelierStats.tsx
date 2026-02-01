@@ -80,7 +80,7 @@ export default function AtelierStats() {
         }
       });
 
-      // 3. COUTURE FLOW ANIMATION (The Lines)
+      // 3. COUTURE FLOW ANIMATION
       gsap.fromTo(".stats-flow-line", 
         { strokeDasharray: 1000, strokeDashoffset: 1000 },
         {
@@ -112,45 +112,32 @@ export default function AtelierStats() {
   return (
     <section ref={container} className="relative w-full bg-bridal-ivory py-32 overflow-hidden">
       
-      {/* --- DECORATION: BLURRED LEAVES --- */}
-      {/* Top Left */}
+      {/* Leaves */}
       <div className="stats-leaf absolute -top-20 -left-20 w-[400px] h-[400px] opacity-30 pointer-events-none z-0">
-         <Image
-            src="/leaves.webp"
-            alt="Decoration"
-            fill
-            className="object-contain blur-[4px]"
-         />
+         <Image src="/leaves.webp" alt="Decoration" fill className="object-contain blur-[4px]" />
       </div>
-      {/* Bottom Right */}
       <div className="stats-leaf absolute -bottom-20 -right-20 w-[500px] h-[500px] opacity-20 pointer-events-none z-0">
-         <Image
-            src="/leaves.webp"
-            alt="Decoration"
-            fill
-            className="object-contain blur-[6px] rotate-180"
-         />
+         <Image src="/leaves.webp" alt="Decoration" fill className="object-contain blur-[6px] rotate-180" />
       </div>
 
-      {/* --- DECORATION: COUTURE FLOW (SVG Lines) --- */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-60">
-         <svg className="w-full h-full" viewBox="0 0 1440 600" fill="none" preserveAspectRatio="none">
-            {/* A wave that goes through the numbers */}
+      {/* --- DECORATION: GLOWING THREADS --- */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-80">
+         {/* ADDED: Drop Shadow for Glow */}
+         <svg className="w-full h-full drop-shadow-[0_0_6px_rgba(212,175,55,0.4)]" viewBox="0 0 1440 600" fill="none" preserveAspectRatio="none">
             <path 
               className="stats-flow-line"
               d="M-100 300 C 400 100, 1000 500, 1500 300" 
               stroke="#D4AF37" 
               strokeWidth="1.5" 
-              strokeOpacity="0.2"
+              strokeOpacity="0.3"
               fill="none"
             />
-            {/* Parallel line */}
             <path 
               className="stats-flow-line"
               d="M-100 350 C 400 150, 1000 550, 1500 350" 
               stroke="#8A9A5B" 
               strokeWidth="1" 
-              strokeOpacity="0.1"
+              strokeOpacity="0.2"
               fill="none"
               strokeDasharray="10 10"
             />
@@ -165,7 +152,7 @@ export default function AtelierStats() {
             The Craft
           </span>
           <h2 className="stats-header font-serif text-4xl md:text-5xl text-bridal-charcoal mb-8">
-            Precision in <span className="italic text-bridal-gold/90">Numbers</span>
+            Precision in <span className="italic text-bridal-gold/90 drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">Numbers</span>
           </h2>
           <p className="stats-header font-sans text-sm md:text-base leading-loose text-bridal-charcoal/70">
             True luxury is defined by what you cannot see. It is the invisible hours of hand-stitching, 
@@ -184,9 +171,9 @@ export default function AtelierStats() {
                  index !== STATS.length - 1 ? "lg:border-r lg:border-bridal-charcoal/10" : ""
               }`}
             >
-              {/* The Number */}
+              {/* The Number with GOLD GLOW */}
               <div className="relative mb-6">
-                 <h3 className="font-serif text-6xl md:text-7xl text-bridal-charcoal leading-none">
+                 <h3 className="font-serif text-6xl md:text-7xl text-bridal-charcoal leading-none drop-shadow-[0_0_15px_rgba(212,175,55,0.25)]">
                     <span id={`stat-val-${stat.id}`}>0</span>
                     <span className="text-4xl ml-1 text-bridal-sage font-sans font-light">{stat.suffix}</span>
                  </h3>
@@ -197,7 +184,6 @@ export default function AtelierStats() {
                  {stat.label}
               </h4>
 
-              {/* The Description */}
               <p className="font-sans text-xs text-bridal-charcoal/60 leading-relaxed max-w-[200px]">
                  {stat.description}
               </p>

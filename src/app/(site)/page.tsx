@@ -14,12 +14,12 @@ export default function Home() {
     <main>
       <VideoShowcase />
       <AtelierIntro />
+      <ArtistryShowcase />
       <Hero /> 
+      <PhilosophySection />   
       <ComprehensiveServices />
-      <PhilosophySection />
       <BespokeJourney />
       <DressSilhouettes/>
-      <ArtistryShowcase />
       <RealWeddings />
       <AtelierStats />
     </main>
