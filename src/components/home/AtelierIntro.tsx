@@ -72,7 +72,7 @@ export default function AtelierIntro() {
       <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-multiply" />
       
       {/* Golden Halo */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(212,175,55,0.08)_0%,transparent_70%)] pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-[radial-gradient(circle,rgba(212,175,55,0.08)_0%,transparent_70%)] pointer-events-none z-0" />
 
       {/* Watermark */}
       <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[20rem] md:text-[30rem] font-serif text-bridal-charcoal/5 leading-none select-none pointer-events-none z-0">
@@ -149,12 +149,12 @@ export default function AtelierIntro() {
       {/* --- DECORATION: Straightened Leaves --- */}
       
       {/* Top Left: Removed 'rotate-180'. It now hangs/stands naturally. */}
-      <div className="intro-leaf absolute -top-20 -left-20 z-0 h-[400px] w-[500px] opacity-15 pointer-events-none">
+      <div className="intro-leaf absolute -top-20 -left-20 z-0 h-100 w-125 opacity-15 pointer-events-none">
          <Image src="/leaves.webp" alt="Leaf Accent" fill className="object-contain blur-[3px]" />
       </div>
 
       {/* Bottom Right: Removed '-rotate-45'. Now perfectly upright. */}
-      <div className="intro-leaf absolute -bottom-10 -right-10 z-0 h-[200px] w-[200px] opacity-30 pointer-events-none">
+      <div className="intro-leaf absolute -bottom-10 -right-10 z-0 h-50 w-50 opacity-30 pointer-events-none">
          <Image src="/leaves.webp" alt="Leaf Accent" fill className="object-contain blur-[1px]" />
       </div>
 

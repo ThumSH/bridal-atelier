@@ -8,6 +8,9 @@ import DressSilhouettes from "@/components/home/DressSilhouettes";
 import ArtistryShowcase from "@/components/home/ArtistryShowcase";
 import RealWeddings from "@/components/home/RealWeddings";
 import AtelierStats from "@/components/home/AtelierStats";
+import CoutureDetails from "@/components/home/CoutureDetails"; // New
+import PressStrip from "@/components/home/PressStrip"; // New
+import PreFooter from "@/components/global/PreFooter";
 
 export default function Home() {
   return (
@@ -15,13 +18,17 @@ export default function Home() {
       <VideoShowcase />
       <AtelierIntro />
       <ArtistryShowcase />
+      <CoutureDetails />
       <Hero /> 
+       <PressStrip />
+        <DressSilhouettes/>
       <PhilosophySection />   
       <ComprehensiveServices />
       <BespokeJourney />
-      <DressSilhouettes/>
+     
       <RealWeddings />
       <AtelierStats />
+      <PreFooter />
     </main>
   );
 }

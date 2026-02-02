@@ -113,10 +113,10 @@ export default function AtelierStats() {
     <section ref={container} className="relative w-full bg-bridal-ivory py-32 overflow-hidden">
       
       {/* Leaves */}
-      <div className="stats-leaf absolute -top-20 -left-20 w-[400px] h-[400px] opacity-30 pointer-events-none z-0">
+      <div className="stats-leaf absolute -top-20 -left-20 w-100 h-100 opacity-30 pointer-events-none z-0">
          <Image src="/leaves.webp" alt="Decoration" fill className="object-contain blur-[4px]" />
       </div>
-      <div className="stats-leaf absolute -bottom-20 -right-20 w-[500px] h-[500px] opacity-20 pointer-events-none z-0">
+      <div className="stats-leaf absolute -bottom-20 -right-20 w-125 h-125 opacity-20 pointer-events-none z-0">
          <Image src="/leaves.webp" alt="Decoration" fill className="object-contain blur-[6px] rotate-180" />
       </div>
 
@@ -184,7 +184,7 @@ export default function AtelierStats() {
                  {stat.label}
               </h4>
 
-              <p className="font-sans text-xs text-bridal-charcoal/60 leading-relaxed max-w-[200px]">
+              <p className="font-sans text-xs text-bridal-charcoal/60 leading-relaxed max-w-50">
                  {stat.description}
               </p>
             </div>

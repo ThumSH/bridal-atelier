@@ -8,7 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageHero from "@/components/global/PageHero";
 import { Scissors, Ruler, PenTool, Sparkles } from "lucide-react";
-import Link from "next/link"; // Added missing import
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -108,7 +108,7 @@ export default function CouturePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
            
            {/* Sticky Image Side */}
-           <div className="md:sticky md:top-32 h-[50vh] md:h-[80vh] w-full rounded-[2rem] md:rounded-4xl overflow-hidden shadow-2xl shadow-bridal-charcoal/10 relative group">
+           <div className="md:sticky md:top-32 h-[50vh] md:h-[80vh] w-full rounded-4xl md:rounded-4xl overflow-hidden shadow-2xl shadow-bridal-charcoal/10 relative group">
               <Image 
                 src="/art.webp" 
                 alt="Sketching" 
@@ -176,11 +176,11 @@ export default function CouturePage() {
                </ul>
             </div>
 
-            <div className="order-1 md:order-2 relative h-[400px] md:h-150 w-full">
+            <div className="order-1 md:order-2 relative h-100 md:h-150 w-full">
                <div className="absolute top-0 right-0 w-[80%] h-[90%] rounded-tl-[5rem] md:rounded-tl-[10rem] overflow-hidden border border-white/10">
                   <Image src="/bridal.jpg" alt="Vintage" fill className="object-cover" />
                </div>
-               <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-tr-[2rem] md:rounded-tr-[5rem] overflow-hidden border-4 border-bridal-charcoal shadow-2xl">
+               <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-tr-4xl md:rounded-tr-[5rem] overflow-hidden border-4 border-bridal-charcoal shadow-2xl">
                   <Image src="/flower.webp" alt="Detail" fill className="object-cover" />
                </div>
             </div>
@@ -193,7 +193,7 @@ export default function CouturePage() {
             <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-xs -rotate-90" />
          </div>
 
-         <div className="absolute top-[30%] left-0 w-full h-[400px] pointer-events-none z-0 opacity-40">
+         <div className="absolute top-[30%] left-0 w-full h-100 pointer-events-none z-0 opacity-40">
             <svg className="w-full h-full" viewBox="0 0 1440 400" fill="none" preserveAspectRatio="none">
                <path 
                  className="thread-line"
@@ -228,10 +228,50 @@ export default function CouturePage() {
          </div>
       </section>
 
-      {/* 6. ALTERATIONS */}
+      {/* 6. LOOKBOOK GRID (NEW ADDITION) */}
+      <section className="py-20 px-6 max-w-480 mx-auto border-t border-bridal-charcoal/5">
+        <div className="text-center mb-16">
+            <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-4 block">Archive</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-bridal-charcoal">Recent Creations</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+            {[
+                { src: "/gown.jpg", title: "The Eliza", cat: "Ballgown", slug: "the-eliza" },
+                { src: "/mermaid.webp", title: "The Seraphina", cat: "Mermaid", slug: "the-seraphina" },
+                { src: "/The Basque.webp", title: "The Clara", cat: "A-Line", slug: "the-clara" },
+                { src: "/archi.webp", title: "The Modernist", cat: "Sheath", slug: "the-modernist" },
+                { src: "/waist.webp", title: "The Victoria", cat: "Corset", slug: "the-victoria" },
+                { src: "/floral.webp", title: "The Flora", cat: "Embroidery", slug: "the-flora" },
+            ].map((item, i) => (
+                <Link key={i} href={`/couture/${item.slug}`}>
+                    <div className="group relative aspect-3/4 overflow-hidden cursor-pointer">
+                        <Image 
+                            src={item.src} 
+                            alt={item.title} 
+                            fill 
+                            className="object-cover transition-transform duration-1000 group-hover:scale-110" 
+                        />
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center text-white">
+                            <h3 className="font-serif text-3xl italic mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">{item.title}</h3>
+                            <p className="font-sans text-xs uppercase tracking-widest translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">{item.cat}</p>
+                        </div>
+                    </div>
+                </Link>
+            ))}
+        </div>
+        
+        <div className="text-center mt-12">
+             <Link href="/contact" className="text-xs uppercase tracking-widest text-bridal-sage border-b border-bridal-sage pb-1 hover:text-bridal-charcoal hover:border-bridal-charcoal transition-all">
+                  Inquire About A Gown
+             </Link>
+        </div>
+      </section>
+
+      {/* 7. ALTERATIONS */}
       <section className="py-20 px-6 max-w-7xl mx-auto mb-20">
-         <div className="bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-16 shadow-xl shadow-bridal-charcoal/5 flex flex-col md:flex-row gap-12 items-center border border-bridal-charcoal/5">
-            <div className="w-full md:w-1/3 relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-inner">
+         <div className="bg-white rounded-4xl md:rounded-[3rem] p-8 md:p-16 shadow-xl shadow-bridal-charcoal/5 flex flex-col md:flex-row gap-12 items-center border border-bridal-charcoal/5">
+            <div className="w-full md:w-1/3 relative h-75 md:h-100 rounded-2xl overflow-hidden shadow-inner">
                <Image src="/gown.jpg" alt="Alterations" fill className="object-cover" />
             </div>
             <div className="w-full md:w-2/3">
@@ -246,7 +286,7 @@ export default function CouturePage() {
          </div>
       </section>
 
-      {/* 7. FOOTER CTA */}
+      {/* 8. FOOTER CTA */}
       <div className="text-center py-24 bg-bridal-charcoal text-white relative overflow-hidden">
          <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
          <h2 className="font-serif text-3xl md:text-4xl mb-6 relative z-10 shadow-glow">Your Dream Dress Awaits</h2>

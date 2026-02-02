@@ -6,7 +6,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Sparkles, Plus } from "lucide-react";
-import { cn } from "@/lib/utils"; //
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -76,7 +75,8 @@ export default function DressSilhouettes() {
             scrollTrigger: {
               trigger: triggerRef.current,
               pin: true,
-              scrub: 0.5,      
+              anticipatePin: 1,  // Prevents flicker on start
+              scrub: 1,          // Increased for smoother sync with Lenis
               start: "top top",
               end: () => `+=${wrapperRef.current!.scrollWidth}`, 
               invalidateOnRefresh: true,
@@ -184,7 +184,7 @@ export default function DressSilhouettes() {
          <span className="font-serif text-5xl leading-none text-bridal-charcoal">0{activeSlide + 1}</span>
          <div className="w-24 h-px bg-bridal-charcoal/10 mb-2 ml-2 relative overflow-visible">
             <div 
-                className="absolute top-0 left-0 h-[2px] bg-bridal-gold transition-all duration-300 shadow-[0_0_10px_rgba(212,175,55,0.8)]" 
+                className="absolute top-0 left-0 h-0.5 bg-bridal-gold transition-all duration-300 shadow-[0_0_10px_rgba(212,175,55,0.8)]" 
                 style={{ width: `${((activeSlide + 1) / DRESSES.length) * 100}%` }}
             />
          </div>
@@ -199,7 +199,7 @@ export default function DressSilhouettes() {
             {DRESSES.map((dress, index) => (
             <div 
                 key={dress.id} 
-                className="dress-slide dress-mobile-card relative h-auto md:h-full w-full md:w-[100vw] flex items-center justify-center px-6 py-12 md:px-20 border-b md:border-b-0 md:border-r border-bridal-charcoal/5 overflow-hidden"
+                className="dress-slide dress-mobile-card relative h-auto md:h-full w-full md:w-screen flex items-center justify-center px-6 py-12 md:px-20 border-b md:border-b-0 md:border-r border-bridal-charcoal/5 overflow-hidden"
             >
                 {/* Background Text */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none opacity-[0.03] z-0">
@@ -249,7 +249,7 @@ export default function DressSilhouettes() {
 
                     {/* 2. IMAGE SIDE */}
                     <div className="relative h-[60vh] md:h-[75vh] w-full order-1 md:order-2">
-                        <div className="relative w-full h-full overflow-hidden rounded-[2rem] md:rounded-[3rem] shadow-2xl shadow-bridal-charcoal/10 border-[4px] md:border-[8px] border-white transform-gpu">
+                        <div className="relative w-full h-full overflow-hidden rounded-4xl md:rounded-[3rem] shadow-2xl shadow-bridal-charcoal/10 border-4 md:border-8 border-white transform-gpu">
                             <Image
                                 src={dress.image}
                                 alt={dress.title}
@@ -259,7 +259,7 @@ export default function DressSilhouettes() {
                                 sizes="(max-width: 768px) 100vw, 50vw"
                             />
                             
-                            <div className="absolute inset-0 bg-gradient-to-t from-bridal-ivory/20 to-transparent mix-blend-overlay" />
+                            <div className="absolute inset-0 bg-linear-to-t from-bridal-ivory/20 to-transparent mix-blend-overlay" />
                             
                             {/* New Arrival Badge */}
                             {index === 0 && (
@@ -285,7 +285,7 @@ export default function DressSilhouettes() {
                             </div>
                         </div>
 
-                        <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 w-full h-full border border-bridal-charcoal/5 rounded-[2rem] md:rounded-[3rem] -z-10" />
+                        <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 w-full h-full border border-bridal-charcoal/5 rounded-4xl md:rounded-[3rem] -z-10" />
                     </div>
 
                 </div>

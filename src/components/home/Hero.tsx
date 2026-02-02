@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
@@ -127,7 +128,7 @@ export default function Hero() {
     <section ref={container} className="relative min-h-screen w-full bg-bridal-ivory overflow-hidden flex items-center justify-center py-20 lg:py-0">
       <div className="absolute inset-0 opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-multiply" />
 
-      <div className={cn("relative w-full max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center transition-all duration-700", isReversed ? "lg:grid-flow-dense" : "")}>
+      <div className={cn("relative w-full max-w-350 mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center transition-all duration-700", isReversed ? "lg:grid-flow-dense" : "")}>
         
         {/* IMAGE SIDE */}
         <div className={cn("relative w-full h-[60vh] lg:h-[80vh] transition-all duration-700", isReversed ? "lg:col-start-2" : "lg:col-start-1")}>
@@ -135,10 +136,10 @@ export default function Hero() {
               <div className="hero-image-inner relative w-full h-full">
                 <Image src={slide.image} alt="Bridal Imagery" fill className="object-cover" priority key={slide.image} />
                 <div className="absolute inset-0 bg-black/10" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-60" />
               </div>
            </div>
-           <div className="hero-meta absolute -bottom-6 -right-6 lg:bottom-10 lg:-right-10 bg-white p-6 rounded-[2rem] shadow-xl z-20 flex flex-col items-center gap-2">
+           <div className="hero-meta absolute -bottom-6 -right-6 lg:bottom-10 lg:-right-10 bg-white p-6 rounded-4xl shadow-xl z-20 flex flex-col items-center gap-2">
               <span className="font-serif text-3xl text-bridal-charcoal">0{currentSlide + 1}</span>
               <div className="w-px h-8 bg-bridal-charcoal/20" />
               <span className="font-sans text-xs text-bridal-charcoal/40">0{SLIDES.length}</span>

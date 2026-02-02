@@ -5,7 +5,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils"; // Ensure cn is imported
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);

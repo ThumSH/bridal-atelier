@@ -7,9 +7,8 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { cn } from "@/lib/utils";
 import PageHero from "@/components/global/PageHero";
-import { Scissors, Ruler, Fingerprint, Gem } from "lucide-react";
+import { Scissors, Ruler, Fingerprint, Gem, Search } from "lucide-react"; // Added Search
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -20,6 +19,37 @@ const CRAFT_METRICS = [
   { id: 2, value: "25", label: "Measurements", icon: <Ruler size={24} /> },
   { id: 3, value: "100%", label: "Natural Fibers", icon: <Gem size={24} /> },
   { id: 4, value: "1/1", label: "Unique Pattern", icon: <Fingerprint size={24} /> },
+];
+
+const MATERIALS = [
+  {
+    id: "silk",
+    name: "Mulberry Silk",
+    origin: "Como, Italy",
+    desc: "100% organic silk habotai lining. Breathable, hypoallergenic, and feels like second skin.",
+    image: "/mulberry.webp"
+  },
+  {
+    id: "lace",
+    name: "Chantilly Lace",
+    origin: "Calais, France",
+    desc: "Woven on 19th-century Leavers looms. Delicate, intricate, and impossibly soft.",
+    image: "/chan.webp" 
+  },
+  {
+    id: "beads",
+    name: "Glass Beads",
+    origin: "Kyoto, Japan",
+    desc: "Precision-cut glass beads that catch light without looking heavy or costume-like.",
+    image: "/bead.webp"
+  },
+  {
+    id: "tulle",
+    name: "Illusion Tulle",
+    origin: "Somerset, UK",
+    desc: "Ultra-fine mesh that disappears against the skin, creating the signature 'floating' lace effect.",
+    image: "/illusion.webp" 
+  }
 ];
 
 export default function CraftPage() {
@@ -78,6 +108,30 @@ export default function CraftPage() {
         ease: "sine.inOut"
     });
 
+    // 5. HORIZONTAL SCROLL (Pinned)
+    // Moves logic INSIDE the hook to fix the syntax error
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 768px)", () => {
+        const materialSection = document.getElementById("material-section");
+        const materialTrack = document.getElementById("material-track");
+        
+        if(materialSection && materialTrack) {
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: materialSection,
+                    pin: true,
+                    scrub: 1,
+                    end: () => "+=" + (materialTrack.scrollWidth - window.innerWidth),
+                    invalidateOnRefresh: true,
+                }
+            });
+            tl.to(materialTrack, {
+                x: -(materialTrack.scrollWidth - window.innerWidth),
+                ease: "none",
+            });
+        }
+    });
+
   }, { scope: container });
 
   return (
@@ -92,7 +146,7 @@ export default function CraftPage() {
 
       {/* 2. PHILOSOPHY INTRO */}
       <section className="py-20 md:py-32 px-6 max-w-5xl mx-auto text-center relative">
-         <div className="craft-leaf absolute -top-10 -left-10 md:-left-20 w-40 h-40 md:w-[300px] md:h-[300px] opacity-20 pointer-events-none">
+         <div className="craft-leaf absolute -top-10 -left-10 md:-left-20 w-40 h-40 md:w-75 md:h-75 opacity-20 pointer-events-none">
             <Image src="/leaves.webp" alt="Leaf" fill className="object-contain blur-[2px]" />
          </div>
 
@@ -104,26 +158,22 @@ export default function CraftPage() {
          </h2>
       </section>
 
-      {/* 3. SECTION: MATERIALS (Fixed Mobile Layout) */}
+      {/* 3. SECTION: MATERIAL INTEGRITY (Intro) */}
       <section className="relative px-6 md:px-12 max-w-7xl mx-auto mb-24 md:mb-40">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
            
-           {/* Sticky Image Side */}
-           {/* FIX: h-[50vh] on mobile so it doesn't dominate the viewport */}
-           <div className="md:sticky md:top-32 h-[50vh] md:h-[80vh] w-full rounded-tl-[5rem] md:rounded-tl-[10rem] rounded-br-[2rem] md:rounded-br-[5rem] overflow-hidden shadow-2xl shadow-bridal-charcoal/10 border border-bridal-charcoal/5 relative">
+           <div className="md:sticky md:top-32 h-[50vh] md:h-[80vh] w-full rounded-tl-[5rem] md:rounded-tl-[10rem] rounded-br-4xl md:rounded-br-[5rem] overflow-hidden shadow-2xl shadow-bridal-charcoal/10 border border-bridal-charcoal/5 relative">
               <Image 
                 src="/flower.webp" 
                 alt="Fabric Detail" 
                 fill 
                 className="parallax-img object-cover scale-110" 
               />
-              {/* Badge positioned safely */}
               <div className="absolute top-4 right-4 md:top-8 md:right-8 bg-white/90 backdrop-blur-md px-4 py-3 md:px-6 md:py-4 rounded-full border border-bridal-sage/30 shadow-lg">
                  <p className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-bridal-charcoal">Sourced in Italy & France</p>
               </div>
            </div>
 
-           {/* Content Side */}
            <div className="flex flex-col justify-center py-0 md:py-32">
               <h3 className="reveal-text font-serif text-4xl md:text-6xl mb-8">
                  Material <br/><span className="italic text-bridal-gold/90">Integrity</span>
@@ -179,11 +229,11 @@ export default function CraftPage() {
                </div>
             </div>
 
-            <div className="order-1 md:order-2 relative h-[400px] md:h-[600px] w-full">
-               <div className="absolute inset-0 rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 grayscale hover:grayscale-0 transition-all duration-1000">
+            <div className="order-1 md:order-2 relative h-100 md:h-150 w-full">
+               <div className="absolute inset-0 rounded-4xl md:rounded-[3rem] overflow-hidden border border-white/10 grayscale hover:grayscale-0 transition-all duration-1000">
                   <Image src="/couture.webp" alt="Structure" fill className="object-cover" />
                </div>
-               <div className="absolute -bottom-10 -left-10 w-[200px] h-[200px] bg-bridal-sage/20 blur-[50px] rounded-full pointer-events-none" />
+               <div className="absolute -bottom-10 -left-10 w-50 h-50 bg-bridal-sage/20 blur-[50px] rounded-full pointer-events-none" />
             </div>
          </div>
       </section>
@@ -191,7 +241,7 @@ export default function CraftPage() {
       {/* 5. METRICS & THREAD ANIMATION */}
       <section className="craft-section relative py-20 md:py-32 px-6 overflow-hidden bg-bridal-ivory">
          
-         <div className="absolute top-[20%] left-0 w-full h-[500px] pointer-events-none z-0 opacity-30">
+         <div className="absolute top-[20%] left-0 w-full h-125 pointer-events-none z-0 opacity-30">
             <svg className="w-full h-full" viewBox="0 0 1440 500" fill="none" preserveAspectRatio="none">
                <path 
                  className="stitch-thread-line"
@@ -218,7 +268,6 @@ export default function CraftPage() {
                <h2 className="font-serif text-3xl md:text-4xl text-bridal-charcoal">The Dedication</h2>
             </div>
 
-            {/* FIX: grid-cols-1 on mobile, grid-cols-2 on tablet, grid-cols-4 on desktop */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                {CRAFT_METRICS.map((metric) => (
                   <div key={metric.id} className="reveal-text flex flex-col items-center text-center p-8 bg-white rounded-2xl shadow-lg shadow-bridal-charcoal/5 border border-bridal-charcoal/5 group hover:-translate-y-2 transition-transform duration-500">
@@ -235,8 +284,59 @@ export default function CraftPage() {
          </div>
       </section>
 
-      {/* 6. FOOTER CTA */}
-      <div className="text-center py-24 bg-bridal-charcoal text-white relative overflow-hidden">
+      {/* 6. HORIZONTAL SCROLL SECTION (DESKTOP) */}
+      {/* Added proper ID 'material-section' wrapper to fix the pinning logic */}
+      <section id="material-section" className="hidden md:flex h-screen w-full bg-bridal-charcoal text-white overflow-hidden items-center relative">
+          <div className="absolute top-10 left-10 z-20">
+              <h2 className="font-serif text-4xl">Material Library</h2>
+              <p className="font-sans text-xs uppercase tracking-widest text-white/50 mt-2">Sourced Globally</p>
+          </div>
+
+          <div id="material-track" className="flex gap-20 px-20 h-[60vh] items-center w-max">
+              <div className="min-w-100 pr-20">
+                  <p className="font-serif text-3xl leading-relaxed text-white/80">
+                      "The hand-feel of a fabric dictates the soul of the dress. We reject synthetics in favor of natural fibers that breathe."
+                  </p>
+              </div>
+
+              {MATERIALS.map((mat, i) => (
+                  <div key={i} className="relative min-w-87.5 h-125 group bg-white/5 border border-white/10 p-4 transition-colors hover:bg-white/10">
+                      <div className="relative w-full h-[70%] mb-6 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
+                          <Image src="/floral.webp" alt={mat.name} fill className="object-cover" />
+                          <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Search size={16} />
+                          </div>
+                      </div>
+                      <h3 className="font-serif text-2xl mb-2">{mat.name}</h3>
+                      <p className="font-sans text-[10px] uppercase tracking-widest text-bridal-sage mb-4">{mat.origin}</p>
+                      <p className="font-sans text-sm text-white/60 leading-relaxed">{mat.desc}</p>
+                      <span className="absolute -top-10 -left-10 font-serif text-[8rem] text-white/5 pointer-events-none select-none">0{i+1}</span>
+                  </div>
+              ))}
+              
+              <div className="min-w-50" /> 
+          </div>
+      </section>
+
+      {/* 7. MOBILE MATERIALS LIST (Mobile Fallback) */}
+      <section className="md:hidden py-20 px-6 bg-bridal-charcoal text-white">
+          <h2 className="font-serif text-3xl mb-12">Material Library</h2>
+          <div className="space-y-16">
+            {MATERIALS.map((mat, i) => (
+                 <div key={i} className="group">
+                     <div className="relative w-full aspect-3/4 mb-6 overflow-hidden border border-white/10">
+                         <Image src="/floral.webp" alt={mat.name} fill className="object-cover" />
+                     </div>
+                     <h3 className="font-serif text-2xl mb-2">{mat.name}</h3>
+                     <p className="font-sans text-[10px] uppercase tracking-widest text-bridal-sage mb-4">{mat.origin}</p>
+                     <p className="font-sans text-sm text-white/60 leading-relaxed">{mat.desc}</p>
+                 </div>
+             ))}
+          </div>
+      </section>
+
+      {/* 8. FOOTER CTA */}
+      <div className="text-center py-24 bg-bridal-charcoal text-white relative overflow-hidden border-t border-white/10">
          <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-overlay" />
          
          <h2 className="font-serif text-3xl md:text-4xl text-white mb-6 relative z-10">Experience the Quality</h2>

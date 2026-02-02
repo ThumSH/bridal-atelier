@@ -59,7 +59,7 @@ export default function Navbar() {
         <div className="w-full flex items-center justify-between px-6 lg:px-12 relative">
           
           {/* --- LEFT: Logo --- */}
-          <div className="flex-shrink-0 z-50">
+          <div className="shrink-0 z-50">
             <Link 
               href="/" 
               onClick={handleLogoClick}
@@ -85,7 +85,7 @@ export default function Navbar() {
               >
                 {item}
                 <span className={cn(
-                  "absolute -bottom-2 left-0 w-0 h-[1px] transition-all duration-300 group-hover:w-full",
+                  "absolute -bottom-2 left-0 w-0 h-px transition-all duration-300 group-hover:w-full",
                   isScrolled ? "bg-bridal-sage" : "bg-white"
                 )} />
               </Link>
@@ -110,7 +110,7 @@ export default function Navbar() {
             )}>
               <a href="#" className={cn("transition-colors hover:-translate-y-1 duration-300", isScrolled ? "text-bridal-charcoal hover:text-bridal-sage" : "text-white hover:text-bridal-sage")}><Instagram size={18} strokeWidth={1.5} /></a>
               <a href="#" className={cn("transition-colors hover:-translate-y-1 duration-300", isScrolled ? "text-bridal-charcoal hover:text-bridal-sage" : "text-white hover:text-bridal-sage")}><Facebook size={18} strokeWidth={1.5} /></a>
-              <a href="#" className={cn("transition-colors hover:-translate-y-1 duration-300", isScrolled ? "text-bridal-charcoal hover:text-bridal-sage" : "text-white hover:text-bridal-sage")}><TikTokIcon className="h-[18px] w-[18px]" strokeWidth={1.5} /></a>
+              <a href="#" className={cn("transition-colors hover:-translate-y-1 duration-300", isScrolled ? "text-bridal-charcoal hover:text-bridal-sage" : "text-white hover:text-bridal-sage")}><TikTokIcon className="h-4.5 w-4.5" strokeWidth={1.5} /></a>
             </div>
           </div>
 

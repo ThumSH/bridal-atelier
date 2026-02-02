@@ -122,10 +122,10 @@ export default function RealWeddings() {
           <div 
             key={wedding.id} 
             // Width Logic: Full width on mobile, fixed width on Desktop to fit 3 perfectly
-            className="wedding-card relative w-full md:w-[350px] aspect-[3/4] group cursor-pointer"
+            className="wedding-card relative w-full md:w-87.5 aspect-3/4 group cursor-pointer"
           >
             {/* Image Wrapper */}
-            <div className="relative h-full w-full overflow-hidden rounded-[2rem] shadow-lg shadow-bridal-charcoal/5">
+            <div className="relative h-full w-full overflow-hidden rounded-4xl shadow-lg shadow-bridal-charcoal/5">
               <Image
                 src={wedding.image}
                 alt={wedding.couple}

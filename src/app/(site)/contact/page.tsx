@@ -78,7 +78,7 @@ export default function ContactPage() {
 
       <section className="relative py-32 px-6 max-w-7xl mx-auto">
          {/* Living Background Glow */}
-         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-bridal-sage/5 rounded-full blur-[100px] pointer-events-none animate-pulse-slow" />
+         <div className="absolute top-0 right-0 w-150 h-150 bg-bridal-sage/5 rounded-full blur-[100px] pointer-events-none animate-pulse-slow" />
 
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
 
@@ -118,7 +118,7 @@ export default function ContactPage() {
             </div>
 
             {/* --- RIGHT: THE FORM (Stationery Style) --- */}
-            <div className="contact-form-section relative bg-white p-8 md:p-16 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-bridal-charcoal/5">
+            <div className="contact-form-section relative bg-white p-8 md:p-16 rounded-4xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-bridal-charcoal/5">
                {/* Floating Stamp */}
                <div className="contact-float absolute -top-6 -right-6 w-24 h-24 bg-bridal-sage rounded-full flex items-center justify-center shadow-lg text-white z-10 border-4 border-white">
                    <div className="text-center">
