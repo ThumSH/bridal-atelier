@@ -93,7 +93,7 @@ export default function Footer() {
           <div className="col-span-1">
              <h4 className="font-serif text-lg italic text-bridal-sage mb-6">Visit Us</h4>
              <ul className="space-y-4 font-sans text-xs tracking-widest uppercase text-white/70">
-              <li>New York • Nationwide</li>
+              <li>Galle • Nationwide</li>
               <li>By Appointment Only</li>
               <li><a href="mailto:hello@bonitha.co" className="hover:text-white hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] transition-all">hello@bonitha.co</a></li>
             </ul>
@@ -112,7 +112,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-12 flex flex-col md:flex-row justify-between font-sans text-[10px] uppercase tracking-widest text-white/30">
           <span>© 2026 Bonitha & Co.</span>
-          <span className="mt-2 md:mt-0">Designed with Elegance</span>
+          <span className="mt-2 md:mt-0">Designed By Tranzix Global Impex</span>
         </div>
 
       </div>
