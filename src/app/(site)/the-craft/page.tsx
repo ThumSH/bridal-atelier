@@ -302,7 +302,7 @@ export default function CraftPage() {
               {MATERIALS.map((mat, i) => (
                   <div key={i} className="relative min-w-87.5 h-125 group bg-white/5 border border-white/10 p-4 transition-colors hover:bg-white/10">
                       <div className="relative w-full h-[70%] mb-6 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
-                          <Image src="/floral.webp" alt={mat.name} fill className="object-cover" />
+                          <Image src={mat.image} alt={mat.name} fill className="object-cover" />
                           <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                               <Search size={16} />
                           </div>

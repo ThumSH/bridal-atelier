@@ -200,7 +200,7 @@ export default function ContactPage() {
           <div className="absolute inset-0 bg-black/30" />
           
           <div className="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl text-center text-white shadow-2xl">
-              <h3 className="font-serif text-3xl mb-2 drop-shadow-md">New York Flagship</h3>
+              <h3 className="font-serif text-3xl mb-2 drop-shadow-md">Galle Flagship</h3>
               <p className="font-sans text-xs uppercase tracking-widest opacity-80">Fashion District</p>
               <button className="mt-6 px-6 py-2 bg-white text-bridal-charcoal rounded-full text-[10px] uppercase tracking-widest hover:bg-bridal-sage hover:text-white transition-colors hover:shadow-[0_0_15px_rgba(255,255,255,0.4)]">
                   Get Directions
