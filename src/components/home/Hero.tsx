@@ -63,7 +63,7 @@ export default function HairEditorialHero() {
            alt="Couture Hair Styling" 
            fill 
            className="object-cover"
-           priority
+           sizes="(max-width: 768px) 100vw, 50vw"
          />
          {/* Cinematic Gradient (Dark at bottom for text) */}
          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />

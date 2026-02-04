@@ -120,8 +120,9 @@ export default function InstaFeed() {
              <Image 
                src={post.src} 
                alt="Bonitha Bride" 
-               fill 
-               className="object-cover transition-transform duration-[2s] group-hover:scale-110"
+               fill
+               sizes="(max-width: 768px) 100vw, 350px" 
+               className="object-cover transition-transform duration-1000 group-hover:scale-110"
              />
 
              {/* Refined Interaction: Subtle contrast and white internal frame */}
