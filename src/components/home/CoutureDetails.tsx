@@ -5,7 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -13,32 +13,22 @@ if (typeof window !== "undefined") {
 
 const DETAILS = [
   {
-    id: 1,
-    src: "/lace.webp", // Lace/Texture
-    alt: "Chantilly Lace",
-    speed: 0.2, // Slow
-    className: "top-10 left-[10%] w-48 md:w-64 aspect-[3/4]",
+    title: "Ethereal Silks",
+    description: "We source only the finest mulberry silks and heavy satins, ensuring a drape that moves like water and feels like a second skin.",
+    image: "/silk.webp", // Found in your public folder
+    features: ["100% Organic Silk", "High-Lustre Finish", "Breathable Luxury"]
   },
   {
-    id: 2,
-    src: "/pearl.webp", // Silk/Button
-    alt: "Pearl Buttons",
-    speed: 0.5, // Medium
-    className: "top-40 right-[15%] w-40 md:w-56 aspect-square"
+    title: "Hand-Knitted Lace",
+    description: "Our signature. Each veil and lace insert is hand-knitted in-house, taking up to 120 hours to achieve a pattern that is entirely unique.",
+    image: "/lace.webp", // Found in your public folder
+    features: ["Bespoke Patterns", "Heritage Techniques", "Delicate Durability"]
   },
   {
-    id: 3,
-    src: "/hand-emb.webp", // Hand stitching
-    alt: "Hand Embroidery",
-    speed: 0.8, // Fast
-    className: "bottom-20 left-[20%] w-56 md:w-72 aspect-video"
-  },
-  {
-    id: 4,
-    src: "/silk.webp", // Veil
-    alt: "Silk Tulle",
-    speed: 0.3, 
-    className: "bottom-40 right-[10%] w-32 md:w-48 aspect-[2/3]"
+    title: "Intricate Beadwork",
+    description: "Precision-placed crystals and pearls that capture the light from every angle, hand-sewn to create a shimmering, multidimensional effect.",
+    image: "/bead.webp", // Found in your public folder
+    features: ["Swarovski Accents", "Reinforced Stitching", "Customizable Shine"]
   }
 ];
 
@@ -46,76 +36,111 @@ export default function CoutureDetails() {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // Parallax Effect for each image
-    DETAILS.forEach((item) => {
-      gsap.to(`.detail-img-${item.id}`, {
-        y: -100 * item.speed, // Move up based on speed
-        ease: "none",
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
+    // 1. Image Zoom/Scale on Scroll
+    const items = gsap.utils.toArray<HTMLElement>(".detail-item");
+    
+    items.forEach((item, i) => {
+      const img = item.querySelector(".detail-img");
+      
+      gsap.fromTo(img, 
+        { scale: 1.2, filter: "blur(10px)" },
+        { 
+          scale: 1, 
+          filter: "blur(0px)",
+          ease: "none",
+          scrollTrigger: {
+            trigger: item,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          }
         }
-      });
+      );
     });
 
-    // Text Reveal
-    gsap.from(".detail-text", {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.1,
-      scrollTrigger: {
-        trigger: ".detail-content",
-        start: "top 70%",
-      }
+    // 2. Background Color Shift
+    gsap.to(container.current, {
+        backgroundColor: "#2C2C2C", // Shift to Charcoal for a "Premium" look
+        color: "#F9F7F2",
+        scrollTrigger: {
+            trigger: container.current,
+            start: "top 40%",
+            end: "top 10%",
+            scrub: true,
+        }
     });
+
   }, { scope: container });
 
   return (
-    <section ref={container} className="relative w-full min-h-[120vh] bg-bridal-ivory overflow-hidden flex items-center justify-center">
+    <section ref={container} className="relative bg-bridal-ivory py-32 transition-colors duration-1000 overflow-hidden">
       
-      {/* Background Subtle Text */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02]">
-         <h1 className="font-serif text-[30vw] text-bridal-charcoal leading-none">SILK</h1>
-      </div>
-
-      {/* Floating Images */}
-      {DETAILS.map((item) => (
-        <div 
-            key={item.id} 
-            className={cn(
-                `detail-img-${item.id} absolute grayscale hover:grayscale-0 transition-all duration-700 ease-out z-10 shadow-xl`, 
-                item.className
-            )}
-        >
-            <div className="relative w-full h-full overflow-hidden rounded-lg">
-                <Image 
-                    src={item.src} 
-                    alt={item.alt} 
-                    fill 
-                    className="object-cover hover:scale-110 transition-transform duration-1000" 
-                />
-            </div>
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Section Header */}
+        <div className="mb-24 text-center">
+            <span className="font-sans text-[10px] uppercase tracking-[0.6em] text-bridal-sage font-bold mb-4 block">
+                The Anatomy of a Gown
+            </span>
+            <h2 className="font-serif text-5xl md:text-7xl leading-tight">
+                Crafted from <br /><span className="italic text-bridal-gold">The Finest Thread.</span>
+            </h2>
         </div>
-      ))}
 
-      {/* Central Content */}
-      <div className="detail-content relative z-20 text-center max-w-xl px-6 bg-bridal-ivory/80 backdrop-blur-sm p-12 rounded-full shadow-[0_0_50px_rgba(249,247,242,1)]">
-        <span className="detail-text font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-4 block">
-            The Materials
-        </span>
-        <h2 className="detail-text font-serif text-5xl md:text-6xl text-bridal-charcoal mb-6">
-            God is in the <br/><span className="italic text-bridal-gold">Details</span>.
-        </h2>
-        <p className="detail-text font-sans text-sm text-bridal-charcoal/70 leading-loose">
-            We source our silks from Como and our lace from Calais. 
-            We believe that the fabric should not just touch your skin, 
-            but caress it. True luxury is the feeling of weightlessness.
-        </p>
+        {/* Content Rows */}
+        <div className="space-y-32 md:space-y-64">
+          {DETAILS.map((detail, i) => (
+            <div 
+              key={detail.title} 
+              className={`detail-item flex flex-col items-center gap-12 md:gap-24 ${
+                i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+              }`}
+            >
+              {/* IMAGE SIDE - The "Lens" */}
+              <div className="flex-1 w-full relative group">
+                <div className="relative aspect-square md:aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl border border-white/5">
+                  <Image 
+                    src={detail.image} 
+                    alt={detail.title} 
+                    fill 
+                    className="detail-img object-cover transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
+                </div>
+                {/* Decoration Element */}
+                <div className="absolute -bottom-6 -right-6 w-24 h-24 border-b-2 border-r-2 border-bridal-gold/30 rounded-br-[2rem]" />
+              </div>
+
+              {/* TEXT SIDE */}
+              <div className="flex-1 max-w-lg">
+                <h3 className="font-serif text-4xl md:text-5xl mb-6">{detail.title}</h3>
+                <p className="font-sans text-base opacity-70 leading-loose mb-10">
+                  {detail.description}
+                </p>
+                
+                <ul className="grid grid-cols-1 gap-4">
+                  {detail.features.map((feature) => (
+                    <li key={feature} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full bg-bridal-sage/20 flex items-center justify-center text-bridal-sage">
+                        <Check size={12} />
+                      </div>
+                      <span className="font-sans text-[10px] uppercase tracking-widest font-bold opacity-80">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
 
+      {/* Background Text Watermark */}
+      <div className="absolute bottom-0 right-0 text-[15vw] font-serif text-white/5 pointer-events-none select-none -mb-10">
+        Couture
+      </div>
     </section>
   );
 }

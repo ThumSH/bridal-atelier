@@ -1,250 +1,326 @@
-/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Sparkles, ArrowRight, ShieldCheck, Camera } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { cn } from "@/lib/utils";
-import PageHero from "@/components/global/PageHero";
-import {  Palette, Flower2, Scissors, Sun } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const SERVICES = [
+// Configuration
+const ARTISTRY_SERVICES = [
   {
-    id: "makeup",
-    title: "Bridal Makeup",
-    subtitle: "The Canvas",
-    desc: "We engineer radiance. Our makeup is not just applied; it is designed to withstand humidity, tears, and 4K photography. From skin prep to the final setting mist, we create a look that feels weightless but lasts an eternity.",
-    features: ["Skin Analysis & Prep", "Waterproof Formulation", "Lighting-Adaptive Pigments"],
-    image: "/makeup.jpg", // Ensure this exists or use /makeup-3.png
-    align: "right"
+    id: "01",
+    title: "Couture Makeup",
+    subtitle: "Light-Sculpting & Skin Architecture",
+    desc: "Our makeup artistry is a masterclass in light-sculpting and skin architecture. We move away from standard application to a process of custom-blending pigments that mirror your biological undertones. Utilizing high-definition technology, we create a second-skin finish that appears flawless under the glare of professional flash. Every stroke is a deliberate act of engineering, designed to remain unshakeable.",
+    mainImage: "/p-11.webp",
+    gallery: ["/m-1.webp", "/m-2.webp", "/m-3.webp"]
   },
   {
-    id: "hair",
-    title: "Hair Couture",
-    subtitle: "The Sculpture",
-    desc: "Architectural updos, romantic waves, or traditional braids. We treat hair as a sculpture, ensuring it frames your face perfectly and holds its structure from the ceremony to the final dance.",
-    features: ["Structural Pinning", "Extension Blending", "Veil Security"],
-    image: "/qfc.webp",
-    align: "left"
+    id: "02",
+    title: "Haute Coiffure",
+    subtitle: "Structural Movement & Security",
+    desc: "Bridal hair is the structural crown of your silhouette. We approach styling with a focus on mathematical symmetry and structural integrity. From the meticulous priming of the hair shaft to the anchor-point setting that secures heavy veils and heirloom jewelry, our coiffure is built to endure. We ensure your look is locked in a humidity-proof embrace.",
+    mainImage: "/test.jpeg",
+    gallery: ["/m-4.webp", "/m-5.webp", "/m-6.webp"]
   },
   {
-    id: "draping",
-    title: "Draping & Styling",
-    subtitle: "The Silhouette",
-    desc: "The perfect saree pleat or the flawless fall of a veil. Our styling team ensures you are pinned to perfection. We specialize in Kandyan, Indian, and modern fusion draping styles.",
-    features: ["Saree Pleating", "Dupatta Setting", "Jewelry Placement"],
-    image: "/mermaid.webp",
-    align: "right"
+    id: "03",
+    title: "Heirloom Embroidery",
+    subtitle: "The Detail Atelier",
+    desc: "The Bonitha embroidery atelier is where fabric becomes a canvas for your personal history. Our master artisans dedicate hundreds of collective hours to a single piece, employing ancient hand-stitching techniques. We utilize real gold thread, freshwater pearls, and intricate zardosi work to create textures rich in story and weight—a wearable heirloom tailored with a mathematical focus.",
+    mainImage: "/m-x.webp",
+    gallery: ["/m-7.webp", "/m-8.webp", "/m-9.webp"]
+  },
+  {
+    id: "04",
+    title: "Skin Artistry",
+    subtitle: "Acne & Texture Refinement",
+    desc: "True beauty begins with a healthy canvas. For brides struggling with acne, hyperpigmentation, or uneven texture, we offer a specialized protocol that balances high-coverage concealment with medical-grade breathability. We do not believe in masking; we believe in refining. Our techniques ensure that even the most textured skin appears smooth and radiant, providing unshakeable confidence.",
+    mainImage: "/m-10.webp",
+    gallery: ["/m-11.webp", "/m-12.webp", "/m-13.webp"],
+    isClinical: true
   }
-];
-
-const FLORALS = [
-  { id: 1, title: "The Bouquet", img: "/flower.webp", desc: "Hand-tied heirloom roses." },
-  { id: 2, title: "Hair Florals", img: "/floral-2.jpg", desc: "Fresh jasmine and baby's breath." },
-  { id: 3, title: "Bridesmaid Bouquets", img: "/floral.webp", desc: "Complementary blooms for your party." },
-  { id: 4, title: "Flower Crowns", img: "/fl-crown.webp", desc: "Whimsical halos for flower girls." },
 ];
 
 export default function ArtistryPage() {
   const container = useRef<HTMLDivElement>(null);
-  
+  const masterVideoRef = useRef<HTMLVideoElement>(null);
+
   useGSAP(() => {
-    // 1. Service Sections Parallax
-    gsap.utils.toArray<HTMLElement>(".service-card").forEach((section) => {
-        const img = section.querySelector(".service-img");
-        
-        gsap.to(img, {
-            y: 50,
-            ease: "none",
-            scrollTrigger: {
-                trigger: section,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
-        });
+    // 1. Header Line Animation (New)
+    gsap.fromTo(".header-line-path", 
+      { strokeDasharray: 1000, strokeDashoffset: 1000 },
+      { strokeDashoffset: 0, duration: 2.5, ease: "power3.out", delay: 0.2 }
+    );
+
+    gsap.from(".header-desc", {
+      y: 20,
+      opacity: 0,
+      duration: 1,
+      delay: 1,
+      ease: "power2.out"
     });
 
-    // 2. Horizontal Floral Scroll
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 768px)", () => {
-        const floralTrack = document.querySelector(".floral-track");
-        const floralSection = document.querySelector(".floral-section");
-        
-        if (floralTrack && floralSection) {
-            const scrollAmount = floralTrack.scrollWidth - window.innerWidth;
-            
-            gsap.to(floralTrack, {
-                x: -scrollAmount,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: floralSection,
-                    pin: true,
-                    scrub: 1,
-                    end: () => `+=${scrollAmount}`,
-                }
-            });
+    // 2. Dappled Light Parallax
+    gsap.to(".service-leaf", {
+      yPercent: 30,
+      rotation: 10,
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+      }
+    });
+
+    // 3. Master Hero Video Reveal
+    gsap.from(".master-hero-frame", {
+      scale: 0.95,
+      opacity: 0,
+      duration: 1.8,
+      ease: "power4.out"
+    });
+
+    // 4. Staggered Service Reveal
+    const reveals = document.querySelectorAll(".service-section");
+    reveals.forEach((section) => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 75%",
         }
-    });
+      });
 
+      tl.from(section.querySelectorAll(".anim-up"), {
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: "power3.out"
+      })
+      .fromTo(section.querySelector(".rope-path"), 
+        { strokeDasharray: 400, strokeDashoffset: 400, opacity: 0 },
+        { strokeDashoffset: 0, opacity: 1, duration: 2, ease: "power2.inOut" },
+        "-=1"
+      );
+    });
   }, { scope: container });
 
   return (
-    <main ref={container} className="bg-bridal-charcoal min-h-screen pb-0 text-white">
+    <main ref={container} className="relative min-h-screen bg-bridal-ivory pt-28 pb-48 overflow-hidden">
       
-      {/* 1. HERO */}
-      <PageHero 
-        title="Total Artistry" 
-        subtitle="Beauty & Blooms" 
-        image="/ti.webp" 
-      />
+      {/* --- ATMOSPHERIC LAYERS --- */}
+      <div className="floating-leaf absolute top-[5%] -left-32 w-[600px] h-[600px] opacity-20 blur-2xl mix-blend-multiply z-0 pointer-events-none">
+        <Image src="/leaves.webp" alt="" fill className="object-contain" />
+      </div>
 
-      {/* 2. INTRO */}
-      <section className="py-24 px-6 max-w-4xl mx-auto text-center">
-         <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-8 block">
-            Holistic Beauty
-         </span>
-         <h2 className="font-serif text-3xl md:text-5xl leading-relaxed">
-            "We believe in a unified vision. From the flush on your cheeks to the flowers in your hands, every element is curated to tell a single, beautiful story."
-         </h2>
+      <div className="floating-leaf absolute top-[25%] -right-40 w-[700px] h-[700px] opacity-30 blur-sm mix-blend-multiply z-0 pointer-events-none rotate-90">
+        <Image src="/leaves.webp" alt="" fill className="object-contain" />
+      </div>
+
+      <div className="floating-leaf absolute top-[30%] -left-20 w-[550px] h-[550px] opacity-20 blur-sm mix-blend-multiply z-0 pointer-events-none -rotate-45">
+        <Image src="/leaves.webp" alt="" fill className="object-contain" />
+      </div>
+
+      <div className="floating-leaf absolute top-[40%] -right-20 w-[550px] h-[550px] opacity-10 blur-sm mix-blend-multiply z-0 pointer-events-none -rotate-5">
+        <Image src="/leaves.webp" alt="" fill className="object-contain" />
+      </div>
+
+      <div className="floating-leaf absolute bottom-[5%] -right-32 w-[650px] h-[650px] opacity-25 blur-sm mix-blend-multiply z-0 pointer-events-none">
+        <Image src="/leaves.webp" alt="" fill className="object-contain" />
+      </div>
+
+
+      {/* --- 1. NEW HEADER SECTION (With Golden Thread) --- */}
+      <section className="relative z-10 max-w-[1400px] mx-auto px-6 mb-24">
+        
+        {/* GOLDEN THREAD SVG */}
+        <svg 
+            className="absolute top-[-50px] left-0 w-full h-[140%] pointer-events-none z-0 overflow-visible opacity-60" 
+            viewBox="0 0 1000 400" 
+            preserveAspectRatio="none"
+        >
+            <path 
+                className="header-line-path"
+                d="M-50,150 C150,50 300,250 500,100 S 800,20 950,150" 
+                fill="none" 
+                stroke="#C5A059" 
+                strokeWidth="1.5"
+                vectorEffect="non-scaling-stroke"
+            />
+        </svg>
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+            {/* Title Block */}
+            <div className="lg:col-span-8">
+                <div className="flex items-center gap-3 text-bridal-gold mb-8">
+                    <Sparkles size={16} />
+                    <span className="font-sans text-[11px] uppercase tracking-[0.5em] font-bold">The Master Showcase</span>
+                </div>
+                <h1 className="font-serif text-6xl md:text-[9rem] text-bridal-charcoal uppercase tracking-tighter leading-[0.8]">
+                    Sculpted <br/> <span className="italic text-bridal-gold font-light lowercase">Radiance.</span>
+                </h1>
+            </div>
+
+            {/* Description Block */}
+            <div className="lg:col-span-4 header-desc pb-4 pl-2 lg:pl-0 border-l lg:border-l-0 border-bridal-gold/30">
+                <p className="font-sans text-base md:text-lg text-bridal-charcoal/70 leading-relaxed font-light">
+                    Where the precision of science meets the intuition of art. A curated anthology of transformations designed to withstand the lens, the light, and the emotion of the moment.
+                </p>
+            </div>
+        </div>
       </section>
 
-      {/* 3. CORE SERVICES (Makeup, Hair, Draping) */}
-      <div className="space-y-0 md:space-y-32 pb-32">
-        {SERVICES.map((service, i) => (
-            <section key={service.id} className="service-card relative min-h-screen flex items-center overflow-hidden">
-                {/* Background Tint */}
-                <div className={cn(
-                    "absolute inset-0 z-0",
-                    i % 2 === 0 ? "bg-white/5" : "bg-transparent"
-                )} />
+      {/* --- 2. THE CINEMATIC HERO (Left: Narrative | Right: Portrait Video) --- */}
+      <section className="relative z-10 max-w-[1400px] mx-auto px-6 mb-40">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+          
+          {/* --- LEFT: NARRATIVE (Removed duplicate H1, kept pure narrative) --- */}
+          <div className="lg:col-span-6 reveal-item">
+            <div className="flex items-center gap-3 text-bridal-gold mb-8">
+               <Sparkles size={16} />
+               <span className="font-sans text-[10px] uppercase tracking-[0.6em] font-bold">The Signature Soul</span>
+            </div>
+            
+            <div className="space-y-8 max-w-xl">
+              <p className="font-sans text-base md:text-lg text-bridal-charcoal/70 leading-relaxed font-light first-letter:text-6xl first-letter:font-serif first-letter:mr-3 first-letter:float-left first-letter:text-bridal-gold">
+                For over 25 years, the Bonitha Atelier has operated at the intersection of classical beauty and modern engineering. We do not simply follow trends; we study the unique architecture of the face and the physics of the silhouette. Every brushstroke is an act of precision, and every draping of fabric is a calculated decision to ensure your unshakeable confidence.
+              </p>
+              <p className="font-sans text-sm text-bridal-charcoal/50 leading-loose uppercase tracking-widest">
+                The following anthology is a curation of our most complex transformations—a digital study of light, texture, and structural movement.
+              </p>
+            </div>
+          </div>
 
-                <div className="max-w-7xl mx-auto px-6 w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* --- RIGHT: THE PORTRAIT VIDEO (Unchanged dimensions/position) --- */}
+          <div className="lg:col-span-6 flex justify-center lg:justify-end">
+            <div className="master-hero-frame relative w-[100%] md:w-[65%] lg:w-[80%] aspect-[3/4] bg-bridal-charcoal border-[12px] md:border-[20px] border-white shadow-2xl overflow-hidden group">
+               <video 
+                  ref={masterVideoRef}
+                  autoPlay muted loop playsInline 
+                  className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-[2s]"
+               >
+                  <source src="/m-vid-2.mp4" type="video/mp4" />
+               </video>
+               
+               <div className="absolute inset-0 bg-black/5" />
+               
+               {/* Internal Detail Badge */}
+               <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2">
+                  <span className="font-sans text-[8px] uppercase tracking-[0.3em] text-white font-bold">Vol. 2026 Archive</span>
+               </div>
+               
+               <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 text-white/60">
+                  <div className="w-10 h-px bg-white/40" />
+                  <span className="font-sans text-[9px] uppercase tracking-widest font-bold">Artistry in Motion</span>
+                  <div className="w-10 h-px bg-white/40" />
+               </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* --- 3. THE SERVICES LIST --- */}
+      <div className="relative z-10 space-y-72 lg:space-y-96">
+        {ARTISTRY_SERVICES.map((service, idx) => {
+          const isEven = idx % 2 === 0;
+
+          return (
+            <section key={service.id} className="service-section max-w-[1500px] mx-auto px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32 items-center">
+                
+                {/* TEXT NARRATIVE */}
+                <div className={`lg:col-span-5 ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
+                  <div className={`anim-up ${!isEven ? 'lg:pl-12' : 'lg:pr-12'}`}>
+                    <span className="font-serif text-4xl text-bridal-gold/30 mb-8 block">{service.id}</span>
                     
-                    {/* Text Side */}
-                    <div className={cn(
-                        "order-2 lg:order-1",
-                        service.align === "left" ? "lg:order-2" : "lg:order-1"
-                    )}>
-                        <div className="flex items-center gap-4 mb-6 text-bridal-sage">
-                            <span className="h-px w-12 bg-bridal-sage" />
-                            <span className="font-sans text-xs uppercase tracking-widest">{service.subtitle}</span>
+                    <div className="relative mb-14">
+                      <h2 className="font-serif text-5xl md:text-8xl text-bridal-charcoal leading-none uppercase tracking-tighter">
+                         {service.title.split(' ')[0]} <br/>
+                         <span className="italic text-bridal-gold font-light lowercase">{service.title.split(' ').slice(1).join(' ')}</span>
+                      </h2>
+                      <svg className="absolute -bottom-8 left-0 w-72 h-12 pointer-events-none" viewBox="0 0 250 40">
+                        <path className="rope-path text-bridal-gold" d="M2 20C50 40 150 45 248 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
+                      </svg>
+                    </div>
+
+                    <div className="space-y-8 mb-14">
+                        <div className="flex items-center gap-4">
+                           <div className="w-8 h-px bg-bridal-gold" />
+                           <p className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-charcoal font-bold">{service.subtitle}</p>
                         </div>
-                        <h2 className="font-serif text-5xl md:text-7xl mb-8">{service.title}</h2>
-                        <p className="font-sans text-base text-white/70 leading-loose mb-10 max-w-md">
-                            {service.desc}
+                        {service.isClinical && (
+                        <div className="flex items-center gap-3 text-bridal-charcoal/40 mb-4">
+                            <ShieldCheck size={16} />
+                            <span className="font-sans text-[9px] uppercase tracking-widest font-bold">Clinical Precision</span>
+                        </div>
+                        )}
+                        <p className="font-sans text-base text-bridal-charcoal/70 leading-relaxed font-light first-letter:text-6xl first-letter:font-serif first-letter:mr-3 first-letter:float-left first-letter:text-bridal-gold">
+                           {service.desc}
                         </p>
-                        
-                        <ul className="space-y-4 mb-10">
-                            {service.features.map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 font-serif text-lg text-white/90">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-bridal-sage" />
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
-
-                        <Link href="/contact" className="inline-block border-b border-bridal-sage pb-1 text-xs uppercase tracking-widest hover:text-bridal-sage transition-colors">
-                            Book {service.title}
-                        </Link>
                     </div>
 
-                    {/* Image Side */}
-                    <div className={cn(
-                        "order-1 lg:order-2 relative h-125 md:h-175 w-full",
-                        service.align === "left" ? "lg:order-1" : "lg:order-2"
-                    )}>
-                        <div className="absolute inset-0 overflow-hidden rounded-[3rem] border border-white/10 shadow-2xl">
-                             <Image 
-                                src={service.image} 
-                                alt={service.title} 
-                                fill 
-                                className="service-img object-cover scale-110 grayscale hover:grayscale-0 transition-all duration-1000" 
-                             />
-                             {/* Floating Icon */}
-                             <div className="absolute bottom-8 right-8 w-20 h-20 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20">
-                                 {i === 0 && <Palette size={32} className="text-bridal-sage" />}
-                                 {i === 1 && <Scissors size={32} className="text-bridal-sage" />}
-                                 {i === 2 && <Sun size={32} className="text-bridal-sage" />}
-                             </div>
-                        </div>
+                    <button className="flex items-center gap-6 text-bridal-charcoal group">
+                      <span className="font-sans text-[11px] uppercase tracking-[0.4em] font-bold border-b-2 border-bridal-gold pb-2 group-hover:pr-8 transition-all duration-500">Request a Consultation</span>
+                      <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform duration-300" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* IMAGE CLUSTER */}
+                <div className={`lg:col-span-7 flex flex-col ${isEven ? 'lg:order-2 items-center lg:items-end' : 'lg:order-1 items-center lg:items-start'}`}>
+                  
+                  {/* Main Service Image */}
+                  <div className="anim-up relative w-[85%] md:w-[75%] aspect-[3/4] bg-bridal-charcoal border-[12px] md:border-[20px] border-white shadow-2xl overflow-hidden mb-12 group">
+                    <Image 
+                        src={service.mainImage} 
+                        alt={service.title} 
+                        fill 
+                        className="object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" 
+                    />
+                    <div className="absolute top-6 right-6 text-white/40">
+                       <Camera size={12} />
                     </div>
+                  </div>
+
+                  {/* Detail Grid */}
+                  <div className="grid grid-cols-3 gap-4 md:gap-6 w-[85%] md:w-[75%] h-32 md:h-48">
+                    {service.gallery.map((src, i) => (
+                      <div key={i} className="anim-up relative h-full w-full bg-bridal-charcoal border-[4px] md:border-[8px] border-white shadow-xl overflow-hidden group">
+                        <Image src={src} alt="Detail" fill className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+                      </div>
+                    ))}
+                  </div>
 
                 </div>
+              </div>
             </section>
-        ))}
+          );
+        })}
       </div>
 
-      {/* 4. FLORAL ARTISTRY (Horizontal Scroll) */}
-      <section className="floral-section relative h-screen bg-bridal-ivory text-bridal-charcoal overflow-hidden flex flex-col justify-center">
-         
-         <div className="absolute top-12 left-6 md:left-12 z-20">
-             <div className="flex items-center gap-3 text-bridal-sage mb-2">
-                 <Flower2 size={20} />
-                 <span className="font-sans text-xs uppercase tracking-widest">The Bloom</span>
-             </div>
-             <h2 className="font-serif text-4xl md:text-6xl text-bridal-charcoal">Floral Design</h2>
-         </div>
-
-         {/* The Track */}
-         <div className="floral-track flex items-center gap-8 md:gap-20 px-6 md:px-20 w-max h-[60vh] md:h-[70vh] pt-20">
-             
-             {/* Intro Text Card */}
-             <div className="w-75 md:w-100 shrink-0">
-                 <p className="font-serif text-2xl md:text-3xl leading-relaxed text-bridal-charcoal/80">
-                     "Flowers are the poetry of the wedding. We source rare blooms to create organic, flowing arrangements that feel gathered from a wild garden."
-                 </p>
-             </div>
-
-             {/* Gallery Cards */}
-             {FLORALS.map((item, i) => (
-                 <div key={item.id} className="relative w-75 md:w-112.5 h-full shrink-0 group">
-                     <div className="relative w-full h-[85%] rounded-2xl overflow-hidden mb-6">
-                         <Image 
-                            src={item.img} 
-                            alt={item.title} 
-                            fill 
-                            className="object-cover transition-transform duration-700 group-hover:scale-110" 
-                         />
-                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                     </div>
-                     <div className="flex justify-between items-end border-b border-bridal-charcoal/20 pb-4">
-                         <div>
-                            <span className="font-sans text-[10px] uppercase tracking-widest text-bridal-sage block mb-1">0{i+1}</span>
-                            <h3 className="font-serif text-2xl md:text-3xl text-bridal-charcoal">{item.title}</h3>
-                         </div>
-                         <div className="w-8 h-8 rounded-full border border-bridal-charcoal/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                             <span className="text-xl">+</span>
-                         </div>
-                     </div>
-                 </div>
-             ))}
-
-             {/* End Spacer */}
-             <div className="w-25 shrink-0" />
-         </div>
+        <section className="relative z-10 max-w-[900px] mx-auto px-6 text-center border-t border-bridal-charcoal/10 pt-24 pb-12">
+        <div className="flex items-center justify-center gap-3 text-bridal-gold mb-8">
+            <Sparkles size={16} />
+            <span className="font-sans text-[10px] uppercase tracking-[0.5em] font-bold">The Coda</span>
+        </div>
+        <h3 className="font-serif text-4xl md:text-5xl text-bridal-charcoal mb-8">
+            The Unified <span className="italic text-bridal-gold">Vision.</span>
+        </h3>
+        <p className="font-sans text-base md:text-lg text-bridal-charcoal/70 leading-loose font-light">
+            We do not see a bride in fragments. The arch of the brow must speak to the drape of the silk; the architecture of the hair must honor the neckline of the gown. This is a complete ecosystem of beauty, where every service we offer—from the clinical preparation of the skin to the final stitch of gold thread—is harmonized to create a singular, breathless moment.
+        </p>
+        <div className="mt-12">
+            <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-bridal-charcoal/40 font-bold">Bonitha Atelier • Est. 1995</span>
+        </div>
       </section>
-
-      {/* 5. FOOTER CTA */}
-      <div className="py-32 text-center relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-          <h2 className="font-serif text-4xl md:text-5xl mb-8 relative z-10">Complete Your Look</h2>
-          <div className="flex flex-col md:flex-row gap-6 justify-center items-center relative z-10">
-              <Link href="/contact" className="px-10 py-4 bg-white text-bridal-charcoal rounded-full text-xs uppercase tracking-widest hover:bg-bridal-sage hover:text-white transition-all duration-500">
-                  Book Beauty & Florals
-              </Link>
-              <Link href="/couture" className="px-10 py-4 border border-white/30 rounded-full text-xs uppercase tracking-widest hover:border-white transition-all duration-500">
-                  View Gowns
-              </Link>
-          </div>
-      </div>
 
     </main>
   );

@@ -1,145 +1,191 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowUpRight, Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Sparkles } from "lucide-react";
 
-const ARTISTRY_ITEMS = [
-  {
-    id: 1,
-    category: "The Face",
-    title: "Bridal Makeup",
-    description: "High-definition, tear-proof artistry designed to look flawless in person and radiant in flash photography.",
-    image: "/qfc.webp", 
-    link: "/artistry"
-  },
-  {
-    id: 2,
-    category: "The Hair",
-    title: "Couture Styling",
-    description: "From structural updos to soft romantic waves, we engineer hairstyles that withstand weather and time.",
-    image: "/r.webp",
-    link: "/artistry"
-  },
-  {
-    id: 3,
-    category: "The Finish",
-    title: "Draping & Polish",
-    description: "The final touches. Saree draping, jewelry setting, and body glow application for the complete look.",
-    image: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=2070&auto=format&fit=crop",
-    link: "/artistry"
-  }
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+const PROCESS_STEPS = [
+  { id: "01", title: "Analysis & Prep", desc: "Identifying skin texture and tone." },
+  { id: "02", title: "The Couture Base", desc: "Custom blending for a second-skin finish." },
+  { id: "03", title: "Light & Shadow", desc: "Sculpting features with precision contour." },
+  { id: "04", title: "The Bridal Glow", desc: "Setting the look for 12-hour wear." },
 ];
 
 export default function ArtistryShowcase() {
-  const [activeId, setActiveId] = useState<number | null>(2); // Default center open
+  const container = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    // 1. Video Floating Parallax
+    gsap.to(videoContainerRef.current, {
+      y: -50,
+      ease: "none",
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      }
+    });
+
+    // 2. Leaf Parallax
+    gsap.to(".artistry-leaf", {
+      yPercent: 40,
+      rotation: 12,
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      }
+    });
+
+    // 3. Narrative Timeline
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top 60%",
+      }
+    });
+
+    tl.from(".artistry-anim", {
+      y: 40,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: "power3.out"
+    })
+    // ANIMATING THE CURVED ROPE: Drawing effect
+    .fromTo(".gold-rope-path", 
+      { strokeDasharray: 300, strokeDashoffset: 300, opacity: 0 },
+      { strokeDasharray: 300, strokeDashoffset: 0, opacity: 0.8, duration: 1.8, ease: "power2.inOut" },
+      "-=1"
+    );
+
+    // 4. Safe Autoplay Logic
+    if (videoRef.current) {
+      const safePlay = () => {
+        const promise = videoRef.current?.play();
+        if (promise !== undefined) {
+          promise.catch(() => { /* Interruption handled */ });
+        }
+      };
+      ScrollTrigger.create({
+        trigger: videoRef.current,
+        start: "top 80%",
+        onEnter: safePlay,
+        onLeave: () => videoRef.current?.pause(),
+      });
+    }
+  }, { scope: container });
 
   return (
-    <section className="relative w-full bg-bridal-charcoal py-32 overflow-hidden">
+    <section ref={container} className="relative w-full bg-bridal-ivory py-32 lg:py-48 overflow-hidden">
       
-      {/* Background Texture (Subtle Noise) */}
-      <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-overlay" />
+      {/* --- ATMOSPHERIC LEAF OVERLAYS (Bridging Gaps) --- */}
+      <div className="artistry-leaf absolute top-10 -left-20 w-[500px] h-[500px] z-0 pointer-events-none opacity-20 blur-xl mix-blend-multiply">
+        <Image src="/leaves.webp" alt="" fill className="object-contain" />
+      </div>
+      <div className="artistry-leaf absolute bottom-10 -right-20 w-[450px] h-[450px] z-0 pointer-events-none opacity-20 blur-2xl rotate-45 mix-blend-multiply">
+        <Image src="/leaves.webp" alt="" fill className="object-contain" />
+      </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 h-[80vh] min-h-[600px] flex flex-col lg:flex-row gap-4">
+      <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center relative z-10">
         
-        {/* --- THE HEADER (Desktop: Left Side, Mobile: Top) --- */}
-        <div className="lg:w-1/4 flex flex-col justify-between py-8 lg:py-0 relative z-10">
-           <div>
-              <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-6 block">
-                 The Studio
-              </span>
-              <h2 className="font-serif text-5xl text-white mb-6">
-                 Artistry <br/> <span className="italic text-bridal-sage">&</span> Grace
-              </h2>
-              <p className="font-sans text-sm text-white/60 leading-loose max-w-xs mb-8">
-                 We view the face as a canvas. Our approach is not just about coverage, but about bringing your inner radiance to the surface.
-              </p>
+        {/* --- LEFT: THE NARRATIVE --- */}
+        <div className="flex flex-col justify-center order-2 lg:order-1">
+           <div className="artistry-anim flex items-center gap-3 text-bridal-gold mb-8">
+             <Sparkles size={16} />
+             <span className="font-sans text-[10px] uppercase tracking-[0.5em] font-bold">The Artistry Process</span>
            </div>
-           
-           <Link 
-             href="/artistry" 
-             className="hidden lg:flex items-center gap-3 text-xs uppercase tracking-widest text-white hover:text-bridal-sage transition-colors group"
-           >
-             View Full Portfolio 
-             <ArrowUpRight size={16} className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
-           </Link>
+
+           <div className="relative mb-14">
+              <h2 className="artistry-anim font-serif text-5xl md:text-7xl lg:text-8xl text-bridal-charcoal leading-[0.85] uppercase tracking-tighter">
+                The Art of <br/> 
+                <span className="italic text-bridal-gold font-light lowercase">Transformation.</span>
+              </h2>
+              
+              {/* --- ENHANCED CURVED GOLDEN ROPE --- */}
+              <svg 
+                className="absolute -bottom-8 left-0 w-64 h-12 pointer-events-none" 
+                viewBox="0 0 250 40" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path 
+                  className="gold-rope-path text-bridal-gold" 
+                  d="M2 15C40 35 120 40 248 5" 
+                  stroke="currentColor" 
+                  strokeWidth="2.5" 
+                  strokeLinecap="round" 
+                />
+              </svg>
+           </div>
+
+           <p className="artistry-anim font-sans text-base text-bridal-charcoal/70 leading-relaxed mb-16 max-w-md font-light">
+              Meticulous craftsmanship for the Bonitha Bride. We sculpt a silhouette that moves with you, ensuring your elegance is unshakeable.
+           </p>
+
+           {/* Redesigned Process Steps */}
+           <div className="artistry-anim space-y-12">
+              {PROCESS_STEPS.map((step) => (
+                <div key={step.id} className="flex gap-10 group">
+                   <div className="relative flex flex-col items-center">
+                      <span className="font-serif text-2xl text-bridal-gold/30 group-hover:text-bridal-gold transition-all duration-500">{step.id}</span>
+                      <div className="w-[1px] h-full bg-bridal-gold/10 group-hover:bg-bridal-gold/40 transition-all duration-500 mt-3" />
+                   </div>
+                   <div className="flex flex-col pb-8">
+                      <h4 className="font-serif text-2xl md:text-3xl text-bridal-charcoal mb-2 group-hover:translate-x-3 transition-transform duration-700">{step.title}</h4>
+                      <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-bridal-charcoal/40 font-bold">{step.desc}</p>
+                   </div>
+                </div>
+              ))}
+           </div>
         </div>
 
-        {/* --- THE INTERACTIVE PANELS (The "Lag-Free" Magic) --- */}
-        <div className="lg:w-3/4 flex flex-col lg:flex-row gap-2 h-full">
-           {ARTISTRY_ITEMS.map((item) => (
-              <div 
-                key={item.id}
-                onMouseEnter={() => setActiveId(item.id)}
-                className={cn(
-                  "relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group",
-                  // FLEX LOGIC: Active item gets flex-[3], others get flex-[1]
-                  activeId === item.id ? "flex-[3] opacity-100" : "flex-[1] opacity-60 hover:opacity-80"
-                )}
-              >
-                 {/* 1. IMAGE BACKGROUND */}
-                 <div className="absolute inset-0 w-full h-full">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className={cn(
-                        "object-cover transition-transform duration-1000",
-                        activeId === item.id ? "scale-100 grayscale-0" : "scale-110 grayscale"
-                      )}
-                    />
-                    {/* Dark Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-                 </div>
 
-                 {/* 2. POWDER GLOW (Only visible when active) */}
-                 <div className={cn(
-                    "absolute inset-0 pointer-events-none transition-opacity duration-700",
-                    activeId === item.id ? "opacity-100" : "opacity-0"
-                 )}>
-                    {/* Inner Vignette using your global class */}
-                    <div className="absolute inset-0 powder-vignette mix-blend-screen" />
-                 </div>
+        {/* --- RIGHT: THE ARCHED VIDEO FRAME --- */}
+        <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+           <div ref={videoContainerRef} className="relative w-full max-w-lg aspect-[9/14]">
+              
+              {/* Museum Arched Frame */}
+              <div className="relative w-full h-full rounded-t-full rounded-b-[3rem] overflow-hidden shadow-[0_60px_120px_-20px_rgba(0,0,0,0.3)] border-[1px] border-white/50 bg-bridal-ivory">
+                <video
+                  ref={videoRef}
+                  playsInline loop muted preload="auto"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  poster="/makeup.jpg" 
+                >
+                  <source src="h-m4.mp4" type="video/mp4" />
+                </video>
 
-                 {/* 3. CONTENT */}
-                 <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 flex flex-col justify-end">
-                    
-                    {/* Category Label (Always Visible) */}
-                    <div className="flex items-center gap-3 mb-4">
-                       <div className={cn(
-                          "w-8 h-[1px] transition-all duration-500",
-                          activeId === item.id ? "bg-bridal-sage w-12" : "bg-white/50"
-                       )} />
-                       <span className="font-sans text-[10px] uppercase tracking-widest text-white/80">
-                          {item.category}
-                       </span>
-                    </div>
+                {/* Cinematic Overlays */}
+                <div className="absolute inset-0 bg-black/5 pointer-events-none mix-blend-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
-                    {/* Title & Desc (Expanded Only) */}
-                    <h3 className="font-serif text-3xl md:text-4xl text-white mb-4">
-                       {item.title}
-                    </h3>
-
-                    <div className={cn(
-                       "overflow-hidden transition-all duration-700 delay-100",
-                       activeId === item.id ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                    )}>
-                       <p className="font-sans text-sm text-white/70 leading-relaxed max-w-md mb-6">
-                          {item.description}
-                       </p>
-                       
-                       <div className="flex items-center gap-2 text-bridal-sage text-xs uppercase tracking-widest">
-                          <Sparkles size={14} />
-                          <span>Explore Service</span>
-                       </div>
-                    </div>
-
-                 </div>
-
+                {/* Status Badge */}
+                <div className="absolute bottom-12 right-10 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2.5 rounded-full">
+                   <div className="flex items-center gap-3">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute h-full w-full rounded-full bg-white opacity-75"></span>
+                        <span className="relative rounded-full h-2 w-2 bg-white"></span>
+                      </span>
+                      <span className="font-sans text-[10px] uppercase tracking-widest text-white font-bold tracking-[0.2em]">Now Sculpting</span>
+                   </div>
+                </div>
               </div>
-           ))}
+
+              {/* Decorative Glass Outer Frame */}
+              <div className="absolute -inset-8 border border-bridal-gold/15 rounded-t-full rounded-b-[4rem] pointer-events-none -z-10 opacity-50" />
+           </div>
         </div>
 
       </div>

@@ -1,7 +1,9 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { useRef } from "react";
 import Image from "next/image";
+import { Sparkles, ArrowDown } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,141 +12,151 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const STEPS = [
-  {
-    id: "01",
-    title: "The Consultation",
-    description: "Your journey begins with a private appointment. Over coffee or champagne, we discuss your vision, from the silhouette of your gown to the palette of your florals.",
-    image: "/mea.webp"
-  },
-  {
-    id: "02",
-    title: "The Artistry",
-    description: "Watch your dream come to life. This phase includes couture fittings, hair & makeup trials, and selecting the finest blooms to match your theme.",
-    image: "/makeup.webp"
-  },
-  {
-    id: "03",
-    title: "The Unveiling",
-    description: "On your special day, our team is there to ensure perfection. From the final button on your dress to the placement of your veil, we handle every detail.",
-    image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2000&auto=format&fit=crop"
-  }
-];
-
 export default function BespokeJourney() {
   const container = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
+  useGSAP(() => {
+    // 1. CINEMATIC VIDEO REVEAL (The "Curtain" Effect)
+    // Starts as a small box and expands out
+    gsap.fromTo(".video-reveal-container", 
+      { clipPath: "inset(20% 20% 20% 20%)", scale: 1.1 },
+      { 
+        clipPath: "inset(0% 0% 0% 0%)", 
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: triggerRef.current,
+          start: "top bottom",
+          end: "top 20%",
+          scrub: true,
+        }
+      }
+    );
 
-      // 1. Reveal Cards
-      STEPS.forEach((step, index) => {
-        gsap.from(`#step-card-${index}`, {
-          y: 30, // Reduced distance for smoother reveal
-          opacity: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: `#step-card-${index}`,
-            start: "top 90%", 
-          },
-        });
+    // 2. TEXT PILLAR PARALLAX
+    gsap.to(".text-pillar", {
+      y: -150,
+      ease: "none",
+      scrollTrigger: {
+        trigger: triggerRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      }
+    });
+
+    // 3. GOLDEN ROPE DRAWING
+    gsap.fromTo(".manifesto-rope-path", 
+      { strokeDasharray: 500, strokeDashoffset: 500 },
+      { 
+        strokeDashoffset: 0, 
+        duration: 2.5, 
+        ease: "power2.inOut",
+        scrollTrigger: {
+          trigger: ".text-pillar",
+          start: "top 70%",
+        }
+      }
+    );
+
+    // 4. Safe Autoplay
+    if (videoRef.current) {
+      ScrollTrigger.create({
+        trigger: videoRef.current,
+        start: "top 80%",
+        onEnter: () => videoRef.current?.play(),
+        onLeave: () => videoRef.current?.pause(),
       });
-
-      // 2. Parallax (Optimized)
-      mm.add("(min-width: 768px)", () => {
-        STEPS.forEach((step, index) => {
-          // Use yPercent for GPU efficiency
-          const moveY = index % 2 === 0 ? -15 : 15; 
-
-          gsap.to(`#step-card-${index}`, {
-            yPercent: moveY, 
-            ease: "none", 
-            scrollTrigger: {
-              trigger: container.current,
-              start: "top bottom", 
-              end: "bottom top",   
-              scrub: 0.5, // Faster reaction time
-            },
-          });
-        });
-      });
-
-      // 3. Background Glow Pulse
-      gsap.to(".magic-glow", {
-        scale: 1.1,
-        opacity: 0.5,
-        duration: 4,
-        yoyo: true,
-        repeat: -1,
-        ease: "sine.inOut"
-      });
-    },
-    { scope: container }
-  );
+    }
+  }, { scope: container });
 
   return (
-    <section ref={container} className="relative w-full bg-bridal-ivory py-20 md:py-40 overflow-hidden">
+    <section ref={container} className="relative w-full bg-bridal-ivory overflow-hidden">
       
-      {/* Background Glow */}
-      <div className="magic-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(212,175,55,0.06)_0%,transparent_70%)] rounded-full pointer-events-none z-0 will-change-transform" />
-
-      {/* Header */}
-      <div className="text-center mb-16 px-6 relative z-10">
-        <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-6 block">
-          The Process
-        </span>
-        <h2 className="font-serif text-4xl md:text-5xl text-bridal-charcoal">
-          Your Journey to <span className="italic text-bridal-gold/80">Forever</span>
-        </h2>
+      {/* Background Leaves (Deepest Layer) */}
+      <div className="absolute inset-0 z-0 opacity-20 blur-3xl mix-blend-multiply">
+        <Image src="/leaves.webp" alt="" fill className="object-cover" />
       </div>
 
-      {/* Steps Grid */}
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 relative z-10">
-        {STEPS.map((step, index) => (
-          <div 
-            key={step.id} 
-            id={`step-card-${index}`} 
-            className="flex flex-col items-center text-center group will-change-transform backface-hidden"
+      <div ref={triggerRef} className="relative w-full min-h-[120vh] flex items-center justify-center py-40">
+        
+        {/* --- MODIFIED: PORTRAIT VIDEO CONTAINER --- */}
+        {/* Changed width from 75% to 45% for a narrow portrait look.
+            Changed from landscape height to aspect-[3/4].
+        */}
+        <div className="video-reveal-container absolute right-[5%] lg:right-[10%] top-1/2 -translate-y-1/2 w-[85%] lg:w-[40%] aspect-[3/4] z-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] bg-bridal-charcoal">
+          <video
+            ref={videoRef}
+            playsInline loop muted preload="auto"
+            className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-1000"
+            poster="/p-7.webp" 
           >
-            {/* Image Container */}
-            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-t-[10rem] mb-8 shadow-lg shadow-bridal-charcoal/5 transform-gpu">
-              <Image
-                src={step.image}
-                alt={step.title}
-                fill
-                className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 33vw"
+            <source src="/mvid.mp4" type="video/mp4" />
+          </video>
+          
+          {/* Internal Sharp Border */}
+          <div className="absolute inset-0 border-[16px] border-white pointer-events-none" />
+          
+          {/* Subtle Video Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-bridal-ivory/20" />
+        </div>
+
+        {/* --- TEXT PILLAR (Unchanged) --- */}
+        <div className="text-pillar relative z-30 lg:-ml-[35%] w-[90%] max-w-xl bg-white p-10 md:p-20 shadow-[40px_40px_100px_-20px_rgba(0,0,0,0.15)] border-t-[8px] border-bridal-gold">
+          
+          <div className="flex items-center gap-3 text-bridal-gold mb-10">
+            <Sparkles size={18} />
+            <span className="font-sans text-[11px] uppercase tracking-[0.6em] font-bold text-bridal-charcoal/60">The Signature Soul</span>
+          </div>
+
+          <div className="relative mb-16">
+            <h2 className="font-serif text-6xl md:text-[5.5rem] text-bridal-charcoal leading-[0.8] uppercase tracking-tighter">
+              Defining <br/>
+              <span className="italic text-bridal-gold font-light lowercase">Elegance.</span>
+            </h2>
+            
+            {/* Golden Rope */}
+            <svg 
+              className="absolute -bottom-12 -left-4 w-80 h-20 pointer-events-none" 
+              viewBox="0 0 350 60" 
+              fill="none" 
+            >
+              <path 
+                className="manifesto-rope-path text-bridal-gold" 
+                d="M10 30C100 60 250 60 340 10" 
+                stroke="currentColor" 
+                strokeWidth="4" 
+                strokeLinecap="round" 
+                opacity="1"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
+            </svg>
+          </div>
+
+          <div className="space-y-10 mt-20">
+            <p className="font-serif text-2xl md:text-3xl text-bridal-charcoal/90 leading-tight italic">
+              "We don't just apply; <br/> we curate a legacy."
+            </p>
+            
+            <p className="font-sans text-base text-bridal-charcoal/60 leading-relaxed font-light">
+              Bridal artistry is an act of engineering. Every brushstroke is calculated to move with you, ensuring your confidence remains unshakeable.
+            </p>
+
+            <div className="pt-10 flex flex-col gap-6">
+              <p className="font-sans text-[10px] uppercase tracking-[0.8em] text-bridal-charcoal/20 font-bold">
+                Est. 1995 • Atelier
+              </p>
               
-              {/* Badge */}
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full border border-bridal-sage/20 shadow-[0_0_15px_rgba(138,154,91,0.2)]">
-                 <span className="font-serif text-sm italic text-bridal-charcoal">{step.id}</span>
+              <div className="flex items-center gap-4 text-bridal-gold/40">
+                 <div className="w-12 h-px bg-current" />
+                 <ArrowDown size={14} className="animate-bounce" />
               </div>
             </div>
-
-            {/* Content */}
-            <h3 className="font-serif text-2xl text-bridal-charcoal mb-4 group-hover:text-bridal-sage transition-colors duration-300">{step.title}</h3>
-            <div className="w-12 h-px bg-bridal-sage/50 mb-6 group-hover:w-24 transition-all duration-500" />
-            <p className="font-sans text-sm leading-loose text-bridal-charcoal/70 max-w-[280px]">
-              {step.description}
-            </p>
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* Static Leaf Decoration (Removed Animation to reduce load) */}
-      <div className="absolute -left-32 -top-20 w-[400px] h-[400px] opacity-10 pointer-events-none z-0">
-        <Image
-          src="/jk.png" 
-          alt="Leaf Decoration"
-          fill
-          className="object-contain blur-[1px]"
-        />
       </div>
-
     </section>
   );
 }
