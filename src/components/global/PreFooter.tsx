@@ -2,10 +2,11 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { MoveRight, Calendar } from "lucide-react";
+import { MoveRight, Sparkles } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -13,15 +14,13 @@ if (typeof window !== "undefined") {
 
 export default function PreFooter() {
   const container = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLHeadingElement>(null);
 
   useGSAP(() => {
-    // 1. Parallax Background Scale (The "Breathing" Effect)
-    gsap.fromTo(".prefooter-bg", 
-      { scale: 1.2, opacity: 0.5 }, 
+    // 1. Background Parallax
+    gsap.fromTo(".prefooter-bg-img", 
+      { scale: 1.1 }, 
       { 
         scale: 1, 
-        opacity: 0.2, 
         ease: "none", 
         scrollTrigger: {
           trigger: container.current,
@@ -33,83 +32,83 @@ export default function PreFooter() {
     );
 
     // 2. Text Reveal
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top 60%",
-      }
-    });
-
-    tl.from(".prefooter-reveal", {
-      y: 100,
+    gsap.from(".pre-reveal", {
+      y: 60,
       opacity: 0,
-      duration: 1,
+      duration: 1.2,
       stagger: 0.1,
-      ease: "power4.out"
-    });
-
-    // 3. Button Magnetism (Visual cue only)
-    gsap.from(".cta-button-wrap", {
-      scale: 0.8,
-      opacity: 0,
-      duration: 1,
-      ease: "elastic.out(1, 0.5)",
-      delay: 0.5,
+      ease: "power3.out",
       scrollTrigger: {
         trigger: container.current,
-        start: "top 60%",
+        start: "top 70%",
       }
     });
 
   }, { scope: container });
 
   return (
-    <section ref={container} className="relative w-full py-32 md:py-48 bg-bridal-charcoal overflow-hidden flex flex-col items-center justify-center text-center px-6">
+    // CHANGE 1: Switched bg-bridal-charcoal to bg-black for distinct contrast with Footer
+    <section ref={container} className="relative w-full py-32 md:py-48 bg-gray overflow-hidden flex flex-col items-center justify-center text-center px-6">
       
-      {/* Background Texture (Parallax) */}
-      <div className="prefooter-bg absolute inset-0 bg-[url('/img2.webp')] bg-cover bg-center mix-blend-overlay opacity-20 pointer-events-none grayscale" />
-      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+      {/* --- BACKGROUND LAYERS --- */}
+      <div className="absolute inset-0 z-0">
+         <Image 
+           src="/p-24.webp" 
+           alt="Atelier Texture"
+           fill
+           className="prefooter-bg-img object-cover opacity-20 mix-blend-overlay grayscale" 
+         />
+      </div>
+      
+      {/* CHANGE 2: Updated Gradient to blend with Black (not Charcoal) */}
+      <div className="absolute inset-0 bg-linear-to-t from-black via-black/80 to-black/40 pointer-events-none" />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto">
+      {/* Decorative Golden Thread */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
+         <svg className="w-full h-full" viewBox="0 0 1440 800" fill="none" preserveAspectRatio="none">
+            <path d="M-100 600 C 400 400, 800 900, 1500 500" stroke="#D4AF37" strokeWidth="0.5" fill="none" />
+         </svg>
+      </div>
+
+      {/* --- CONTENT --- */}
+      <div className="relative z-10 max-w-5xl mx-auto">
         
-        <div className="overflow-hidden mb-6">
-           <span className="prefooter-reveal inline-flex items-center gap-2 font-sans text-[10px] uppercase tracking-[0.4em] text-bridal-gold font-bold border border-bridal-gold/30 px-4 py-2 rounded-full">
-              <Calendar size={12} />
-              Now Booking 2026/2027
-           </span>
+        {/* Badge */}
+        <div className="mb-10 flex justify-center">
+           <div className="pre-reveal inline-flex items-center gap-3 px-6 py-2 border border-bridal-gold/30 rounded-full backdrop-blur-sm bg-white/5">
+              <Sparkles size={14} className="text-bridal-gold" />
+              <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-white/90 font-bold">
+                 Limited Availability 2026
+              </span>
+           </div>
         </div>
 
-        <h2 ref={textRef} className="font-serif text-5xl md:text-8xl text-white leading-[0.9] mb-10">
-          <div className="overflow-hidden">
-            <span className="prefooter-reveal block">Ready to be a</span>
-          </div>
-          <div className="overflow-hidden">
-            <span className="prefooter-reveal block italic text-bridal-sage">Bonitha Bride?</span>
-          </div>
+        {/* Headline */}
+        <h2 className="font-serif text-6xl md:text-8xl lg:text-9xl text-white leading-[0.85] mb-12 tracking-tight">
+          <span className="pre-reveal block">Your Moment.</span>
+          <span className="pre-reveal block italic text-bridal-gold/90 font-light">Our Masterpiece.</span>
         </h2>
 
-        <p className="prefooter-reveal font-sans text-white/60 text-sm md:text-base max-w-lg mx-auto leading-loose mb-16">
-          Your transformation begins with a conversation. Let us craft a look that is as timeless as your love story.
+        {/* Description */}
+        <p className="pre-reveal font-sans text-white/60 text-sm md:text-base max-w-xl mx-auto leading-loose mb-16 font-light tracking-wide">
+          From the first consultation to the final reveal, experience the pinnacle of bridal luxury. Let us craft a look that defines you.
         </p>
 
-        <div className="cta-button-wrap relative group inline-block">
-           <div className="absolute -inset-4 bg-bridal-sage/20 rounded-full blur-xl group-hover:bg-bridal-sage/40 transition-all duration-500" />
+        {/* CTA Button (With Reduced Glow) */}
+        <div className="pre-reveal relative group inline-block">
+           <div className="absolute -inset-1 bg-linear-to-r from-bridal-gold/10 to-bridal-sage/10 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
            
-           <Link href="/contact" className="relative flex items-center gap-6 px-12 py-6 bg-bridal-ivory text-bridal-charcoal rounded-full overflow-hidden transition-all duration-300 hover:scale-105">
-              <span className="relative z-10 font-sans text-xs uppercase tracking-[0.2em] font-bold">
-                Book Your Consultation
+           <Link href="/contact" className="relative flex items-center gap-8 px-10 py-5 bg-white text-bridal-charcoal rounded-full overflow-hidden transition-all duration-500 hover:scale-105 hover:bg-bridal-ivory shadow-xl hover:shadow-2xl">
+              <span className="relative z-10 font-sans text-[11px] uppercase tracking-[0.3em] font-bold pl-2">
+                Secure Your Date
               </span>
-              <div className="w-10 h-10 rounded-full bg-bridal-charcoal text-white flex items-center justify-center group-hover:rotate-45 transition-transform duration-500">
-                 <MoveRight size={16} />
+              <div className="w-12 h-12 -mr-2 rounded-full bg-bridal-charcoal text-white flex items-center justify-center group-hover:bg-bridal-gold transition-colors duration-500">
+                 <MoveRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </div>
            </Link>
         </div>
 
       </div>
-
-      {/* Decorative Footer Line */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
     </section>
   );
 }

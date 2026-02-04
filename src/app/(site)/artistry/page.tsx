@@ -206,7 +206,7 @@ export default function ArtistryPage() {
                   autoPlay muted loop playsInline 
                   className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-[2s]"
                >
-                  <source src="/m-vid-2.mp4" type="video/mp4" />
+                  <source src="/m-vid-2.webm" type="video/webm" />
                </video>
                
                <div className="absolute inset-0 bg-black/5" />

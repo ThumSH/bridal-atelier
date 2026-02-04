@@ -18,7 +18,7 @@ const GOWN_VOLUMES = [
     id: "Vol. I",
     title: "The Architect of Shadows",
     desc: "A study in contrast and silhouette architecture. This volume explores the aggressive elegance of the mermaid form, utilizing internal contour-boning to sculpt the waist into a masterpiece of symmetry. We focus on the interplay between heavy silk crepe and the softest Italian lace, ensuring that every movement creates a cinematic shadow. It is an act of engineering designed for the bride who wishes to command the room with a single, unshakeable line.",
-    heroVideo: "/mvid-1.mp4",
+    heroVideo: "/mvid-1.webm",
   }
 ];
 
@@ -163,9 +163,9 @@ export default function GownsAnthologyPage() {
             {/* VIDEO: Now spans 8 columns (larger) + aspect ratio increased to 3:2 */}
             <div className={`lg:col-span-8 ${idx % 2 !== 0 ? 'lg:order-1' : ''}`}>
                <div className="relative aspect-[3/2] bg-bridal-charcoal border-[15px] md:border-[25px] border-white shadow-2xl overflow-hidden">
-                  {vol.heroVideo.endsWith('.mp4') ? (
+                  {vol.heroVideo.endsWith('.webm') ? (
                     <video autoPlay muted loop playsInline className="w-full h-full object-cover">
-                      <source src={vol.heroVideo} type="video/mp4" />
+                      <source src={vol.heroVideo} type="video/webm" />
                     </video>
                   ) : (
                     <Image src={vol.heroVideo} alt="" fill className="object-cover" />

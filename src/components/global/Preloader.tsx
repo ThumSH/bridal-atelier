@@ -66,16 +66,14 @@ export default function Preloader() {
         {/* Brand Name */}
         <div className="overflow-hidden mb-6">
           <h1 className="font-serif text-5xl md:text-7xl tracking-widest uppercase flex items-center gap-4">
-            <span className="preloader-text block">Bonitha</span>
-            <span className="preloader-text block text-bridal-sage italic">&</span>
-            <span className="preloader-text block">Co.</span>
+            <span className="preloader-text block">Bonitha SALON</span>
           </h1>
         </div>
         
         {/* Subtitle */}
         <div className="overflow-hidden mb-12">
            <p className="preloader-text font-sans text-xs uppercase tracking-[0.6em] text-white/50">
-             Couture • Artistry • Grace
+             Hair  • Beauty
            </p>
         </div>
 

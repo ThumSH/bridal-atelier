@@ -1,22 +1,35 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useLayoutEffect } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { usePathname } from "next/navigation"; // Import usePathname
+import { usePathname } from "next/navigation";
 
-// Register ScrollTrigger to avoid errors
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
-  const pathname = usePathname(); // Track the current page URL
+  const pathname = usePathname();
+
+  // 1. THE NUCLEAR FIX: Use useLayoutEffect to intercept the browser paint
+  // We disable the browser's ability to remember scroll positions.
+  useLayoutEffect(() => {
+    if (typeof window !== "undefined") {
+      // A. Kill native scroll restoration
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      
+      // B. Force the window to the top instantly
+      window.scrollTo(0, 0);
+    }
+  }, []);
 
   useEffect(() => {
-    // 1. Initialize Lenis
+    // 2. Initialize Lenis
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -27,31 +40,29 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     });
     lenisRef.current = lenis;
 
-    // 2. Connect Lenis to ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
+    // 3. Double-Check: Force Lenis to 0 immediately on mount
+    lenis.scrollTo(0, { immediate: true });
 
-    // 3. Sync GSAP Ticker with Lenis RAF
+    // 4. Connect to GSAP
+    lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
-
-    // 4. Disable Lag Smoothing (prevents jitters)
     gsap.ticker.lagSmoothing(0);
 
-    // Cleanup
     return () => {
       gsap.ticker.remove((time) => lenis.raf(time * 1000));
       lenis.destroy();
     };
   }, []);
 
-  // --- THE FIX: RESET SCROLL ON ROUTE CHANGE ---
+  // 5. Handle Route Changes (Next.js Navigation)
   useEffect(() => {
     if (lenisRef.current) {
-        // immediate: true forces an instant jump (no animation) to top
+        // Force instant jump to top when URL changes
         lenisRef.current.scrollTo(0, { immediate: true }); 
     }
-  }, [pathname]); // Runs every time 'pathname' changes
+  }, [pathname]);
 
   return <>{children}</>;
 }

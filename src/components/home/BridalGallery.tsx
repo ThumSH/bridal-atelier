@@ -12,6 +12,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Ensure these images exist in your public folder or update them
 const GALLERY_IMAGES = [
   { id: 1, src: "/p-11.webp", alt: "Bonitha Bride 1" },
   { id: 2, src: "/p-12.webp", alt: "Bonitha Bride 2" },
@@ -28,107 +29,100 @@ export default function BridalGallery() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container.current,
-        start: "top 75%",
+        start: "top 70%", // Starts slightly earlier for better responsiveness
       }
     });
 
-    tl.from(".gallery-header-anim", {
-      y: 40,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.15,
-      ease: "power3.out",
-    });
+    // 1. Header Reveal (Faster)
+    tl.fromTo(".gallery-header-anim", 
+      { y: 30, opacity: 0 },
+      { 
+        y: 0, 
+        opacity: 1, 
+        duration: 0.6, // Was 1.0
+        stagger: 0.1, // Was 0.2
+        ease: "power2.out" 
+      }
+    );
 
-    // Decorative rope lines animation
-    tl.from(".rope-line", {
-      width: 0,
-      duration: 1.5,
-      ease: "power4.inOut",
-    }, "-=0.8");
-
-    tl.from(".gallery-item", {
-      y: 60,
-      opacity: 0,
-      duration: 1.2,
-      stagger: 0.1, 
-      ease: "power3.out",
-    }, "-=1");
+    // 2. Grid Items Reveal (Much Snappier)
+    tl.fromTo(".gallery-item-anim",
+      { y: 40, opacity: 0, scale: 0.95 },
+      { 
+        y: 0, 
+        opacity: 1, 
+        scale: 1,
+        duration: 0.8, // Was 1.2
+        stagger: 0.08, // Was 0.15 (Rapid fire cascade)
+        ease: "power3.out" // Stronger 'pop' effect
+      },
+      "-=0.4"
+    );
 
   }, { scope: container });
 
   return (
-    <section ref={container} className="w-full bg-bridal-ivory py-32 px-4 md:px-8">
+    <section ref={container} className="relative py-24 bg-white overflow-hidden">
       
-      {/* --- SECTION HEADER --- */}
-      <div className="max-w-[1400px] mx-auto text-center mb-24 relative">
-         
-         <div className="gallery-header-anim flex items-center justify-center gap-3 text-bridal-charcoal/60 mb-8">
-           <Sparkles size={14} className="text-bridal-gold" />
-           <span className="font-sans text-[10px] uppercase tracking-[0.5em] font-bold">
-              The Atelier Collection
-           </span>
-         </div>
+      {/* Background Texture */}
+      <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
 
-         {/* --- TITLE WITH GOLDEN ROPE LINES --- */}
-         <div className="relative inline-block px-12 py-6">
-            {/* Top Rope Line */}
-            <div className="rope-line absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-bridal-gold to-transparent" />
-            <div className="rope-line absolute top-[4px] left-1/4 right-1/4 h-[0.5px] bg-bridal-gold/40" />
+      <div className="max-w-350 mx-auto px-4 md:px-6 relative z-10">
+        
+        {/* --- HEADER SECTION --- */}
+        <div className="flex flex-col items-center text-center mb-16 md:mb-20">
+           <div className="gallery-header-anim flex items-center gap-2 mb-4 opacity-0">
+              <Sparkles className="w-4 h-4 text-bridal-gold" />
+              <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-bridal-sage font-bold">
+                 Real Moments
+              </span>
+           </div>
+           
+           <h2 className="gallery-header-anim font-serif text-5xl md:text-7xl text-bridal-charcoal opacity-0">
+              Captured in <span className="italic text-bridal-gold">Time.</span>
+           </h2>
+        </div>
 
-            <h2 className="gallery-header-anim font-serif text-5xl md:text-8xl text-bridal-charcoal leading-none uppercase tracking-tight">
-               The Bonitha <span className="italic text-bridal-gold font-light lowercase">Bride.</span>
-            </h2>
+        {/* --- MASONRY-STYLE GRID --- */}
+        {/* We use columns for a true masonry feel, or a strict grid for cleanliness. 
+            Let's stick to a clean 3-column grid for the 'Saloon' look. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+          {GALLERY_IMAGES.map((img) => (
+            <div 
+               key={img.id} 
+               className="gallery-item-anim relative aspect-3/4 group overflow-hidden bg-bridal-charcoal/5 opacity-0"
+            >
+               <Image 
+                 src={img.src} 
+                 alt={img.alt} 
+                 fill 
+                 sizes="(max-width: 768px) 100vw, 33vw"
+                 // SPEED UP: changed duration-[2s] to duration-700
+                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+               />
+               
+               {/* Professional Hover: Subtle darkness for text readability if you add captions later */}
+               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500" />
+               
+               {/* Sharp White Border on Hover */}
+               <div className="absolute inset-4 border border-white/0 group-hover:border-white/50 transition-all duration-500 pointer-events-none" />
+            </div>
+          ))}
+        </div>
 
-            {/* Bottom Rope Line */}
-            <div className="rope-line absolute bottom-[4px] left-1/4 right-1/4 h-[0.5px] bg-bridal-gold/40" />
-            <div className="rope-line absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-bridal-gold to-transparent" />
-         </div>
+        {/* --- VIEW MORE BUTTON --- */}
+        <div className="flex justify-center mt-16 gallery-header-anim opacity-0">
+          <Link href="/gowns" className="group">
+            <div className="px-12 py-4 bg-transparent border border-bridal-charcoal text-bridal-charcoal transition-all duration-300 hover:bg-bridal-charcoal hover:text-white">
+               <span className="text-[10px] uppercase tracking-[0.3em] font-bold flex items-center gap-4">
+                 View Our Stunning Brides
+                 <MoveRight size={14} className="transition-transform duration-300 group-hover:translate-x-2" />
+               </span>
+            </div>
+          </Link>
+        </div>
 
-         <p className="gallery-header-anim font-sans text-sm md:text-base text-bridal-charcoal/70 max-w-xl mx-auto leading-relaxed mt-10 font-light">
-            A curation of our most cherished transformations. Each portrait captures a moment of architectural grace and unshakeable confidence.
-         </p>
       </div>
-
-
-      {/* --- IMAGE GRID (Sharp Edges) --- */}
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-1 mb-20">
-        {GALLERY_IMAGES.map((img) => (
-          <div 
-            key={img.id} 
-            // Removed rounded-2rem, now using rounded-none for professional sharp look
-            className="gallery-item relative w-full aspect-[3/4] rounded-none overflow-hidden group cursor-pointer shadow-none"
-          >
-             <Image 
-               src={img.src} 
-               alt={img.alt} 
-               fill 
-               className="object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
-             />
-             
-             {/* Professional Hover: Subtle contrast shift rather than a dark mask */}
-             <div className="absolute inset-0 bg-bridal-charcoal/0 group-hover:bg-bridal-charcoal/10 transition-all duration-700" />
-             
-             {/* Sharp White Border on Hover */}
-             <div className="absolute inset-6 border border-white/0 group-hover:border-white/40 transition-all duration-700 pointer-events-none" />
-          </div>
-        ))}
-      </div>
-
-
-      {/* --- VIEW MORE BUTTON (Sharp Aesthetic) --- */}
-      <div className="flex justify-center pb-8 gallery-header-anim">
-        <Link href="/portfolio" className="group">
-          {/* Changed rounded-full to rounded-none to match the professional theme */}
-          <div className="px-16 py-5 bg-bridal-charcoal text-white border border-bridal-charcoal rounded-none transition-all duration-500 hover:bg-transparent hover:text-bridal-charcoal hover:scale-105">
-             <span className="text-[10px] uppercase tracking-[0.3em] font-bold flex items-center gap-4">
-               Enter The Gallery
-               <MoveRight size={14} className="transition-transform duration-300 group-hover:translate-x-2" />
-             </span>
-          </div>
-        </Link>
-      </div>
-
     </section>
   );
 }

@@ -25,14 +25,15 @@ export default function ArtistryShowcase() {
 
   useGSAP(() => {
     // 1. Video Floating Parallax
-    gsap.to(videoContainerRef.current, {
-      y: -50,
-      ease: "none",
+gsap.from(videoContainerRef.current, {
+      y: 100,          // Starts 100px lower than final position
+      opacity: 0,      // Starts invisible
+      duration: 1.8,   // Long duration for "gentle" feel
+      ease: "power3.out", // Smooth deceleration
       scrollTrigger: {
-        trigger: container.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
+        trigger: videoContainerRef.current, // Trigger specifically on the video
+        start: "top 85%", // Animation starts when top of video hits 85% of viewport height
+        toggleActions: "play none none reverse", // Plays on enter, reverses if you scroll back up
       }
     });
 
@@ -71,7 +72,7 @@ export default function ArtistryShowcase() {
     );
 
     // 4. Safe Autoplay Logic
-    if (videoRef.current) {
+if (videoRef.current) {
       const safePlay = () => {
         const promise = videoRef.current?.play();
         if (promise !== undefined) {
@@ -91,10 +92,10 @@ export default function ArtistryShowcase() {
     <section ref={container} className="relative w-full bg-bridal-ivory py-32 lg:py-48 overflow-hidden">
       
       {/* --- ATMOSPHERIC LEAF OVERLAYS (Bridging Gaps) --- */}
-      <div className="artistry-leaf absolute top-10 -left-20 w-[500px] h-[500px] z-0 pointer-events-none opacity-20 blur-xl mix-blend-multiply">
+      <div className="artistry-leaf absolute top-10 -left-20 w-[500px] h-[500px] z-0 pointer-events-none opacity-20 blur-sm mix-blend-multiply">
         <Image src="/leaves.webp" alt="" fill className="object-contain" />
       </div>
-      <div className="artistry-leaf absolute bottom-10 -right-20 w-[450px] h-[450px] z-0 pointer-events-none opacity-20 blur-2xl rotate-45 mix-blend-multiply">
+      <div className="artistry-leaf absolute bottom-10 -right-20 w-[450px] h-[450px] z-0 pointer-events-none opacity-20 blur-sm rotate-45 mix-blend-multiply">
         <Image src="/leaves.webp" alt="" fill className="object-contain" />
       </div>
 
@@ -157,15 +158,21 @@ export default function ArtistryShowcase() {
            <div ref={videoContainerRef} className="relative w-full max-w-lg aspect-[9/14]">
               
               {/* Museum Arched Frame */}
-              <div className="relative w-full h-full rounded-t-full rounded-b-[3rem] overflow-hidden shadow-[0_60px_120px_-20px_rgba(0,0,0,0.3)] border-[1px] border-white/50 bg-bridal-ivory">
+                          <div className="relative w-full h-full rounded-t-[2rem] md:rounded-t-full rounded-b-[2.5rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-white/40 bg-bridal-ivory">
                 <video
-                  ref={videoRef}
-                  playsInline loop muted preload="auto"
-                  className="absolute inset-0 w-full h-full object-cover"
-                  poster="/makeup.jpg" 
-                >
-                  <source src="h-m4.mp4" type="video/mp4" />
-                </video>
+                ref={videoRef}
+                playsInline
+                loop
+                muted
+                preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover"
+                poster="/makeup.jpg"
+                aria-label="Makeup artistry video showing transformation process"
+              >
+                <source src="h-m4.webm" type="video/webm" />
+                {/* Fallback for older browsers */}
+                <source src="h-m4.mp4" type="video/mp4" />
+              </video>
 
                 {/* Cinematic Overlays */}
                 <div className="absolute inset-0 bg-black/5 pointer-events-none mix-blend-overlay" />
