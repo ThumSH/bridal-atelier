@@ -1,5 +1,4 @@
 import VideoShowcase from "@/components/home/VideoShowcase";
-import TransitionMarquee from "@/components/ui/TransitionMarquee"; // Ensure you created this component
 import AtelierIntro from "@/components/home/AtelierIntro";
 import PressStrip from "@/components/home/PressStrip";
 import Hero from "@/components/home/Hero";
@@ -27,7 +26,7 @@ export default function Home() {
       <div className="relative z-10 -mt-15">
         
         {/* The "Lid" that creates the rounded transition */}
-        <TransitionMarquee />
+        
 
         {/* The White Content Block */}
         <div className="bg-bridal-ivory pb-0">

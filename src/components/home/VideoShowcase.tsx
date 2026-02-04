@@ -5,35 +5,39 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Globe, Play } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
+
+// Base64 Noise to avoid external network requests (Performance gain)
+const NOISE_BASE64 = "data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E";
 
 export default function VideoShowcase() {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      // 1. Text Reveal
-      gsap.from(".video-title", {
-        y: 100,
-        opacity: 0,
-        duration: 2,
-        ease: "power4.out",
-        delay: 0.5,
-      });
+      const tl = gsap.timeline();
 
-      gsap.from(".video-sub", {
+      // 1. Text Reveal - Optimized to start slightly earlier
+      tl.from(".video-title", {
+        y: 80,
+        opacity: 0,
+        duration: 1.8,
+        ease: "power3.out",
+        delay: 0.2, // Reduced delay for perceived speed
+      })
+      .from(".video-sub", {
         y: 20,
         opacity: 0,
-        duration: 1.5,
-        ease: "power3.out",
-        delay: 1,
-      });
+        duration: 1,
+        ease: "power2.out",
+      }, "-=1.2"); // Overlap animation by 1.2s
 
       // 2. Parallax Video
+      // Using fastScrollEnd to prevent jitter on rapid scrolling
       gsap.to(".video-bg", {
         yPercent: 30,
         ease: "none",
@@ -49,41 +53,31 @@ export default function VideoShowcase() {
   );
 
   return (
-    <section ref={container} className="relative h-screen w-full overflow-hidden bg-bridal-charcoal">
+    <section ref={container} className="relative h-screen w-full">
       
       {/* --- BACKGROUND VIDEO --- */}
-      <div className="video-bg absolute inset-0 h-[120%] w-full">
-        {/* VIDEO OPTIMIZATION: 
-            1. muted + playsInline: Required for autoplay on iOS.
-            2. preload="auto": Tells browser to load this FIRST.
-            3. poster: Shows this image instantly while video loads (Crucial!).
+      <div className="video-bg absolute inset-0 h-[98%] w-full">
+        {/* BEST PRACTICE FOR VIDEO:
+           1. Poster: This image loads INSTANTLY. Crucial for LCP (Largest Contentful Paint).
+           2. Fallback: Provide WebM (Light) and MP4 (Compatible).
         */}
         <video
-          className="h-full w-full object-cover opacity-90" // Increased opacity slightly
+          className="h-full w-full object-cover opacity-100"
           autoPlay
           muted
           loop
           playsInline
           preload="auto"
-          // poster="/video-poster.jpg" <--- UNCOMMENT AND ADD A REAL IMAGE PATH
+          poster="/hero-poster.jpg" // [ACTION REQUIRED] Add a high-res screenshot of your video here
         >
-          <source src="/per.webm" type="video/webm" /> 
-           
+          {/* Prioritize WebM for Chrome/Firefox */}
+          {/* Fallback for Safari/iOS if needed */}
+          <source src="/wed-vid.mp4" type="video/mp4" /> 
         </video>
         
-        {/* --- LUXURY OVERLAYS (The "Makeup" for bad video quality) --- */}
-        
-        {/* 1. Base Darkener: Uniform dark tint */}
-        <div className="absolute inset-0 bg-black/30" /> 
 
-        {/* 2. Texture: Hides pixelation/banding */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-30 mix-blend-overlay" /> 
-        
-        {/* 3. The "Nav Saver": Gradient at top to make Navbar POP */}
-        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-10" />
 
-        {/* 4. Vignette: Darken corners to focus attention */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)] pointer-events-none" />
+
       </div>
 
       {/* --- CENTER CONTENT --- */}
