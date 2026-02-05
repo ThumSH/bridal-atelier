@@ -54,7 +54,7 @@ export default function VideoShowcase() {
           preload="auto"
           poster="/hero-poster.jpg" 
         >
-          <source src="/wed-vid.mp4" type="video/mp4" /> 
+          <source src="/per.webm" type="video/webm" /> 
         </video>
         
         {/* Dark Overlay for better text readability */}
