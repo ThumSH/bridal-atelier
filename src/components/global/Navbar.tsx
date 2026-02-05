@@ -65,13 +65,13 @@ export default function Navbar() {
   return (
     <>
       {/* --- MAIN NAVBAR --- */}
-      <div className="fixed top-0 left-0 w-full z-[100] flex justify-center pt-4 md:pt-6 px-4 pointer-events-none">
+      <div className="fixed top-0 left-0 w-full z-100 flex justify-center pt-4 md:pt-6 px-4 pointer-events-none">
         <header
           className={cn(
             "pointer-events-auto flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
             isScrolled
               ? "w-[95%] md:w-[70%] max-w-5xl bg-[#EBEBE8]/80 backdrop-blur-xl shadow-lg rounded-full py-3 px-6 border border-white/40"
-              : "w-full max-w-[1400px] bg-transparent py-2 px-0 border-transparent",
+              : "w-full max-w-350 bg-transparent py-2 px-0 border-transparent",
             useDarkTheme ? "text-bridal-charcoal" : "text-white"
           )}
         >
@@ -89,7 +89,7 @@ export default function Navbar() {
               }
             }}
           >
-             <div className="flex flex-col leading-none">
+             <div className="flex flex-col items-center leading-none">
                 <span className="font-serif text-xl md:text-3xl tracking-wide">
                    BONITHA SALON<span className="text-bridal-gold">.</span>
                 </span>
@@ -142,7 +142,7 @@ export default function Navbar() {
       {/* --- MOBILE MENU OVERLAY --- */}
       <div 
         ref={menuRef}
-        className="fixed inset-0 z-[90] bg-bridal-ivory flex flex-col justify-center px-8 -translate-y-full"
+        className="fixed inset-0 z-90 bg-bridal-ivory flex flex-col justify-center px-8 -translate-y-full"
       >
          <div className="flex flex-col gap-8">
             {NAV_ITEMS.map((item) => (
