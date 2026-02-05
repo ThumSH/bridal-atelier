@@ -6,7 +6,7 @@ import CustomCursor from "@/components/global/CustomCursor";
 import Preloader from "@/components/global/Preloader";
 
 export const metadata: Metadata = {
-  title: "Bonitha Saloon | Award-Winning Bridal Hair & Beauty Studio",
+  title: "Bonitha Salon | Award-Winning Bridal Hair & Beauty Studio",
   description: "Premier bridal couture, professional makeup artistry, and luxury hair styling by Bonitha. World-class bridal transformations for your special day.",
   keywords: ["Bridal Makeup", "Wedding Hair Styling", "Bridal Gowns", "Bonitha Saloon", "Award Winning Salon"],
 };
