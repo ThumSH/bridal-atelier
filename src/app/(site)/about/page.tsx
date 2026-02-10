@@ -14,6 +14,7 @@ if (typeof window !== "undefined") {
 
 export default function AboutPage() {
   const container = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useGSAP(() => {
     // 1. Header Line Animation
@@ -32,7 +33,7 @@ export default function AboutPage() {
       });
     });
 
-    // 3. Section Reveals
+    // 3. Section Reveals (OPTIMIZED TIMING)
     const reveals = document.querySelectorAll(".about-reveal");
     reveals.forEach((el) => {
       gsap.from(el, {
@@ -40,9 +41,22 @@ export default function AboutPage() {
         opacity: 0,
         duration: 1.2,
         ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 85%" }
+        scrollTrigger: { trigger: el, start: "top 90%" }
       });
     });
+
+    // 4. Video Performance (OPTIMIZATION)
+    if (videoRef.current) {
+      ScrollTrigger.create({
+        trigger: videoRef.current,
+        start: "top 80%",
+        end: "bottom 20%",
+        onEnter: () => videoRef.current?.play().catch(() => {}),
+        onLeave: () => videoRef.current?.pause(),
+        onEnterBack: () => videoRef.current?.play().catch(() => {}),
+        onLeaveBack: () => videoRef.current?.pause(),
+      });
+    }
   }, { scope: container });
 
   return (
@@ -79,6 +93,8 @@ export default function AboutPage() {
                  src="/own.webp" 
                  alt="Founder of Bonitha" 
                  fill 
+                 // OPTIMIZATION:
+                 sizes="(max-width: 1024px) 100vw, 50vw"
                  className="object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-[2s]" 
                />
                <div className="absolute bottom-12 -right-12 w-64 h-32 z-20 pointer-events-none opacity-80 rotate-[-5deg]">
@@ -136,6 +152,8 @@ export default function AboutPage() {
                  src="/st.webp" 
                  alt="Bonitha Atelier Sanctuary" 
                  fill 
+                 // OPTIMIZATION:
+                 sizes="(max-width: 1024px) 100vw, 60vw"
                  className="object-cover transition-transform duration-[2s] group-hover:scale-105" 
                />
                <div className="absolute inset-0 bg-black/5 pointer-events-none" />
@@ -144,23 +162,26 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* --- 3. THE RECOGNITION (UPDATED: Wider Video, Tighter Image) --- */}
+      {/* --- 3. THE RECOGNITION --- */}
       <section className="relative z-10 max-w-[1400px] mx-auto px-6 mb-32 about-reveal">
         <div className="flex items-center justify-center gap-3 text-bridal-gold mb-16">
            <Award size={20} />
            <span className="font-sans text-[11px] uppercase tracking-[0.5em] font-bold">Gilded Recognition</span>
         </div>
 
-        {/* LAYOUT: 5:7 Split for wider video */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
            
-           {/* LEFT COLUMN: The Video (Expanded Width, Reduced Height to 3/4) */}
            <div className="lg:col-span-5 lg:order-1">
               <div className="relative w-full aspect-[3/4] bg-bridal-charcoal border-[12px] border-white shadow-2xl overflow-hidden group">
-                 <video autoPlay muted loop playsInline className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000">
+                 {/* OPTIMIZATION: Video ref added */}
+                 <video 
+                    ref={videoRef}
+                    muted loop playsInline 
+                    preload="metadata"
+                    className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000"
+                 >
                     <source src="/teamx.mp4" type="video/mp4" />
                  </video>
-                 {/* Badge */}
                  <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
                     <div className="w-8 h-8 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center">
                         <PlayCircle size={14} className="text-white" />
@@ -170,10 +191,8 @@ export default function AboutPage() {
               </div>
            </div>
 
-           {/* RIGHT COLUMN: Text & Landscape Image Stacked */}
            <div className="lg:col-span-7 lg:order-2 flex flex-col justify-center">
               
-              {/* Text Block */}
               <div className="lg:pr-12 mb-6">
                  <h3 className="font-serif text-3xl md:text-5xl text-bridal-charcoal mb-6">National Awards 2025</h3>
                  <p className="font-sans text-sm md:text-base text-bridal-charcoal/60 leading-relaxed mb-6 font-light">
@@ -186,12 +205,13 @@ export default function AboutPage() {
                  </ul>
               </div>
 
-              {/* Landscape Image (Reduced Width & Closer Spacing) */}
               <div className="relative w-[85%] aspect-[16/9] border-[12px] border-white shadow-xl overflow-hidden">
                  <Image 
                     src="/awards.jpeg" 
                     alt="Award Ceremony Group" 
                     fill 
+                    // OPTIMIZATION:
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover" 
                  />
                  <div className="absolute inset-0 bg-bridal-charcoal/10 mix-blend-multiply" />

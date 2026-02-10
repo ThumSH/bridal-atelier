@@ -12,7 +12,6 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Ensure these images exist in your public folder or update them
 const GALLERY_IMAGES = [
   { id: 1, src: "/p-11.webp", alt: "Bonitha Bride 1" },
   { id: 2, src: "/p-12.webp", alt: "Bonitha Bride 2" },
@@ -29,32 +28,33 @@ export default function BridalGallery() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container.current,
-        start: "top 70%", // Starts slightly earlier for better responsiveness
+        // OPTIMIZATION: Start animation SOONER (85%) so users don't stare at empty space
+        start: "top 85%", 
       }
     });
 
-    // 1. Header Reveal (Faster)
+    // 1. Header Reveal
     tl.fromTo(".gallery-header-anim", 
       { y: 30, opacity: 0 },
       { 
         y: 0, 
         opacity: 1, 
-        duration: 0.6, // Was 1.0
-        stagger: 0.1, // Was 0.2
+        duration: 0.6, 
+        stagger: 0.1, 
         ease: "power2.out" 
       }
     );
 
-    // 2. Grid Items Reveal (Much Snappier)
+    // 2. Grid Items Reveal
     tl.fromTo(".gallery-item-anim",
       { y: 40, opacity: 0, scale: 0.95 },
       { 
         y: 0, 
         opacity: 1, 
         scale: 1,
-        duration: 0.8, // Was 1.2
-        stagger: 0.08, // Was 0.15 (Rapid fire cascade)
-        ease: "power3.out" // Stronger 'pop' effect
+        duration: 0.8, 
+        stagger: 0.05, // OPTIMIZATION: Faster stagger for snappier feel
+        ease: "power3.out" 
       },
       "-=0.4"
     );
@@ -67,7 +67,7 @@ export default function BridalGallery() {
       {/* Background Texture */}
       <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
 
-      <div className="max-w-350 mx-auto px-4 md:px-6 relative z-10">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 relative z-10">
         
         {/* --- HEADER SECTION --- */}
         <div className="flex flex-col items-center text-center mb-16 md:mb-20">
@@ -83,28 +83,23 @@ export default function BridalGallery() {
            </h2>
         </div>
 
-        {/* --- MASONRY-STYLE GRID --- */}
-        {/* We use columns for a true masonry feel, or a strict grid for cleanliness. 
-            Let's stick to a clean 3-column grid for the 'Saloon' look. */}
+        {/* --- GRID --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
           {GALLERY_IMAGES.map((img) => (
             <div 
                key={img.id} 
-               className="gallery-item-anim relative aspect-3/4 group overflow-hidden bg-bridal-charcoal/5 opacity-0"
+               className="gallery-item-anim relative aspect-[3/4] group overflow-hidden bg-bridal-charcoal/5 opacity-0"
             >
                <Image 
                  src={img.src} 
                  alt={img.alt} 
                  fill 
-                 sizes="(max-width: 768px) 100vw, 33vw"
-                 // SPEED UP: changed duration-[2s] to duration-700
+                 // OPTIMIZATION: Exact match for grid (Mobile: 100vw, Tablet: 50vw, Desktop: 33vw)
+                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                />
                
-               {/* Professional Hover: Subtle darkness for text readability if you add captions later */}
                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500" />
-               
-               {/* Sharp White Border on Hover */}
                <div className="absolute inset-4 border border-white/0 group-hover:border-white/50 transition-all duration-500 pointer-events-none" />
             </div>
           ))}

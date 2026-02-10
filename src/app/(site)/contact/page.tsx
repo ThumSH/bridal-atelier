@@ -53,11 +53,11 @@ export default function ContactPage() {
       {/* Background Noise */}
       <div className="fixed inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
 
-      <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+      <div className="max-w-350 mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
         
         {/* --- LEFT: THE VISUAL (Sticky) --- */}
         <div className="relative h-[60vh] lg:h-[80vh] w-full lg:sticky lg:top-32">
-           <div className="contact-img-reveal relative w-full h-full rounded-[2rem] overflow-hidden shadow-2xl">
+           <div className="contact-img-reveal relative w-full h-full rounded-4xl overflow-hidden shadow-2xl">
               <Image 
                 src="/p-22.webp" // A strong portrait image works best here
                 alt="Book Your Appointment" 
@@ -82,7 +82,7 @@ export default function ContactPage() {
           <div className="mb-12 relative">
             {/* GOLDEN THREAD SVG */}
             <svg 
-                className="absolute top-[-40px] -left-20 w-[140%] h-[200%] pointer-events-none z-0 opacity-30 overflow-visible" 
+                className="absolute -top-10 -left-20 w-[140%] h-[200%] pointer-events-none z-0 opacity-30 overflow-visible" 
                 viewBox="0 0 400 100" 
                 fill="none"
                 preserveAspectRatio="none"
@@ -97,7 +97,7 @@ export default function ContactPage() {
             </svg>
 
             <div className="contact-anim flex items-center gap-3 mb-4 relative z-10">
-               <span className="h-[1px] w-8 bg-bridal-gold"></span>
+               <span className="h-px w-8 bg-bridal-gold"></span>
                <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-bridal-sage font-bold">
                  Reservations
                </span>

@@ -77,7 +77,7 @@ export default function AwardWinningStudio() {
       </div>
 
       {/* --- DECORATION 2: BLURRED LEAVES --- */}
-      <div className="award-leaf absolute -top-20 -left-20 w-[500px] h-[500px] pointer-events-none z-0 opacity-10 mix-blend-multiply">
+      <div className="award-leaf absolute -top-20 -left-20 w-125 h-125 pointer-events-none z-0 opacity-10 mix-blend-multiply">
          <Image 
            src="/leaves.webp" 
            alt="Decorative Leaf" 
@@ -122,7 +122,7 @@ export default function AwardWinningStudio() {
         </div>
 
         {/* --- RIGHT: LANDSCAPE IMAGE --- */}
-        <div className="award-image-reveal order-1 lg:order-2 relative w-full aspect-[4/3] md:aspect-[16/10] rounded-[2rem] overflow-hidden shadow-2xl border border-bridal-charcoal/5 group">
+        <div className="award-image-reveal order-1 lg:order-2 relative w-full aspect-4/3 md:aspect-16/10 rounded-4xl overflow-hidden shadow-2xl border border-bridal-charcoal/5 group">
            <Image 
              src="/awards.jpeg" 
              alt="Bonitha Studio Awards" 
@@ -131,7 +131,7 @@ export default function AwardWinningStudio() {
            />
            
            {/* Overlay Gradient */}
-           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+           <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
            
            {/* Floating Badge */}
            <div className="absolute bottom-8 right-8 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg hover:bg-white/20 transition-colors">

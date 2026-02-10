@@ -87,13 +87,26 @@ export default function ArtistryPage() {
       ease: "power4.out"
     });
 
-    // 4. Staggered Service Reveal
+    // 4. Video Playback Control (OPTIMIZATION)
+    if (masterVideoRef.current) {
+        ScrollTrigger.create({
+            trigger: masterVideoRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            onEnter: () => masterVideoRef.current?.play().catch(() => {}),
+            onLeave: () => masterVideoRef.current?.pause(),
+            onEnterBack: () => masterVideoRef.current?.play().catch(() => {}),
+            onLeaveBack: () => masterVideoRef.current?.pause(),
+        });
+    }
+
+    // 5. Staggered Service Reveal
     const reveals = document.querySelectorAll(".service-section");
     reveals.forEach((section) => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 75%",
+          start: "top 85%", // Optimization: Earlier reveal
         }
       });
 
@@ -203,7 +216,8 @@ export default function ArtistryPage() {
             <div className="master-hero-frame relative w-[100%] md:w-[65%] lg:w-[80%] aspect-[3/4] bg-bridal-charcoal border-[12px] md:border-[20px] border-white shadow-2xl overflow-hidden group">
                <video 
                   ref={masterVideoRef}
-                  autoPlay muted loop playsInline 
+                  muted loop playsInline 
+                  preload="metadata"
                   className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-[2s]"
                >
                   <source src="/m-vid-2.webm" type="video/webm" />
@@ -283,6 +297,8 @@ export default function ArtistryPage() {
                         src={service.mainImage} 
                         alt={service.title} 
                         fill 
+                        // OPTIMIZATION:
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                         className="object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" 
                     />
                     <div className="absolute top-6 right-6 text-white/40">
@@ -294,7 +310,14 @@ export default function ArtistryPage() {
                   <div className="grid grid-cols-3 gap-4 md:gap-6 w-[85%] md:w-[75%] h-32 md:h-48">
                     {service.gallery.map((src, i) => (
                       <div key={i} className="anim-up relative h-full w-full bg-bridal-charcoal border-[4px] md:border-[8px] border-white shadow-xl overflow-hidden group">
-                        <Image src={src} alt="Detail" fill className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+                        <Image 
+                            src={src} 
+                            alt="Detail" 
+                            fill 
+                            // OPTIMIZATION: Small sizes
+                            sizes="(max-width: 768px) 33vw, 15vw"
+                            className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" 
+                        />
                       </div>
                     ))}
                   </div>

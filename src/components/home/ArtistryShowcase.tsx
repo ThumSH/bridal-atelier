@@ -24,16 +24,16 @@ export default function ArtistryShowcase() {
   const videoContainerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // 1. Video Floating Parallax
-gsap.from(videoContainerRef.current, {
-      y: 100,          // Starts 100px lower than final position
-      opacity: 0,      // Starts invisible
-      duration: 1.8,   // Long duration for "gentle" feel
-      ease: "power3.out", // Smooth deceleration
+    // 1. Video Floating Parallax (OPTIMIZED)
+    gsap.from(videoContainerRef.current, {
+      y: 80,           // Reduced travel distance for smoother reveal
+      opacity: 0,      
+      duration: 1.5,   
+      ease: "power3.out", 
       scrollTrigger: {
-        trigger: videoContainerRef.current, // Trigger specifically on the video
-        start: "top 85%", // Animation starts when top of video hits 85% of viewport height
-        toggleActions: "play none none reverse", // Plays on enter, reverses if you scroll back up
+        trigger: videoContainerRef.current, 
+        start: "top 90%", // OPTIMIZATION: Reveal much earlier
+        toggleActions: "play none none reverse", 
       }
     });
 
@@ -64,7 +64,6 @@ gsap.from(videoContainerRef.current, {
       stagger: 0.1,
       ease: "power3.out"
     })
-    // ANIMATING THE CURVED ROPE: Drawing effect
     .fromTo(".gold-rope-path", 
       { strokeDasharray: 300, strokeDashoffset: 300, opacity: 0 },
       { strokeDasharray: 300, strokeDashoffset: 0, opacity: 0.8, duration: 1.8, ease: "power2.inOut" },
@@ -72,18 +71,13 @@ gsap.from(videoContainerRef.current, {
     );
 
     // 4. Safe Autoplay Logic
-if (videoRef.current) {
-      const safePlay = () => {
-        const promise = videoRef.current?.play();
-        if (promise !== undefined) {
-          promise.catch(() => { /* Interruption handled */ });
-        }
-      };
+    if (videoRef.current) {
       ScrollTrigger.create({
         trigger: videoRef.current,
         start: "top 80%",
-        onEnter: safePlay,
+        onEnter: () => videoRef.current?.play().catch(() => {}), // Catch prevent defaults
         onLeave: () => videoRef.current?.pause(),
+        onEnterBack: () => videoRef.current?.play().catch(() => {}),
       });
     }
   }, { scope: container });
@@ -91,7 +85,7 @@ if (videoRef.current) {
   return (
     <section ref={container} className="relative w-full bg-bridal-ivory py-32 lg:py-48 overflow-hidden">
       
-      {/* --- ATMOSPHERIC LEAF OVERLAYS (Bridging Gaps) --- */}
+      {/* --- ATMOSPHERIC LEAF OVERLAYS --- */}
       <div className="artistry-leaf absolute top-10 -left-20 w-[500px] h-[500px] z-0 pointer-events-none opacity-20 blur-sm mix-blend-multiply">
         <Image src="/leaves.webp" alt="" fill className="object-contain" />
       </div>
@@ -114,7 +108,6 @@ if (videoRef.current) {
                 <span className="italic text-bridal-gold font-light lowercase">Transformation.</span>
               </h2>
               
-              {/* --- ENHANCED CURVED GOLDEN ROPE --- */}
               <svg 
                 className="absolute -bottom-8 left-0 w-64 h-12 pointer-events-none" 
                 viewBox="0 0 250 40" 
@@ -135,7 +128,6 @@ if (videoRef.current) {
               Meticulous craftsmanship for the Bonitha Bride. We sculpt a silhouette that moves with you, ensuring your elegance is unshakeable.
            </p>
 
-           {/* Redesigned Process Steps */}
            <div className="artistry-anim space-y-12">
               {PROCESS_STEPS.map((step) => (
                 <div key={step.id} className="flex gap-10 group">
@@ -152,27 +144,24 @@ if (videoRef.current) {
            </div>
         </div>
 
-
         {/* --- RIGHT: THE ARCHED VIDEO FRAME --- */}
         <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
            <div ref={videoContainerRef} className="relative w-full max-w-lg aspect-[9/14]">
               
               {/* Museum Arched Frame */}
-                          <div className="relative w-full h-full rounded-t-[2rem] md:rounded-t-full rounded-b-[2.5rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-white/40 bg-bridal-ivory">
+              <div className="relative w-full h-full rounded-t-[2rem] md:rounded-t-full rounded-b-[2.5rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-white/40 bg-bridal-ivory">
                 <video
-                ref={videoRef}
-                playsInline
-                loop
-                muted
-                preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover"
-                poster="/makeup.jpg"
-                aria-label="Makeup artistry video showing transformation process"
-              >
-                <source src="h-m4.webm" type="video/webm" />
-                {/* Fallback for older browsers */}
-                <source src="h-m4.mp4" type="video/mp4" />
-              </video>
+                  ref={videoRef}
+                  playsInline
+                  loop
+                  muted
+                  preload="auto" // OPTIMIZATION: Load aggressively for smooth start
+                  className="absolute inset-0 w-full h-full object-cover"
+                  poster="/makeup.jpg"
+                >
+                  <source src="h-m4.webm" type="video/webm" />
+                  <source src="h-m4.mp4" type="video/mp4" />
+                </video>
 
                 {/* Cinematic Overlays */}
                 <div className="absolute inset-0 bg-black/5 pointer-events-none mix-blend-overlay" />
@@ -190,7 +179,6 @@ if (videoRef.current) {
                 </div>
               </div>
 
-              {/* Decorative Glass Outer Frame */}
               <div className="absolute -inset-8 border border-bridal-gold/15 rounded-t-full rounded-b-[4rem] pointer-events-none -z-10 opacity-50" />
            </div>
         </div>

@@ -20,6 +20,10 @@ body {
   .shadow-glow {
     text-shadow: 0 0 30px rgba(249, 247, 242, 0.5);
   }
+  .optimize-noise {
+    opacity: 0.03;
+    mix-blend-mode: multiply;
+  }
   
   .powder-vignette {
     background: radial-gradient(circle at center, rgba(251, 113, 133, 0.15) 0%, transparent 70%);
@@ -28,5 +32,13 @@ body {
   /* Smooth reveal for text lines */
   .mask-text {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  }
+
+  /* Disable blend mode on touch/small devices for performance */
+  @media (hover: none) and (pointer: coarse) {
+    .optimize-noise {
+      mix-blend-mode: normal; /* Much cheaper to render */
+      background-image: none; /* Optional: Remove it entirely */
+    }
   }
 }

@@ -65,7 +65,7 @@ export default function HairEditorialHero() {
            priority
          />
          {/* Cinematic Gradient (Dark at bottom for text) */}
-         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-80" />
       </div>
 
       {/* --- THE TEXT OVERLAY --- */}

@@ -15,15 +15,24 @@ export default function VideoShowcase() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useGSAP(() => {
-    // Parallax Logic: Moves the video slightly slower than the scroll speed
-    gsap.to(videoRef.current, {
-      yPercent: 20, // Moves down 20%
-      ease: "none",
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
+    // 1. Parallax Animation
+    // Since the container is fixed, we need to trigger based on the scroll of the PAGE, not the element.
+    // However, for this specific fix, let's focus on the Play/Pause optimization.
+
+    // 2. OPTIMIZATION: Pause video when scrolled out of view
+    // We create a trigger on the whole document or use the Spacer div logic.
+    // Easier approach: Watch the scroll position.
+    ScrollTrigger.create({
+      trigger: document.body, // Watch the whole page
+      start: "top top",
+      end: "100vh top", // When we've scrolled past the first viewport (where video lives)
+      onLeave: () => {
+        // User has scrolled PAST the video
+        if (videoRef.current) videoRef.current.pause();
+      },
+      onEnterBack: () => {
+        // User has scrolled BACK to the video
+        if (videoRef.current) videoRef.current.play();
       },
     });
 
@@ -37,12 +46,10 @@ export default function VideoShowcase() {
     });
   }, { scope: container });
 
+
   return (
     // CHANGE 1: Use h-dvh (Dynamic Viewport Height) for full mobile coverage
-    <section ref={container} className="fixed  h-dvh w-full overflow-hidden bg-black">
-      
-      {/* CHANGE 2: Height set to 120% to allow parallax movement without gaps */}
-      {/* -top-[10%] centers the 120% height so there is room on top and bottom */}
+   <section ref={container} className="fixed h-dvh w-full overflow-hidden bg-black z-0">
       <div className="absolute inset-0 h-[120%] w-full -top-[0.1%]">
         <video
           ref={videoRef}
@@ -50,25 +57,20 @@ export default function VideoShowcase() {
           autoPlay
           muted
           loop
-          playsInline // Essential for iOS mobile fullscreen behavior
-          preload="auto"
+          playsInline
+          preload="none" // CHANGED: Don't load until necessary (Next.js usually handles this, but good to be explicit)
           poster="/hero-poster.jpg" 
         >
           <source src="/wed-vid.webm" type="video/webm" /> 
         </video>
-        
-        {/* Dark Overlay for better text readability */}
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      {/* --- CONTENT LAYER --- */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white px-4">
-        
         <div className="hero-text">
             <p className="mb-4 font-sans text-[10px] md:text-xs uppercase tracking-[0.4em] text-white/80">
             The 2026 Collection
             </p>
-
             <h1 className="font-serif text-6xl md:text-8xl lg:text-9xl tracking-tight mix-blend-screen drop-shadow-2xl">
             <span className="italic">BONITHA SALON</span> 
             </h1>
@@ -81,7 +83,6 @@ export default function VideoShowcase() {
           <span className="font-sans text-[9px] uppercase tracking-widest">Scroll to Explore</span>
           <ChevronDown size={24} />
         </div>
-
       </div>
     </section>
   );

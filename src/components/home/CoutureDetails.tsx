@@ -39,7 +39,7 @@ export default function CoutureDetails() {
     // 1. Image Zoom/Scale on Scroll
     const items = gsap.utils.toArray<HTMLElement>(".detail-item");
     
-    items.forEach((item, i) => {
+    items.forEach((item) => {
       const img = item.querySelector(".detail-img");
       
       gsap.fromTo(img, 
@@ -98,7 +98,7 @@ export default function CoutureDetails() {
             >
               {/* IMAGE SIDE - The "Lens" */}
               <div className="flex-1 w-full relative group">
-                <div className="relative aspect-square md:aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl border border-white/5">
+                <div className="relative aspect-square md:aspect-4/3 rounded-4xl overflow-hidden shadow-2xl border border-white/5">
                   <Image 
                     src={detail.image} 
                     alt={detail.title} 
@@ -108,7 +108,7 @@ export default function CoutureDetails() {
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
                 </div>
                 {/* Decoration Element */}
-                <div className="absolute -bottom-6 -right-6 w-24 h-24 border-b-2 border-r-2 border-bridal-gold/30 rounded-br-[2rem]" />
+                <div className="absolute -bottom-6 -right-6 w-24 h-24 border-b-2 border-r-2 border-bridal-gold/30 rounded-br-4xl" />
               </div>
 
               {/* TEXT SIDE */}

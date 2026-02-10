@@ -75,7 +75,7 @@ export default function AtelierIntro() {
       <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-multiply" />
       
       {/* Golden Halo Background */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(212,175,55,0.05)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-150 h-150 bg-[radial-gradient(circle,rgba(212,175,55,0.05)_0%,transparent_70%)] pointer-events-none" />
 
       {/* The 'B' Watermark */}
       <div className="absolute top-20 left-10 text-[25rem] md:text-[35rem] font-serif text-bridal-charcoal/5 leading-none select-none pointer-events-none z-0">
@@ -84,7 +84,7 @@ export default function AtelierIntro() {
 
       {/* Blurred Leaf Parallax Accents */}
       <div className="intro-leaf absolute -top-10 -right-20 z-0 h-80 w-80 opacity-20 pointer-events-none">
-         <Image src="/leaves.webp" alt="Leaf Accent" fill className="object-contain blur-[4px]" />
+         <Image src="/leaves.webp" alt="Leaf Accent" fill className="object-contain blur-xs" />
       </div>
       <div className="intro-leaf absolute bottom-10 left-1/2 z-0 h-40 w-40 opacity-10 pointer-events-none">
          <Image src="/leaves.webp" alt="Leaf Accent" fill className="object-contain blur-[2px] rotate-180" />
@@ -95,7 +95,7 @@ export default function AtelierIntro() {
         
         {/* LEFT: The Visual Centerpiece */}
         <div className="lg:col-span-5 relative">
-          <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border border-bridal-charcoal/5">
+          <div className="relative aspect-4/5 rounded-[3rem] overflow-hidden shadow-2xl border border-bridal-charcoal/5">
             <div className="intro-image-parallax absolute inset-0 w-full h-full scale-110">
               <Image 
                 src="/h-p1.webp" 

@@ -19,7 +19,7 @@ const INSTA_POSTS = [
   { id: 4, src: "/p-4.webp", label: "Eternal Vows", span: "md:col-span-2 md:row-span-1" },
 ];
 
-export default function InstaFeed() {
+export default function RealWeddings() {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -43,13 +43,17 @@ export default function InstaFeed() {
       "-=1"
     );
 
-    tl.from(".insta-item", {
-      scale: 0.95,
-      opacity: 0,
-      duration: 1.5,
-      stagger: 0.2,
-      ease: "power4.out"
-    }, "-=1.2");
+    tl.fromTo(".insta-item", 
+      { scale: 0.95, opacity: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 1.5,
+        stagger: 0.2,
+        ease: "power4.out"
+      }, 
+      "-=1.2"
+    );
 
   }, { scope: container });
 
@@ -98,20 +102,22 @@ export default function InstaFeed() {
         {INSTA_POSTS.map((post) => (
           <div 
             key={post.id} 
-            className={`insta-item group relative overflow-hidden cursor-pointer bg-neutral-200 ${post.span} aspect-square md:aspect-auto min-h-[400px]`}
+            // Added opacity-0 here so they are hidden until GSAP runs (prevents flash)
+            className={`insta-item group relative overflow-hidden cursor-pointer bg-neutral-200 ${post.span} aspect-square md:aspect-auto min-h-[400px] opacity-0`}
           >
               <Image 
                 src={post.src} 
                 alt={post.label} 
                 fill
-                sizes="(max-width: 1600px) 50vw, 800px" 
+                // OPTIMIZATION: Critical bandwidth fix
+                // Mobile: 100vw
+                // Desktop: If it's a double span (2 cols), it needs 50vw. If single, 33vw.
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover transition-transform duration-[2s] cubic-bezier(0.2, 1, 0.3, 1) group-hover:scale-105"
               />
 
-              {/* Minimal Overlay */}
               <div className="absolute inset-0 bg-bridal-charcoal/0 group-hover:bg-bridal-charcoal/40 transition-colors duration-700" />
               
-              {/* Content Reveal */}
               <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0">
                  <span className="text-white font-serif italic text-2xl mb-2">{post.label}</span>
                  <div className="w-8 h-px bg-white/60 mb-4" />
@@ -123,7 +129,7 @@ export default function InstaFeed() {
 
       {/* --- REFINED CTA --- */}
       <div className="relative z-10 mt-32 flex flex-col items-center">
-          <Link href="/journal" className="group relative">
+          <Link href="/declarations" className="group relative">
             <div className="overflow-hidden border border-bridal-charcoal px-20 py-8 transition-all duration-500 hover:bg-bridal-charcoal">
                 <span className="relative z-10 font-sans text-[11px] uppercase tracking-[0.5em] font-bold text-bridal-charcoal group-hover:text-white flex items-center gap-6">
                    Explore Full Journal

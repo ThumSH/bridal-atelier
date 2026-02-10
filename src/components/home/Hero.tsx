@@ -66,7 +66,7 @@ export default function HairEditorialHero() {
            sizes="(max-width: 768px) 100vw, 50vw"
          />
          {/* Cinematic Gradient (Dark at bottom for text) */}
-         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-80" />
       </div>
 
       {/* --- THE TEXT OVERLAY --- */}
@@ -97,7 +97,7 @@ export default function HairEditorialHero() {
 
          {/* Button */}
          <div className="hero-fade-in">
-            <Link href="/gowns" className="group flex items-center gap-4 w-fit">
+            <Link href="/artistry" className="group flex items-center gap-4 w-fit">
               <div className="px-10 py-4 bg-white text-bridal-charcoal rounded-full transition-all duration-500 group-hover:bg-bridal-gold group-hover:text-white group-hover:shadow-[0_0_30px_rgba(212,175,55,0.4)]">
                  <span className="text-[10px] uppercase tracking-widest font-bold flex items-center gap-3">
                    View Our Services

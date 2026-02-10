@@ -48,7 +48,7 @@ export default function Footer() {
 
       {/* --- DECORATION: Straight Leaf (FIXED SIZE) --- */}
       {/* Corrected invalid w-100 to w-[30rem] */}
-      <div className="absolute -bottom-32 -right-20 z-0 w-[30rem] h-[30rem] opacity-5 pointer-events-none">
+      <div className="absolute -bottom-32 -right-20 z-0 w-120 h-120 opacity-5 pointer-events-none">
          <Image
             src="/leaves.webp"
             alt="Leaf Accent"

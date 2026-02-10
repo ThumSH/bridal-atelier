@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={`${serif.variable} ${sans.variable} font-sans antialiased bg-bridal-ivory text-bridal-charcoal selection:bg-bridal-sage selection:text-white cursor-none`}>
         
         {/* 1. Global Noise Overlay */}
-        <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+        <div className="fixed inset-0 z-0 pointer-events-none optimize-noise bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
         
         {/* 2. Luxury Elements */}
         <CustomCursor />

@@ -106,18 +106,18 @@ export default function BespokeJourney() {
 
       {/* --- DECORATIVE GOLDEN LINES --- */}
       {/* Vertical Thread (Desktop) */}
-      <div className="hidden lg:block absolute left-1/2 top-0 w-px h-full bg-gradient-to-b from-transparent via-bridal-gold/40 to-transparent origin-top golden-line-vertical z-0" />
+      <div className="hidden lg:block absolute left-1/2 top-0 w-px h-full bg-linear-to-b from-transparent via-bridal-gold/40 to-transparent origin-top golden-line-vertical z-0" />
       
       {/* Floating Accent Line (Left side) */}
-      <div className="absolute left-0 top-1/4 w-20 lg:w-40 h-[1px] bg-bridal-gold/30 z-10" />
+      <div className="absolute left-0 top-1/4 w-20 lg:w-40 h-px bg-bridal-gold/30 z-10" />
 
       <div ref={triggerRef} className="relative w-full min-h-screen lg:min-h-[130vh] py-20 lg:py-0 flex flex-col lg:flex-row lg:items-center">
         
         {/* --- VIDEO CONTAINER --- */}
-        <div className="video-reveal-container relative w-[90%] mx-auto lg:mx-0 aspect-[3/4] lg:aspect-[9/16] lg:absolute lg:right-[8%] lg:w-[35%] lg:h-[95vh] z-10 shadow-2xl bg-bridal-charcoal mb-8 lg:mb-0">
+        <div className="video-reveal-container relative w-[90%] mx-auto lg:mx-0 aspect-3/4 lg:aspect-9/16 lg:absolute lg:right-[8%] lg:w-[35%] lg:h-[95vh] z-10 shadow-2xl bg-bridal-charcoal mb-8 lg:mb-0">
           
           {/* Animated Golden Frame Corner (Top Right) */}
-          <div className="absolute -top-4 -right-4 w-24 h-24 border-t-[1px] border-r-[1px] border-bridal-gold/60 z-20 pointer-events-none" />
+          <div className="absolute -top-4 -right-4 w-24 h-24 border-t border-r border-bridal-gold/60 z-20 pointer-events-none" />
           
           <video
             ref={videoRef}
@@ -129,19 +129,19 @@ export default function BespokeJourney() {
           </video>
 
           {/* Inner Matte Border */}
-          <div className="absolute inset-0 border-[12px] md:border-[16px] border-white pointer-events-none" />
+          <div className="absolute inset-0 border-12 md:border-16 border-white pointer-events-none" />
           
           {/* Sublte Golden Inner Glow */}
-          <div className="absolute inset-0 border-[1px] border-bridal-gold/20 m-[13px] md:m-[17px] pointer-events-none" />
+          <div className="absolute inset-0 border border-bridal-gold/20 m-3.25 md:m-4.25 pointer-events-none" />
           
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:bg-gradient-to-l lg:from-transparent lg:to-bridal-ivory/10" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent lg:bg-linear-to-l lg:from-transparent lg:to-bridal-ivory/10" />
         </div>
 
         {/* --- TEXT PILLAR --- */}
-        <div className="text-pillar relative z-20 w-[90%] mx-auto lg:mx-0 lg:w-[45%] lg:ml-[10%] bg-white p-8 md:p-14 lg:p-16 shadow-xl border-t-[8px] border-bridal-gold">
+        <div className="text-pillar relative z-20 w-[90%] mx-auto lg:mx-0 lg:w-[45%] lg:ml-[10%] bg-white p-8 md:p-14 lg:p-16 shadow-xl border-t-8 border-bridal-gold">
           
           {/* Decorative Sideline */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[1px] h-32 bg-bridal-gold/20 hidden lg:block" />
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-px h-32 bg-bridal-gold/20 hidden lg:block" />
 
           <div className="flex items-center gap-3 text-bridal-gold mb-6 lg:mb-8">
             <Sparkles size={18} />
@@ -174,7 +174,7 @@ export default function BespokeJourney() {
                   Est. 1995 • Atelier
                 </p>
                 {/* Horizontal Golden Accent */}
-                <div className="w-full h-[1px] bg-bridal-gold/20" />
+                <div className="w-full h-px bg-bridal-gold/20" />
               </div>
               
               <div className="flex items-center gap-4 text-bridal-gold/40">

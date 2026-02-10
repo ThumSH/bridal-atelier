@@ -46,6 +46,8 @@ const FULL_GALLERY = [
 
 export default function GownsAnthologyPage() {
   const container = useRef<HTMLDivElement>(null);
+  // OPTIMIZATION: Ref array for volume videos
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   useGSAP(() => {
     // 1. Header Line Animation
@@ -88,6 +90,21 @@ export default function GownsAnthologyPage() {
           { strokeDasharray: 400, strokeDashoffset: 400 },
           { strokeDashoffset: 0, duration: 1.5, ease: "power2.inOut" }, "-=0.8");
     });
+
+    // 4. Video Playback Control (OPTIMIZATION)
+    videoRefs.current.forEach((video) => {
+        if(!video) return;
+        ScrollTrigger.create({
+            trigger: video,
+            start: "top 80%",
+            end: "bottom 20%",
+            onEnter: () => video.play().catch(() => {}),
+            onLeave: () => video.pause(),
+            onEnterBack: () => video.play().catch(() => {}),
+            onLeaveBack: () => video.pause(),
+        });
+    });
+
   }, { scope: container });
 
   return (
@@ -164,7 +181,13 @@ export default function GownsAnthologyPage() {
             <div className={`lg:col-span-8 ${idx % 2 !== 0 ? 'lg:order-1' : ''}`}>
                <div className="relative aspect-[3/2] bg-bridal-charcoal border-[15px] md:border-[25px] border-white shadow-2xl overflow-hidden">
                   {vol.heroVideo.endsWith('.webm') ? (
-                    <video autoPlay muted loop playsInline className="w-full h-full object-cover">
+                    <video 
+                        // OPTIMIZATION: Ref capture
+                        ref={(el) => { if (el) videoRefs.current[idx] = el; }}
+                        muted loop playsInline 
+                        preload="metadata"
+                        className="w-full h-full object-cover"
+                    >
                       <source src={vol.heroVideo} type="video/webm" />
                     </video>
                   ) : (
@@ -193,6 +216,8 @@ export default function GownsAnthologyPage() {
                   src={img.src} 
                   alt={img.label} 
                   fill 
+                  // OPTIMIZATION:
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover transition-all duration-[1.5s] ease-in-out group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0" 
                 />
                 <div className="absolute inset-0 bg-bridal-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex flex-col items-center justify-center">

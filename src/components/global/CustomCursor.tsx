@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react"; // Added useEffect
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
@@ -9,10 +10,23 @@ export default function CustomCursor() {
   const cursor = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
+  const [isActive, setIsActive] = useState(false); // New State
+
+  // OPTIMIZATION: Only run on devices with a mouse
+  useEffect(() => {
+    // Check if device has a fine pointer (mouse/trackpad)
+    const mediaQuery = window.matchMedia("(pointer: fine)");
+    setIsActive(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => setIsActive(e.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   useGSAP(() => {
-    // 1. Move INSTANTLY (No "Late" Lag)
-    // We use a very low duration (0.1) so it feels snappy but still smooth (not jittery)
+    if (!isActive || !cursor.current) return; // Don't run GSAP if disabled
+
+    // 1. Move INSTANTLY
     const xTo = gsap.quickTo(cursor.current, "x", { duration: 0.15, ease: "power3.out" });
     const yTo = gsap.quickTo(cursor.current, "y", { duration: 0.15, ease: "power3.out" });
 
@@ -26,7 +40,6 @@ export default function CustomCursor() {
     // 2. Hover Listeners
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // Check if hovering over a clickable element
       if (target.matches("a, button, input, textarea, .cursor-hover, a *, button *")) {
         setIsHovering(true);
       } else {
@@ -47,38 +60,32 @@ export default function CustomCursor() {
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [isActive]); // Re-run if active state changes
+
+  if (!isActive) return null; // Don't render anything on mobile/touch
 
   return (
     <div 
         ref={cursor}
-        className="fixed top-0 left-0 pointer-events-none z-9999 mix-blend-difference hidden md:block"
-        style={{ transform: 'translate(-50%, -50%)' }} // Center the div on the mouse
+        className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        style={{ transform: 'translate(-50%, -50%)' }} 
     >
-        {/* The Container handles the Rotation & Scale */}
         <div 
             className={cn(
                 "relative flex items-center justify-center transition-all duration-500 ease-out",
-                isHovering ? "w-12 h-12 rotate-45" : "w-3 h-3 rotate-45", // Rotates 45deg to make a Diamond
+                isHovering ? "w-12 h-12 rotate-45" : "w-3 h-3 rotate-45",
                 isClicking && "scale-75"
             )}
         >
-            {/* 1. The Center "Gem" (Solid Diamond) */}
             <div 
                 className={cn(
                     "absolute bg-white transition-all duration-300",
-                    // When hovering: it shrinks to a tiny dot in the center
-                    // When normal: it fills the diamond
                     isHovering ? "w-1 h-1 opacity-100" : "w-full h-full opacity-100"
                 )}
             />
-
-            {/* 2. The Outer "Setting" (Border Ring) */}
             <div 
                 className={cn(
                     "absolute border border-white transition-all duration-500 ease-out",
-                    // When hovering: It expands to full size
-                    // When normal: It shrinks and hides
                     isHovering ? "w-full h-full opacity-100" : "w-0 h-0 opacity-0"
                 )}
             />
