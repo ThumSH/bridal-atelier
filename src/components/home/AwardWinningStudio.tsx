@@ -18,7 +18,8 @@ export default function AwardWinningStudio() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container.current,
-        start: "top 70%",
+        // OPTIMIZATION: Earlier start (85%) so elements are visible sooner
+        start: "top 85%",
       }
     });
 
@@ -27,7 +28,7 @@ export default function AwardWinningStudio() {
       x: -50, 
       opacity: 0,
       duration: 1,
-      stagger: 0.2,
+      stagger: 0.15, // Slightly faster stagger
       ease: "power3.out"
     });
 
@@ -77,11 +78,13 @@ export default function AwardWinningStudio() {
       </div>
 
       {/* --- DECORATION 2: BLURRED LEAVES --- */}
-      <div className="award-leaf absolute -top-20 -left-20 w-125 h-125 pointer-events-none z-0 opacity-10 mix-blend-multiply">
+      <div className="award-leaf absolute -top-20 -left-20 w-[125px] h-[125px] pointer-events-none z-0 opacity-10 mix-blend-multiply">
          <Image 
            src="/leaves.webp" 
            alt="Decorative Leaf" 
            fill 
+           // OPTIMIZATION: Very small decoration, 125px is enough
+           sizes="125px"
            className="object-contain blur-md rotate-[-30deg]" 
          />
       </div>
@@ -122,16 +125,18 @@ export default function AwardWinningStudio() {
         </div>
 
         {/* --- RIGHT: LANDSCAPE IMAGE --- */}
-        <div className="award-image-reveal order-1 lg:order-2 relative w-full aspect-4/3 md:aspect-16/10 rounded-4xl overflow-hidden shadow-2xl border border-bridal-charcoal/5 group">
+        <div className="award-image-reveal order-1 lg:order-2 relative w-full aspect-[4/3] md:aspect-[16/10] rounded-[2rem] overflow-hidden shadow-2xl border border-bridal-charcoal/5 group">
            <Image 
-             src="/awards.jpeg" 
+             src="/awards.webp" 
              alt="Bonitha Studio Awards" 
              fill 
+             // OPTIMIZATION: Mobile 100vw, Desktop 50vw
+             sizes="(max-width: 1024px) 100vw, 50vw"
              className="object-cover transition-transform duration-[3s] ease-out group-hover:scale-105"
            />
            
            {/* Overlay Gradient */}
-           <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
            
            {/* Floating Badge */}
            <div className="absolute bottom-8 right-8 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg hover:bg-white/20 transition-colors">

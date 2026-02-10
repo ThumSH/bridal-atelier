@@ -31,7 +31,7 @@ export default function PreFooter() {
       }
     );
 
-    // 2. Text Reveal
+    // 2. Text Reveal (OPTIMIZED TRIGGER)
     gsap.from(".pre-reveal", {
       y: 60,
       opacity: 0,
@@ -40,27 +40,29 @@ export default function PreFooter() {
       ease: "power3.out",
       scrollTrigger: {
         trigger: container.current,
-        start: "top 70%",
+        start: "top 80%", // Reveal sooner
       }
     });
 
   }, { scope: container });
 
   return (
-    // CHANGE 1: Switched bg-bridal-charcoal to bg-black for distinct contrast with Footer
-    <section ref={container} className="relative w-full py-32 md:py-48 bg-gray overflow-hidden flex flex-col items-center justify-center text-center px-6">
+    // CHANGE 1: Switched to bg-black for distinct contrast
+    <section ref={container} className="relative w-full py-32 md:py-48 bg-black overflow-hidden flex flex-col items-center justify-center text-center px-6">
       
       {/* --- BACKGROUND LAYERS --- */}
       <div className="absolute inset-0 z-0">
-         <Image 
-           src="/p-24.webp" 
-           alt="Atelier Texture"
-           fill
-           className="prefooter-bg-img object-cover opacity-20 mix-blend-overlay grayscale" 
-         />
+          <Image 
+            src="/p-24.webp" 
+            alt="Atelier Texture"
+            fill
+            // OPTIMIZATION: Full width background needs 100vw
+            sizes="100vw"
+            className="prefooter-bg-img object-cover opacity-80 mix-blend-overlay grayscale" 
+          />
       </div>
       
-      {/* CHANGE 2: Updated Gradient to blend with Black (not Charcoal) */}
+      {/* CHANGE 2: Updated Gradient to blend with Black */}
       <div className="absolute inset-0 bg-linear-to-t from-black via-black/80 to-black/40 pointer-events-none" />
 
       {/* Decorative Golden Thread */}
