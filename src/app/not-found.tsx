@@ -6,7 +6,7 @@ export default function NotFound() {
     <div className="h-screen w-full bg-bridal-charcoal text-bridal-ivory flex flex-col items-center justify-center relative overflow-hidden">
       
       {/* Texture */}
-      <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      <div className="absolute inset-0 opacity-20 bg-[url('/noise.svg')]" />
       
       <span className="font-sans text-xs uppercase tracking-[0.4em] text-bridal-sage mb-8 relative z-10">
          404 Error

@@ -4,12 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Trophy, Star } from "lucide-react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function AwardWinningStudio() {
   const container = useRef<HTMLDivElement>(null);

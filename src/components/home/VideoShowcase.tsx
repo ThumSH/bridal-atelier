@@ -6,9 +6,6 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown } from "lucide-react";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function VideoShowcase() {
   const container = useRef<HTMLDivElement>(null);
@@ -58,7 +55,7 @@ export default function VideoShowcase() {
           muted
           loop
           playsInline
-          preload="none" // CHANGED: Don't load until necessary (Next.js usually handles this, but good to be explicit)
+          preload="auto"
           poster="/hero-poster.jpg" 
         >
           <source src="/wed-vid.webm" type="video/webm" /> 
@@ -72,7 +69,7 @@ export default function VideoShowcase() {
             The 2026 Collection
             </p>
             <h1 className="font-serif text-6xl md:text-8xl lg:text-9xl tracking-tight mix-blend-screen drop-shadow-2xl">
-            <span className="italic">BONITHA SALON</span> 
+            <span className="italic">SALON BONITHA</span> 
             </h1>
             <span className="mt-2 md:mt-4 font-serif italic text-2xl md:text-5xl text-bridal-sage tracking-wide">
                 Hair & Beauty

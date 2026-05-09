@@ -5,12 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MoveRight, Sparkles } from "lucide-react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function PreFooter() {
   const container = useRef<HTMLDivElement>(null);

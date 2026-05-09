@@ -4,13 +4,9 @@ import { useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MoveRight } from "lucide-react";
 import Link from "next/link";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function AtelierIntro() {
   const container = useRef<HTMLDivElement>(null);
@@ -72,7 +68,7 @@ export default function AtelierIntro() {
     <section ref={container} className="relative py-32 md:py-48 bg-bridal-ivory overflow-hidden">
       
       {/* --- LUXURY BACKGROUND LAYERS --- */}
-      <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-multiply" />
+      <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.svg')] pointer-events-none mix-blend-multiply" />
       
       {/* Golden Halo Background */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-150 h-150 bg-[radial-gradient(circle,rgba(212,175,55,0.05)_0%,transparent_70%)] pointer-events-none" />

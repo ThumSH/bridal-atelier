@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Menu, X, ArrowRight } from "lucide-react";
@@ -11,6 +12,7 @@ import { useGSAP } from "@gsap/react";
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const pathname = usePathname();
   
   const menuRef = useRef<HTMLDivElement>(null);
@@ -22,9 +24,12 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 20);
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? scrollY / docHeight : 0);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -64,6 +69,14 @@ export default function Navbar() {
 
   return (
     <>
+      {/* --- SCROLL PROGRESS BAR --- */}
+      <div className="fixed top-0 left-0 w-full h-0.5 z-101 pointer-events-none">
+        <div
+          className="h-full bg-bridal-gold origin-left transition-none"
+          style={{ transform: `scaleX(${scrollProgress})` }}
+        />
+      </div>
+
       {/* --- MAIN NAVBAR --- */}
       <div className="fixed top-0 left-0 w-full z-100 flex justify-center pt-4 md:pt-6 px-4 pointer-events-none">
         <header
@@ -90,10 +103,15 @@ export default function Navbar() {
             }}
           >
              <div className="flex flex-col items-center leading-none">
-                <span className="font-serif text-xl md:text-3xl tracking-wide">
-                   BONITHA SALON<span className="text-bridal-gold">.</span>
-                </span>
-                <span className="font-sans text-[8px] uppercase tracking-[0.3em] opacity-70">
+                <Image 
+                  src="/logo.svg" 
+                  alt="Bonitha Salon Logo" 
+                  width={260} 
+                  height={70} 
+                  className="w-auto h-12 md:h-15 transition-all duration-500 mb-1"
+                  priority
+                />
+                <span className="font-sans text-[10px] uppercase tracking-[0.3em] opacity-70">
                    Hair & Beauty
                 </span>
              </div>

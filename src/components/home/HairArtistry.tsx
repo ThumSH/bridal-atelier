@@ -7,9 +7,6 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Sparkles } from "lucide-react";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const HAIR_STEPS = [
   { id: "01", title: "Texture Prep", desc: "Priming the hair shaft for volume and hold." },
@@ -109,20 +106,20 @@ export default function HairArtistry() {
     <section ref={container} className="relative w-full bg-bridal-ivory py-32 lg:py-48 overflow-hidden">
       
       {/* --- ATMOSPHERIC LEAF OVERLAYS --- */}
-      <div className="hair-leaf absolute top-0 -left-20 w-[600px] h-[600px] z-0 pointer-events-none opacity-30 blur-sm mix-blend-multiply">
+      <div className="hair-leaf absolute top-0 -left-20 w-150 h-150 z-0 pointer-events-none opacity-30 blur-sm mix-blend-multiply">
         <Image src="/leaves.webp" alt="" fill className="object-contain" />
       </div>
-      <div className="hair-leaf absolute bottom-20 -right-20 w-[450px] h-[450px] z-0 pointer-events-none opacity-20 blur-sm rotate-90 mix-blend-multiply">
+      <div className="hair-leaf absolute bottom-20 -right-20 w-112.5 h-112.5 z-0 pointer-events-none opacity-20 blur-sm rotate-90 mix-blend-multiply">
         <Image src="/leaves.webp" alt="" fill className="object-contain" />
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center relative z-10">
+      <div className="max-w-300 mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center relative z-10">
         
         {/* --- LEFT: CINEMATIC VIDEO FRAME --- */}
         <div className="flex justify-center lg:justify-start">
            
            {/* WRAPPER: Handles Opacity/Slide In */}
-           <div ref={revealWrapperRef} className="relative w-full max-w-lg aspect-[9/14] will-change-transform">
+           <div ref={revealWrapperRef} className="relative w-full max-w-lg aspect-9/14">
               
               {/* INNER: Handles Parallax Movement */}
               <div ref={parallaxInnerRef} className="w-full h-full relative">
@@ -142,7 +139,7 @@ export default function HairArtistry() {
                     </video>
 
                     <div className="absolute inset-0 bg-black/5 pointer-events-none mix-blend-overlay" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
                     <div className="absolute bottom-12 left-10 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2.5 rounded-full">
                     <div className="flex items-center gap-3">

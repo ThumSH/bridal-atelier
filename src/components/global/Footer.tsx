@@ -23,7 +23,7 @@ export default function Footer() {
     <footer className="relative bg-bridal-charcoal text-bridal-ivory overflow-hidden border-t border-white/5">
       
       {/* --- BACKGROUND TEXTURE --- */}
-      <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
+      <div className="absolute inset-0 opacity-20 bg-[url('/noise.svg')] pointer-events-none" />
 
       {/* --- Glowing Threads Background (Couture Flow) --- */}
       <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-screen">
@@ -67,9 +67,13 @@ export default function Footer() {
             <Link href="/" className="relative z-50 block mb-6 group" onClick={handleLogoClick}>
                <div className="flex flex-col leading-none">
                   {/* Main Name */}
-                  <span className="font-serif text-4xl md:text-5xl tracking-wide text-white group-hover:text-bridal-gold transition-colors duration-500">
-                     BONITHA SALON<span className="text-bridal-gold">.</span>
-                  </span>
+                  <Image 
+                    src="/logo.svg" 
+                    alt="Bonitha Salon Logo" 
+                    width={440} 
+                    height={100} 
+                    className="w-auto h-26 md:h-40 opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+                  />
                   
                   {/* Tagline - Fixed Size & Spacing */}
                   <span className="font-sans text-[10px] md:text-[11px] uppercase tracking-[0.35em] text-white/50 mt-2 group-hover:text-white/80 transition-colors duration-500">

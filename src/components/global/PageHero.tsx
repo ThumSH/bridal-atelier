@@ -4,11 +4,6 @@ import { useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 interface PageHeroProps {
   title: string;
@@ -56,7 +51,7 @@ export default function PageHero({ title, subtitle, image }: PageHeroProps) {
           priority
         />
         {/* Added Noise Overlay for texture consistency */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20 mix-blend-overlay" />
       </div>
 
       {/* Content */}

@@ -3,12 +3,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Star } from "lucide-react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function TransitionMarquee() {
   const container = useRef<HTMLDivElement>(null);
@@ -50,7 +45,7 @@ export default function TransitionMarquee() {
       </div>
       
       {/* Gradient Fade on Edges for Smooth Look */}
-      <div className="absolute inset-0 bg-gradient-to-r from-bridal-ivory via-transparent to-bridal-ivory pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-r from-bridal-ivory via-transparent to-bridal-ivory pointer-events-none" />
     </div>
   );
 }

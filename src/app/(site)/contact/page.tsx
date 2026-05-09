@@ -51,7 +51,7 @@ export default function ContactPage() {
     <main ref={container} className="relative min-h-screen bg-bridal-ivory pt-32 pb-20 md:pt-40 md:pb-32 px-6">
       
       {/* Background Noise */}
-      <div className="fixed inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
+      <div className="fixed inset-0 opacity-[0.03] bg-[url('/noise.svg')] pointer-events-none" />
 
       <div className="max-w-350 mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
         

@@ -17,7 +17,7 @@ export default function Preloader() {
       window.scrollTo(0, 0);
     } else {
       document.body.style.overflow = "";
-      document.body.style.cursor = "default";
+      document.body.style.cursor = "";
     }
   }, [isComplete]);
 
@@ -67,7 +67,7 @@ export default function Preloader() {
   return (
     <div 
       ref={container} 
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-bridal-charcoal text-bridal-ivory"
+      className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-bridal-charcoal text-bridal-ivory"
     >
       {/* Wrapper for content to fade it out separately */}
       <div ref={contentRef} className="flex flex-col items-center relative z-10 mix-blend-difference">
@@ -92,7 +92,7 @@ export default function Preloader() {
       </div>
 
       {/* Background Noise - Fade target added class 'preloader-noise' */}
-      <div className="preloader-noise absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
+      <div className="preloader-noise absolute inset-0 opacity-20 bg-[url('/noise.svg')] pointer-events-none" />
     </div>
   );
 }

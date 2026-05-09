@@ -4,13 +4,8 @@ import { useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Sparkles, MoveRight } from "lucide-react";
 import Link from "next/link";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function HairEditorialHero() {
   const container = useRef<HTMLDivElement>(null);
@@ -38,12 +33,12 @@ export default function HairEditorialHero() {
       }
     );
 
-    // 2. TEXT REVEAL
-    tl.from(".hair-text", {
+    // 2. TEXT REVEAL — targets both .hair-text and .hero-fade-in
+    tl.from(".hair-text, .hero-fade-in", {
       y: 100,
       opacity: 0,
       duration: 1,
-      stagger: 0.2,
+      stagger: 0.15,
       ease: "power3.out"
     }, "-=1"); // Overlap with image expansion
 

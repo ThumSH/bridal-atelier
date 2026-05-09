@@ -6,11 +6,7 @@ import Link from "next/link";
 import { MoveRight, Sparkles } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const GALLERY_IMAGES = [
   { id: 1, src: "/p-11.webp", alt: "Bonitha Bride 1" },
@@ -65,9 +61,9 @@ export default function BridalGallery() {
     <section ref={container} className="relative py-24 bg-white overflow-hidden">
       
       {/* Background Texture */}
-      <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.02] bg-[url('/noise.svg')] pointer-events-none" />
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 relative z-10">
+      <div className="max-w-350 mx-auto px-4 md:px-6 relative z-10">
         
         {/* --- HEADER SECTION --- */}
         <div className="flex flex-col items-center text-center mb-16 md:mb-20">
@@ -88,7 +84,7 @@ export default function BridalGallery() {
           {GALLERY_IMAGES.map((img) => (
             <div 
                key={img.id} 
-               className="gallery-item-anim relative aspect-[3/4] group overflow-hidden bg-bridal-charcoal/5 opacity-0"
+               className="gallery-item-anim relative aspect-3/4 group overflow-hidden bg-bridal-charcoal/5 opacity-0"
             >
                <Image 
                  src={img.src} 

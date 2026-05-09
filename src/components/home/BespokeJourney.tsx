@@ -8,9 +8,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function BespokeJourney() {
   const container = useRef<HTMLDivElement>(null);
@@ -121,7 +118,7 @@ export default function BespokeJourney() {
           
           <video
             ref={videoRef}
-            playsInline loop muted preload="auto"
+            playsInline loop muted preload="metadata"
             className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-1000"
             poster="/p-7.webp" 
           >
@@ -171,7 +168,7 @@ export default function BespokeJourney() {
             <div className="pt-6 lg:pt-8 flex flex-col gap-6">
               <div className="flex items-center gap-4">
                 <p className="font-sans text-[10px] uppercase tracking-[0.8em] text-bridal-charcoal/20 font-bold whitespace-nowrap">
-                  Est. 1995 • Atelier
+                  Est. 2024 • Atelier
                 </p>
                 {/* Horizontal Golden Accent */}
                 <div className="w-full h-px bg-bridal-gold/20" />

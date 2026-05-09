@@ -5,12 +5,7 @@ import Image from "next/image";
 import { Sparkles } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 // --- CONFIGURATION ---
 const HEADER_IMAGE = "/p-1.webp"; 

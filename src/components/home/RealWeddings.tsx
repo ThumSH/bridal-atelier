@@ -6,11 +6,6 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const INSTA_POSTS = [
   { id: 1, src: "/p-1.webp", label: "The Morning Of", span: "md:col-span-2 md:row-span-2" },
