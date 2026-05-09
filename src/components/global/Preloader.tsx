@@ -74,7 +74,7 @@ export default function Preloader() {
         {/* Brand Name */}
         <div className="overflow-hidden mb-6">
           <h1 className="font-serif text-5xl md:text-7xl tracking-widest uppercase flex items-center gap-4">
-            <span className="preloader-text block">Bonitha SALON</span>
+            <span className="preloader-text block">SALON BONITHA</span>
           </h1>
         </div>
         

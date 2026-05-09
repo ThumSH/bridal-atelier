@@ -108,10 +108,16 @@ export default function Navbar() {
                   alt="Bonitha Salon Logo" 
                   width={260} 
                   height={70} 
-                  className="w-auto h-12 md:h-15 transition-all duration-500 mb-1"
+                  className={cn(
+                    "w-auto transition-all duration-500 mb-1",
+                    isScrolled ? "h-8 md:h-10" : "h-14 md:h-20"
+                  )}
                   priority
                 />
-                <span className="font-sans text-[10px] uppercase tracking-[0.3em] opacity-70">
+                <span className={cn(
+                  "font-sans uppercase tracking-[0.3em] opacity-70 transition-all duration-500",
+                  isScrolled ? "text-[5px] md:text-[9px]" : "text-[8px] md:text-[8px]"
+                )}>
                    Hair & Beauty
                 </span>
              </div>
